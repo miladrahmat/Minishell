@@ -6,7 +6,7 @@
 #    By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/09/27 14:27:51 by lemercie         ###   ########.fr        #
+#    Updated: 2024/09/27 15:55:05 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ LIBFT	:= ./includes/libft
 
 HEADERS	:= -I $(LIBFT)
 #SRCDIR	:= ./src/
-SRCS	:= test.c
+SRCS	:= test.c paths.c path_utils.c path_helpers.c
 OBJS	:= ${SRCS:.c=.o}
 
 all: libft $(NAME)
