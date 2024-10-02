@@ -6,7 +6,7 @@
 #    By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/09/27 15:55:05 by lemercie         ###   ########.fr        #
+#    Updated: 2024/10/02 13:41:17 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,13 +18,13 @@ LIBFT	:= ./includes/libft
 
 HEADERS	:= -I $(LIBFT)
 #SRCDIR	:= ./src/
-SRCS	:= test.c paths.c path_utils.c path_helpers.c
+SRCS	:= test.c paths.c path_utils.c path_helpers.c parser.c
 OBJS	:= ${SRCS:.c=.o}
 
 all: libft $(NAME)
 
 libft: 
-	make -C $(LIBFT)
+	make bonus -C $(LIBFT)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) 

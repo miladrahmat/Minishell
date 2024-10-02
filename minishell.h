@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/02 12:08:12 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/02 13:36:12 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,6 @@ int	check_exec_access(char *cmd);
 char	**get_paths(char **envp);
 // paths.c
 char	**get_exec_path(char *command, char **envp, int *path_error);
+// parser.c
+t_list	*tokenize(char *line);
 #endif

@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 10:11:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/02 11:57:56 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/02 16:50:40 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,9 @@ char	*skip_whitespace(char *s)
 	if (!s)
 		return (NULL);
 	while (*s && is_whitespace(*s))
+	{
 		s++;
+	}
 	return (s);
 }
 
@@ -76,7 +78,7 @@ size_t	get_token_len(char *start, char *end)
 {
 	size_t	len;
 
-	len = 1;
+	len = 0;
 	while (start != end)
 	{
 		start++;
@@ -103,7 +105,8 @@ char	*get_quoted_string(char *start, t_list **new_token)
 
 
 	quote = *start;
-	end = start + 1;
+	start++;
+	end = start;
 	while (*end != quote)
 	{
 		end++;
@@ -112,6 +115,7 @@ char	*get_quoted_string(char *start, t_list **new_token)
 	return (end);
 }
 
+// lets make it so start is inclusive and end is not inclusive
 t_list	*tokenize(char *line)
 {
 	char	*start;
@@ -121,24 +125,28 @@ t_list	*tokenize(char *line)
 
 	if (!line)
 		return NULL;
-	start = skip_whitespace(line);
-	end = start + 1;
+	start = line;
 	tokens = NULL;
+	end = start;
 	while (*start && *end)
 	{
+		start = skip_whitespace(start);
+		end = start;
 		if (*start == '\'' || *start == '\"')
 		{
 			start = get_quoted_string(start, &new_token);
 			ft_lstadd_back(&tokens, new_token);
-			end = start + 1;
+			start++;
+			end = start;
 			continue ;
 		}
-		while (!is_whitespace(*end))
+		while (*end && !is_whitespace(*end))
 		{
 			end++;
 		}
 		new_token = ft_lstnew(get_token(start, end));
 		ft_lstadd_back(&tokens, new_token);
+		end++;
 		start = end;
 		
 	}
