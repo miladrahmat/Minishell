@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/09/27 15:54:36 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/02 12:08:12 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@ typedef struct s_files
 	int	infile;
 	int	outfile;
 }	t_files;
+
+typedef struct s_execute
+{
+	char	**cmd;
+	int		infile;
+	int		outfile;
+}	t_execute;
 
 // path_utils.c
 void	open_files(t_files *files, char *infile_name, char *outfile_name);
