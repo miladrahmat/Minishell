@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+         #
+#    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/09/27 15:55:05 by lemercie         ###   ########.fr        #
+#    Updated: 2024/10/02 16:07:55 by mrahmat-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,20 +16,23 @@ LDFLAGS	:= -lreadline
 NAME	:= minishell
 LIBFT	:= ./includes/libft
 
-HEADERS	:= -I $(LIBFT)
-#SRCDIR	:= ./src/
-SRCS	:= test.c paths.c path_utils.c path_helpers.c
+HEADERS	:= -I $(LIBFT) -I includes/
+SRCDIR	:= ./sources/
+SRCS	:= test.c paths.c path_utils.c path_helpers.c \
+			$(SRCDIR)builtin_cmds.c \
+			$(SRCDIR)echo.c \
+			$(SRCDIR)env_cmd.c
 OBJS	:= ${SRCS:.c=.o}
 
 all: libft $(NAME)
 
 libft: 
-	make -C $(LIBFT)
+	make bonus -C $(LIBFT)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) 
 
-$(NAME): $(OBJS) ./minishell.h
+$(NAME): $(OBJS) ./includes/minishell.h
 	$(CC) $(LDFLAGS) $(OBJS) $(LIBFT)/libft.a $(HEADERS) -o $(NAME)
 
 clean:
