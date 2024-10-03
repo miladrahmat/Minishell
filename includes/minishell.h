@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/02 16:38:26 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/03 15:59:46 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ char	**get_paths(char **envp);
 char	**get_exec_path(char *command, char **envp, int *path_error);
 
 //builtin_cmds
-int		check_builtin_cmd(char **cmd, int fd, t_list *envp);
+int		check_builtin_cmd(char **cmd, int fd, t_list **envp);
 int		echo(char **str, int fd);
-int		env(char **cmd, int fd, t_list *envp);
-int		unset(char **cmd, t_list *envp);
+int		env(char **cmd, int fd, t_list **envp);
+int		unset(char **cmd, t_list **envp);
 
 //helper functions
 void	split_free(char **str);
