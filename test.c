@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/03 15:59:49 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/03 16:22:25 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,17 @@ int	main(int ac, char **av, char **envp)
 	env = copy_env(envp);
 	while (true)
 	{
-		line = readline("\e[1;32m[MINISHELL]$>\e[0m");
+		line = readline("\e[1;32m[MINISHELL]$> \e[0m");
 		if (line && *line)
 		{
 			cmd = ft_split(line, ' ');
 			add_history(line);
 			free(line);
 			if (cmd == NULL || *cmd == NULL)
+			{
+				ft_lstclear(&env, &free);
 				exit(1);
+			}
 			check_builtin_cmd(cmd, 1, &env);
 			split_free(cmd);
 		}
