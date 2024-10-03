@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/03 16:22:25 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/03 17:03:14 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,17 @@ t_list	*copy_env(char **envp)
 	return (env);
 }
 
+void	print_list(void *arg)
+{
+	printf("%s\n", (char *) arg);
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	char	*line;
 	char	**cmd;
 	t_list	*env;
+	t_list	*tokens;
 
 	(void)av;
 	(void)ac;
@@ -59,6 +65,8 @@ int	main(int ac, char **av, char **envp)
 		line = readline("\e[1;32m[MINISHELL]$> \e[0m");
 		if (line && *line)
 		{
+			tokens = tokenize(line);
+			ft_lstiter(tokens, &print_list);
 			cmd = ft_split(line, ' ');
 			add_history(line);
 			free(line);

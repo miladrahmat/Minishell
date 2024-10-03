@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:20:32 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/03 15:58:38 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/03 16:41:42 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	builtin_exit(char **cmd)
 	exit(ret_val);
 }
 
-int	check_builtin_cmd(char **cmd, int fd, t_list *envp)
+int	check_builtin_cmd(char **cmd, int fd, t_list **envp)
 {
 	if (ft_strncmp(*cmd, "pwd", 4) == 0)
 		return (pwd(cmd, fd));
