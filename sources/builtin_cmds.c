@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:20:32 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/03 15:58:38 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/03 17:56:34 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	cd(char **cmd)
 	return (0);
 }
 
-int	builtin_exit(char **cmd)
+int	builtin_exit(char **cmd, t_list **envp)
 {
 	int	ret_val;
 
@@ -64,10 +64,11 @@ int	builtin_exit(char **cmd)
 		ret_val = ft_atoi(cmd[1]);
 	ft_putendl_fd(*cmd, 2);
 	split_free(cmd);
+	ft_lstclear(envp, &free);
 	exit(ret_val);
 }
 
-int	check_builtin_cmd(char **cmd, int fd, t_list *envp)
+int	check_builtin_cmd(char **cmd, int fd, t_list **envp)
 {
 	if (ft_strncmp(*cmd, "pwd", 4) == 0)
 		return (pwd(cmd, fd));
@@ -76,10 +77,12 @@ int	check_builtin_cmd(char **cmd, int fd, t_list *envp)
 	else if (ft_strncmp(*cmd, "echo", 5) == 0)
 		return (echo(cmd + 1, fd));
 	else if (ft_strncmp(*cmd, "exit", 5) == 0)
-		return (builtin_exit(cmd));
+		return (builtin_exit(cmd, envp));
 	else if (ft_strncmp(*cmd, "env", 4) == 0)
 		return (env(cmd, fd, envp));
 	else if (ft_strncmp(*cmd, "unset", 6) == 0)
 		return (unset(cmd + 1, envp));
+	else if (ft_strncmp(*cmd, "export", 7) == 0)
+		return (export(cmd, fd, envp));
 	return (-1);
 }
