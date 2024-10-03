@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 10:11:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/02 16:50:40 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/03 15:46:45 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,16 @@
 // 			append redirect
 // 		arguments
 //
+//WEIRD CASES
+//	echo stuff > outfile more
+//		==> outfile will contain: stuff more
 //
-//
+// TOKENIZATION
+// 	1. check for odd numbered quotes
+// 	2. split on pipes (but not pipes inside quotes)
+// 	3. transform into command table
+// 	4. expand variables (also inside of double quotes)
+// 	5. remove quotes
 bool	is_operator(char c)
 {
 	return (c == '|' || c == '<' || c == '>');
@@ -60,7 +68,7 @@ bool	is_operator(char c)
 bool	is_whitespace(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\v' ||
-	c =='\f');
+		c =='\f');
 }
 
 char	*skip_whitespace(char *s)
@@ -122,16 +130,19 @@ t_list	*tokenize(char *line)
 	char	*end;
 	t_list	*new_token;
 	t_list	*tokens;
+	int		quotes;
 
 	if (!line)
 		return NULL;
 	start = line;
 	tokens = NULL;
 	end = start;
+	quotes = 0;
 	while (*start && *end)
 	{
 		start = skip_whitespace(start);
 		end = start;
+		/*
 		if (*start == '\'' || *start == '\"')
 		{
 			start = get_quoted_string(start, &new_token);
@@ -140,15 +151,32 @@ t_list	*tokenize(char *line)
 			end = start;
 			continue ;
 		}
-		while (*end && !is_whitespace(*end))
+		*/
+		//while (*end && !is_whitespace(*end))
+		while (*end)
 		{
+			if (quotes == 0)
+			{
+				if (*end == '\'')
+					quotes = 1;
+				else if (*end == '\"')
+					quotes = 2;
+				else if (*end == '|')
+					break ;
+			}
+			else if (quotes == 1 && *end == '\'')
+				quotes = 0;
+			else if (quotes == 2 && *end == '\"')
+				quotes = 0;
 			end++;
 		}
 		new_token = ft_lstnew(get_token(start, end));
 		ft_lstadd_back(&tokens, new_token);
-		end++;
+		if (*(end + 1))
+			end++;
+		else
+			break ;
 		start = end;
-		
 	}
 	return (tokens);
 }
