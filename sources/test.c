@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/03 17:03:14 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/04 12:59:24 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	main(int ac, char **av, char **envp)
 	char	**cmd;
 	t_list	*env;
 	t_list	*tokens;
+	t_list	*cmd_table;
 
 	(void)av;
 	(void)ac;
@@ -67,6 +68,8 @@ int	main(int ac, char **av, char **envp)
 		{
 			tokens = tokenize(line);
 			ft_lstiter(tokens, &print_list);
+			cmd_table = init_cmd_table(tokens);
+			ft_lstiter(cmd_table, &print_list);
 			cmd = ft_split(line, ' ');
 			add_history(line);
 			free(line);

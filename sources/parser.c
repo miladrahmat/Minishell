@@ -6,11 +6,11 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 10:11:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/03 15:46:45 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/04 15:30:33 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./minishell.h"
+#include "minishell.h"
 
 // expand $ env variable
 // 	special case $?
