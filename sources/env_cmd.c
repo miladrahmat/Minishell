@@ -6,40 +6,15 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:02:40 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/03 19:08:25 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/04 19:06:09 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static size_t	get_cmd_amount(char **cmd)
+int	env(char **cmd, int fd, t_env **envp)
 {
-	size_t	amount;
-
-	amount = 0;
-	while (*(cmd + amount) != NULL)
-		amount++;
-	return (amount);
-}
-
-static bool	check_arg(char **cmd, t_list *node)
-{
-	size_t	cmd_nbr;
-
-	cmd_nbr = 0;
-	while (cmd_nbr < get_cmd_amount(cmd) && node != NULL)
-	{
-		if (ft_strncmp((char *)node->content, \
-			*(cmd + cmd_nbr), ft_strlen(*(cmd + cmd_nbr))) == 0)
-			return (false);
-		cmd_nbr++;
-	}
-	return (true);
-}
-
-int	env(char **cmd, int fd, t_list **envp)
-{
-	t_list	*list_iter;
+	t_env	*list_iter;
 
 	if (cmd[1] != NULL)
 	{
@@ -49,53 +24,101 @@ int	env(char **cmd, int fd, t_list **envp)
 	list_iter = *envp;
 	while (list_iter != NULL)
 	{
-		ft_putendl_fd((char *)list_iter->content, fd);
+		if (list_iter->flag == true)
+		{
+			ft_putstr_fd(list_iter->key, fd);
+			ft_putchar_fd('=', fd);
+			ft_putendl_fd(list_iter->value, fd);
+		}
 		list_iter = list_iter->next;
 	}
 	return (0);
 }
 
-int	unset(char **cmd, t_list **envp)
+int	unset(char **cmd, t_env **envp)
 {
-	t_list	*list_iter;
+	t_env	*list_iter;
+	size_t	cmd_iter;
 
 	list_iter = *envp;
 	while (list_iter != NULL)
 	{
-		if (!check_arg(cmd, list_iter))
-			connect_list(envp, &list_iter);
-		else
+		cmd_iter = 0;
+		while (cmd_iter < get_cmd_amount(cmd))
+		{
+			if (!check_key(*(cmd + cmd_iter), list_iter))
+				connect_list(envp, &list_iter);
+			cmd_iter++;
+		}
+		if (list_iter != NULL)
 			list_iter = list_iter->next;
 	}
 	return (0);
 }
 
-int	export(char **cmd, int fd, t_list **envp)
+static bool	export_existing_key(char *cmd, t_env **envp)
 {
-	char	*copy;
-	t_list	*list_iter;
-	size_t	cmd_nbr;
-	size_t	cmd_index;
+	t_env	*list_iter;
+	char	*key;
+	char	*value;
+	size_t	cut;
 
-	cmd_nbr = get_cmd_amount(cmd);
-	cmd_index = 1;
 	list_iter = *envp;
-	if (cmd_nbr == 1)
-		return (env(cmd, fd, envp));
-	while (cmd_index < cmd_nbr)
+	cut = ft_strlen_eq(cmd);
+	while (list_iter != NULL)
 	{
-		while (check_arg(&cmd[cmd_index], list_iter))
+		if (!check_key(cmd, list_iter))
 		{
-			list_iter = list_iter->next;
-			if (list_iter == NULL)
-				break ;
+			key = ft_substr(cmd, 0, cut);
+			if (key == NULL)
+				return (0);
+			value = ft_substr(cmd, cut + 1, ft_strlen(cmd) - cut);
+			if (value == NULL)
+				return (0);
+			ft_env_free_add(list_iter, key, value);
+			return (true);
 		}
-		copy = ft_strdup(cmd[cmd_index]);
-		if (copy == NULL)
-			return (0);
-		else
-			ft_lstadd_back(envp, ft_lstnew(copy));
-		cmd_index++;
+		if (list_iter != NULL)
+			list_iter = list_iter->next;
+	}
+	return (false);
+}
+
+static int	print_export(int fd, t_env **envp)
+{
+	t_env	*list_iter;
+
+	list_iter = *envp;
+	while (list_iter != NULL)
+	{
+		ft_putstr_fd("declare -x ", fd);
+		ft_putstr_fd(list_iter->key, fd);
+		ft_putstr_fd("=\"", fd);
+		ft_putstr_fd(list_iter->value, fd);
+		ft_putendl_fd("\"", fd);
+		list_iter = list_iter->next;
+	}
+	return (0);
+}
+
+int	export(char **cmd, int fd, t_env **envp)
+{
+	t_env	*new;
+	size_t	cmd_nbr;
+
+	cmd_nbr = 1;
+	if (get_cmd_amount(cmd) == 1)
+		return (print_export(fd, envp));
+	while (cmd_nbr < get_cmd_amount(cmd))
+	{
+		if (export_existing_key(*(cmd + cmd_nbr), envp) == false)
+		{
+			new = get_key_value(*(cmd + cmd_nbr));
+			if (new == NULL)
+				return (0);
+			ft_envadd_back(envp, new);
+		}
+		cmd_nbr++;
 	}
 	return (0);
 }

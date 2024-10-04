@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/03 18:47:46 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/04 19:10:22 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,14 @@
 # include <errno.h>
 # include <unistd.h>
 # include "libft.h"
-# include "vector.h"
+
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	bool			flag;
+	struct s_env	*next;
+}	t_env;
 
 typedef struct s_files
 {
@@ -42,14 +49,26 @@ char	**get_paths(char **envp);
 char	**get_exec_path(char *command, char **envp, int *path_error);
 
 //builtin_cmds
-int		check_builtin_cmd(char **cmd, int fd, t_list **envp);
+int		check_builtin_cmd(char **cmd, int fd, t_env **envp);
 int		echo(char **str, int fd);
-int		env(char **cmd, int fd, t_list **envp);
-int		unset(char **cmd, t_list **envp);
-int		export(char **cmd, int fd, t_list **envp);
+int		env(char **cmd, int fd, t_env **envp);
+int		unset(char **cmd, t_env **envp);
+int		export(char **cmd, int fd, t_env **envp);
 
 //helper functions
 void	split_free(char **str);
-void	connect_list(t_list **list, t_list **node);
+void	connect_list(t_env **list, t_env **node);
+bool	check_key(char *cmd, t_env *node);
+size_t	get_cmd_amount(char **cmd);
+size_t	ft_strlen_eq(char *str);
+
+//env struct functions
+t_env	*ft_envnew(char *key, char *value);
+void	ft_envadd_back(t_env **lst, t_env *new);
+void	ft_envadd_front(t_env **lst, t_env *new);
+void	ft_envdelone(t_env *lst, void (*del)(void *));
+void	ft_envclear(t_env **lst, void (*del)(void *));
+void	ft_env_free_add(t_env *lst, char *key, char *value);
+t_env	*get_key_value(char *str);
 
 #endif
