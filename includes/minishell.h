@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/07 10:49:27 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/07 14:04:05 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,6 @@ void	split_free(char **str);
 // string_utils.c
 bool	is_whitespace(char c);
 char	*skip_whitespace(char *s);
+int		substr_len(char *start, char *end);
 
 #endif
