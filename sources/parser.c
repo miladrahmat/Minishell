@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 10:11:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/04 15:30:33 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/07 10:50:22 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,23 +63,6 @@
 bool	is_operator(char c)
 {
 	return (c == '|' || c == '<' || c == '>');
-}
-
-bool	is_whitespace(char c)
-{
-	return (c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\v' ||
-		c =='\f');
-}
-
-char	*skip_whitespace(char *s)
-{
-	if (!s)
-		return (NULL);
-	while (*s && is_whitespace(*s))
-	{
-		s++;
-	}
-	return (s);
 }
 
 size_t	get_token_len(char *start, char *end)

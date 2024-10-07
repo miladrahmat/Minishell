@@ -6,13 +6,70 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/04 17:00:31 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/07 11:15:43 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	parse_token(t_cmd *cmd, char *content)
+// > output
+// >> output appennd
+// < input
+// << input heredoc
+int	get_redir(t_cmd *cmd, char *content, int i_content)
+{
+	if (!content[i_content + 1])
+		return (-1);
+	if (content[i_content] == '>')
+	{
+		if (content[i_content + 1] == '>')
+		{
+			if (!content[i_content + 2])
+			{
+				return (-1);
+			}
+			cmd->outfile = open(skip_whitespace(&content[i_content + 2]),
+					   O_WRONLY | O_CREAT | O_APPEND, 0666);
+			i_content++;
+		}
+		else
+		{
+			cmd->outfile = open(skip_whitespace(&content[i_content + 1]),
+					O_WRONLY | O_CREAT | O_TRUNC, 0666);
+		}
+		i_content++;
+	}
+	else if (content[i_content] == '<')
+	{
+		if (content[i_content + 1] == '<')
+		{
+			if (!content[i_content + 2])
+			{
+				return (-1);
+			}
+		//	cmd->infile = read_heredoc(
+		//		skip_whitespace(&content[i_content + 2]));
+			i_content++;
+		}
+		else
+		{
+			cmd->infile = open(skip_whitespace(&content[i_content + 1]),
+					O_RDONLY);
+		}
+	i_content++;
+	}
+	while (content[i_content] && is_whitespace(content[i_content]))
+	{
+		i_content++;
+	}
+	while (content[i_content] && !is_whitespace(content[i_content]))
+	{
+		i_content++;
+	}
+	return (i_content);
+}
+
+void	parse_redirs(t_cmd *cmd, char *content)
 {
 	char	*cmd_no_redir;
 	int		i_content;
@@ -23,18 +80,24 @@ void	parse_token(t_cmd *cmd, char *content)
 	i_cmd = 0;
 	while (content[i_content])
 	{
-		// goto < or >
-		// skip space
-		// get word
-		while (content[i_content] != '<' && content[i_content] != '>')
+		if (content[i_content] == '<' || content[i_content] == '>')
+		{
+			i_content = get_redir(cmd, content, i_content);
+		}
+		else
 		{
 			cmd_no_redir[i_cmd] = content[i_content];
 			i_content++;
 			i_cmd++;
 		}
-		
 	}
-		
+	cmd_no_redir[i_cmd] = '\0';
+}
+
+void	parse_token(t_cmd *cmd, char *content)
+{
+	parse_redirs(cmd, content);
+	//parse_cmds		
 }
 // find redirects and remove them
 void	*token_to_cmd(void *content)

@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/10/04 12:38:33 by lemercie         ###   ########.fr        #
+#    Updated: 2024/10/07 10:50:53 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ LIBFT	:= ./includes/libft
 HEADERS	:= -I $(LIBFT) -I includes/
 SRCDIR	:= ./sources/
 SRCS	:= $(addprefix $(SRCDIR),test.c parser.c paths.c path_utils.c \
-		   path_helpers.c builtin_cmds.c echo.c env_cmd.c cmd_table.c)
+		   path_helpers.c builtin_cmds.c echo.c env_cmd.c cmd_table.c \
+		   string_utils.c)
 OBJS	:= ${SRCS:.c=.o}
 
 all: libft $(NAME)
