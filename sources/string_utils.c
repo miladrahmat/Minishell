@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 10:49:45 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/07 14:04:54 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/07 14:58:52 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,17 @@ bool	is_whitespace(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\v' ||
 		c =='\f');
+}
+
+char	*skip_whitespace(char *s)
+{
+	if (!s)
+		return (NULL);
+	while (*s && is_whitespace(*s))
+	{
+		s++;
+	}
+	return (s);
 }
 
 int	substr_len(char *start, char *end)
@@ -30,13 +41,15 @@ int	substr_len(char *start, char *end)
 	return (i);
 }
 
-char	*skip_whitespace(char *s)
+char	*get_word(char *start)
 {
-	if (!s)
-		return (NULL);
-	while (*s && is_whitespace(*s))
+	char	*end;
+
+	start = skip_whitespace(start);
+	end = start;
+	while (!is_whitespace(*end))
 	{
-		s++;
+		end++;
 	}
-	return (s);
+	return (strndup(start, substr_len(start, end)));
 }

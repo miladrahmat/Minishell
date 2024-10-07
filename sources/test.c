@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/07 14:26:15 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/07 15:23:05 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,12 @@ int	main(int ac, char **av, char **envp)
 		{
 			tokens = tokenize(line);
 			ft_lstiter(tokens, &print_list);
-			cmd_table = init_cmd_table(tokens);
+			cmd_table = init_cmd_table(tokens, envp);
 		//	ft_lstiter(cmd_table, &print_list);
 			printf("%i - ", ((t_cmd *)cmd_table->content)->infile);
 			printf("%i\n", ((t_cmd *)cmd_table->content)->outfile);
 			i = 0;
-			while (((t_cmd *)cmd_table->content)->cmd[1])
+			while (((t_cmd *)cmd_table->content)->cmd[i])
 			{
 				printf("%sOMG\n", ((t_cmd *)cmd_table->content)->cmd[i]);
 				i++;

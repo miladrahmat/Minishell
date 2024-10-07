@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/07 14:04:05 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/07 15:23:26 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,16 @@ typedef struct s_files
 
 typedef struct s_cmd
 {
+	char	*token;
 	char	**cmd;
 	int		infile;
 	int		outfile;
+	char	**envp;
+	int		path_error;
 }	t_cmd;
 
 // cmd_table.c
-t_list	*init_cmd_table(t_list *tokens);
+t_list	*init_cmd_table(t_list *tokens, char **envp);
 // path_utils.c
 void	open_files(t_files *files, char *infile_name, char *outfile_name);
 void	close_all(t_files files, int pipefd[2]);
@@ -65,5 +68,6 @@ void	split_free(char **str);
 bool	is_whitespace(char c);
 char	*skip_whitespace(char *s);
 int		substr_len(char *start, char *end);
+char	*get_word(char *start);
 
 #endif
