@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/09 11:32:58 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/09 17:17:53 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,15 @@ int	main(int ac, char **av, char **envp)
 			tokens = tokenize(line);
 			ft_lstiter(tokens, &print_list);
 			cmd_table = init_cmd_table(tokens, envp);
-		//	ft_lstiter(cmd_table, &print_list);
 			cmd_table_iter = cmd_table;
 			while (cmd_table_iter)
 			{
-				printf("infile: %i\n", ((t_cmd *)cmd_table_iter->content)->infile);
-				printf("outfile: %i\n", ((t_cmd *)cmd_table_iter->content)->outfile);
+				if (((t_cmd *)cmd_table_iter->content)->infiles)
+					printf("infile: %s\n", ((t_redir *)((t_cmd *)
+						cmd_table_iter->content)->infiles->content)->filename);
+				if (((t_cmd *)cmd_table_iter->content)->outfiles)
+					printf("outfile: %s\n", ((t_redir *)((t_cmd *)
+						cmd_table_iter->content)->outfiles->content)->filename);
 				i = 0;
 				while (((t_cmd *)cmd_table_iter->content)->cmd &&
 					((t_cmd *)cmd_table_iter->content)->cmd[i])

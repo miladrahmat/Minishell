@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/09 11:54:20 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/09 15:42:49 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,21 @@
 # include "libft.h"
 # include "vector.h"
 
+typedef enum e_redir_type
+{
+	error,
+	out_trunc,
+	out_append,
+	input,
+	heredoc
+}	t_redir_type;
+
+typedef struct s_redir
+{
+	t_redir_type	redir_type;
+	char			*filename;
+}	t_redir;
+
 typedef struct s_files
 {
 	int	infile;
@@ -33,20 +48,11 @@ typedef struct s_cmd
 {
 	char	*token;
 	char	**cmd;
-	int		infile;
-	int		outfile;
+	t_list	*infiles;
+	t_list	*outfiles;
 	char	**envp;
 	int		path_error;
 }	t_cmd;
-
-typedef enum e_redir_type
-{
-	error,
-	out_trunc,
-	out_append,
-	input,
-	heredoc
-}	t_redir_type;
 
 // cmd_table.c
 t_list	*init_cmd_table(t_list *tokens, char **envp);

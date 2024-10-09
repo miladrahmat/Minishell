@@ -6,12 +6,16 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/09 12:18:17 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/09 17:21:02 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// > output
+// >> output append
+// < input
+// << input heredoc
 t_redir_type	get_redir_type(char *content)
 {
 	if (!content[1])
@@ -41,34 +45,90 @@ t_redir_type	get_redir_type(char *content)
 	return (error);
 }
 
-// > output
-// >> output append
-// < input
-// << input heredoc
-// TODO: leaks memory from get_word()
 // TODO: heredoc
-// returns index to part of content that is after the redir
+// TODO: support multiple infiles and outfiles. 
+// 		For output, it has to end up in the rightmost outfile, but intermediary 
+// 		files have to be created too.
+// 		For input, only the rightmost file is used, but it will try to open
+// 		all files. 
+// If open() fails, this prints an error and continues, the fd will be -1.
+// Returns index to part of content that is after the redir.
+int	get_redir(t_cmd *cmd, char *content, int i_content)
+{
+	t_redir	*redir;
+
+	redir = malloc(sizeof(t_redir));
+	redir->redir_type = get_redir_type(&content[i_content]);
+	if (redir->redir_type == out_append)
+	{
+		redir->filename = get_word(&content[i_content + 2]);
+		ft_lstadd_back(&cmd->outfiles, ft_lstnew(redir));
+		i_content += 2;
+	}
+	else if (redir->redir_type == out_trunc)
+	{
+		redir->filename = get_word(&content[i_content + 1]);
+		ft_lstadd_back(&cmd->outfiles, ft_lstnew(redir));
+		i_content++;
+	}
+	else if (redir->redir_type == input)
+	{
+		redir->filename = get_word(&content[i_content + 1]);
+		ft_lstadd_back(&cmd->infiles, ft_lstnew(redir));
+		i_content++;
+	}
+	else if (redir->redir_type == heredoc)
+	{
+		printf("get_redir(): TODO: implement heredoc\n");
+		i_content += 2;
+	}
+	else
+	{
+		free(redir);
+	}
+	while (content[i_content] && is_whitespace(content[i_content]))
+	{
+		i_content++;
+	}
+	while (content[i_content] && !is_whitespace(content[i_content]))
+	{
+		i_content++;
+	}
+	return (i_content);
+}
+/*
 int	get_redir(t_cmd *cmd, char *content, int i_content)
 {
 	t_redir_type	redir_type;
+	char			*filename;
 
 	redir_type = get_redir_type(&content[i_content]);
 	if (redir_type == out_append)
 	{
-		cmd->outfile = open(get_word(&content[i_content + 2]),
-			   O_WRONLY | O_CREAT | O_APPEND, 0666);
+		ft_lstadd_back(&cmd->infiles, ft_lstnew(get_word(&content[i_content + 2])));
+		filename = get_word(&content[i_content + 2]);
+		cmd->outfile = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0666);
+		if (cmd->outfile == -1)
+			print_error("Failed to open file", filename);
+		free(filename);
 		i_content += 2;
 	}
 	else if (redir_type == out_trunc)
 	{
-		cmd->outfile = open(get_word(&content[i_content + 1]),
-			O_WRONLY | O_CREAT | O_TRUNC, 0666);
+		filename = get_word(&content[i_content + 1]);
+		cmd->outfile = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+		if (cmd->outfile == -1)
+			print_error("Failed to open file", filename);
+		free(filename);
 		i_content++;
 	}
 	else if (redir_type == input)
 	{
-		cmd->infile = open(get_word(&content[i_content + 1]),
-			O_RDONLY);
+		filename = get_word(&content[i_content + 1]);
+		cmd->infile = open(filename, O_RDONLY);
+		if (cmd->infile == -1)
+			print_error("Failed to open file", filename);
+		free(filename);
 		i_content++;
 	}
 	else if (redir_type == heredoc)
@@ -86,7 +146,7 @@ int	get_redir(t_cmd *cmd, char *content, int i_content)
 	}
 	return (i_content);
 }
-
+*/
 // find redirects and remove them
 void	parse_redirs(t_cmd *cmd, char *content)
 {
@@ -120,8 +180,8 @@ void	*token_to_cmd(void *content)
 	t_cmd	*cmd;
 	
 	cmd = malloc(sizeof(t_cmd));
-	cmd->infile = 0;
-	cmd->outfile = 1;
+	cmd->infiles = NULL;
+	cmd->outfiles = NULL;
 	cmd->path_error = 0;
 	parse_redirs(cmd, content);
 	return (cmd);
@@ -138,6 +198,7 @@ t_list	*init_cmd_table(t_list *tokens, char **envp)
 	while (list_iter)
 	{
 		cmd = (t_cmd *) list_iter->content;
+		// TODO: test for builtins before searching for path
 		cmd->cmd = get_exec_path(cmd->token, envp, &cmd->path_error);
 		list_iter = list_iter->next;
 	}
