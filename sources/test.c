@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/07 15:23:05 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/09 11:32:58 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	main(int ac, char **av, char **envp)
 	t_list	*env;
 	t_list	*tokens;
 	t_list	*cmd_table;
+	t_list	*cmd_table_iter;
 	int		i;
 
 	(void)av;
@@ -71,14 +72,21 @@ int	main(int ac, char **av, char **envp)
 			ft_lstiter(tokens, &print_list);
 			cmd_table = init_cmd_table(tokens, envp);
 		//	ft_lstiter(cmd_table, &print_list);
-			printf("%i - ", ((t_cmd *)cmd_table->content)->infile);
-			printf("%i\n", ((t_cmd *)cmd_table->content)->outfile);
-			i = 0;
-			while (((t_cmd *)cmd_table->content)->cmd[i])
+			cmd_table_iter = cmd_table;
+			while (cmd_table_iter)
 			{
-				printf("%sOMG\n", ((t_cmd *)cmd_table->content)->cmd[i]);
-				i++;
+				printf("infile: %i\n", ((t_cmd *)cmd_table_iter->content)->infile);
+				printf("outfile: %i\n", ((t_cmd *)cmd_table_iter->content)->outfile);
+				i = 0;
+				while (((t_cmd *)cmd_table_iter->content)->cmd &&
+					((t_cmd *)cmd_table_iter->content)->cmd[i])
+				{
+					printf("cmd: %s\n", ((t_cmd *)cmd_table_iter->content)->cmd[i]);
+					i++;
+				}
+				cmd_table_iter = cmd_table_iter->next;
 			}
+			printf("done\n");
 			cmd = ft_split(line, ' ');
 			add_history(line);
 			free(line);
