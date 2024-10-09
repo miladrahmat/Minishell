@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/07 15:23:26 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/09 11:54:20 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,15 @@ typedef struct s_cmd
 	char	**envp;
 	int		path_error;
 }	t_cmd;
+
+typedef enum e_redir_type
+{
+	error,
+	out_trunc,
+	out_append,
+	input,
+	heredoc
+}	t_redir_type;
 
 // cmd_table.c
 t_list	*init_cmd_table(t_list *tokens, char **envp);
