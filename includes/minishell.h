@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/10 14:27:52 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/10 17:32:13 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,6 @@ char	*skip_whitespace(char *s);
 int		substr_len(char *start, char *end);
 char	*get_word(char *start);
 
+// expand_vars.c
+char	*expand_vars(char *token, t_list *env);
 #endif

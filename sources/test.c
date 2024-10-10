@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/10 14:30:37 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/10 15:06:04 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,8 @@ int	main(int ac, char **av, char **envp)
 				while (((t_cmd *)cmd_table_iter->content)->cmd_args &&
 					((t_cmd *)cmd_table_iter->content)->cmd_args[i])
 				{
-					printf("cmd: %s\n", ((t_cmd *)cmd_table_iter->content)->cmd_args[i]);
+					printf("cmd: %s\n",
+						((t_cmd *)cmd_table_iter->content)->cmd_args[i]);
 					i++;
 				}
 				cmd_table_iter = cmd_table_iter->next;

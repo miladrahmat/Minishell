@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/10 14:29:23 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/10 17:32:53 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,6 @@ t_redir_type	get_redir_type(char *content)
 }
 
 // TODO: heredoc
-// TODO: support multiple infiles and outfiles. 
-// 		For output, it has to end up in the rightmost outfile, but intermediary 
-// 		files have to be created too.
-// 		For input, only the rightmost file is used, but it will try to open
-// 		all files. 
-// If open() fails, this prints an error and continues, the fd will be -1.
 // Returns index to part of content that is after the redir.
 int	get_redir(t_cmd *cmd, char *content, int i_content)
 {
@@ -96,6 +90,11 @@ int	get_redir(t_cmd *cmd, char *content, int i_content)
 	}
 	return (i_content);
 }
+
+//	For output, it has to end up in the rightmost outfile, but intermediary 
+// 		files have to be created too.
+// 		For input, only the rightmost file is used, but it will try to open
+// 		all files. 
 /*
 int	get_redir(t_cmd *cmd, char *content, int i_content)
 {
@@ -147,7 +146,7 @@ int	get_redir(t_cmd *cmd, char *content, int i_content)
 	return (i_content);
 }
 */
-// find redirects and remove them
+// find redirects and remove them from the token
 void	parse_redirs(t_cmd *cmd, char *content)
 {
 	char	*cmd_no_redir;
@@ -175,7 +174,7 @@ void	parse_redirs(t_cmd *cmd, char *content)
 }
 
 // init each t_cmd of the list (but not cmd->cmd_args yet)
-void	*token_to_cmd(void *content)
+void	*init_t_cmd(void *content)
 {
 	t_cmd	*cmd;
 	
@@ -193,13 +192,12 @@ t_list	*init_cmd_table(t_list *tokens, t_list *env)
 	t_list	*list_iter;
 	t_cmd	*cmd;
 
-	cmd_table = ft_lstmap(tokens, &token_to_cmd, &free);
+	cmd_table = ft_lstmap(tokens, &init_t_cmd, &free);
 	list_iter = cmd_table;
 	while (list_iter)
 	{
-		//cmd->token = expand_vars(cmd->token, env);
+		cmd->token = expand_vars(cmd->token, env);
 		cmd = (t_cmd *) list_iter->content;
-		// TODO: test for builtins before searching for path
 		if (test_builtin_cmd(cmd->token) == false)
 			cmd->cmd_args = get_exec_path(cmd->token, env, &cmd->path_error);
 		else
