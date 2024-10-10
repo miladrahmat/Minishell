@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:20:32 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/03 16:41:42 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/10 12:23:37 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,23 @@ int	builtin_exit(char **cmd)
 	ft_putendl_fd(*cmd, 2);
 	split_free(cmd);
 	exit(ret_val);
+}
+
+bool	test_builtin_cmd(char *cmd)
+{
+	if (ft_strncmp(cmd, "pwd", 4) == 0)
+		return (true);
+	else if (ft_strncmp("cd", cmd, 3) == 0)
+		return (true);
+	else if (ft_strncmp(cmd, "echo", 5) == 0)
+		return (true);
+	else if (ft_strncmp(cmd, "exit", 5) == 0)
+		return (true);
+	else if (ft_strncmp(cmd, "env", 4) == 0)
+		return (true);
+	else if (ft_strncmp(cmd, "unset", 6) == 0)
+		return (true);
+	return (false);
 }
 
 int	check_builtin_cmd(char **cmd, int fd, t_list **envp)

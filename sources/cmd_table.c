@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/09 17:21:02 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/10 14:29:23 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ void	parse_redirs(t_cmd *cmd, char *content)
 	cmd->token = cmd_no_redir;
 }
 
-// init each t_cmd of the list
+// init each t_cmd of the list (but not cmd->cmd_args yet)
 void	*token_to_cmd(void *content)
 {
 	t_cmd	*cmd;
@@ -187,7 +187,7 @@ void	*token_to_cmd(void *content)
 	return (cmd);
 }
 
-t_list	*init_cmd_table(t_list *tokens, char **envp)
+t_list	*init_cmd_table(t_list *tokens, t_list *env)
 {
 	t_list	*cmd_table;
 	t_list	*list_iter;
@@ -197,9 +197,20 @@ t_list	*init_cmd_table(t_list *tokens, char **envp)
 	list_iter = cmd_table;
 	while (list_iter)
 	{
+		//cmd->token = expand_vars(cmd->token, env);
 		cmd = (t_cmd *) list_iter->content;
 		// TODO: test for builtins before searching for path
-		cmd->cmd = get_exec_path(cmd->token, envp, &cmd->path_error);
+		if (test_builtin_cmd(cmd->token) == false)
+			cmd->cmd_args = get_exec_path(cmd->token, env, &cmd->path_error);
+		else
+		{
+			cmd->cmd_args = NULL;
+			/*
+			cmd->cmd_args = malloc(sizeof(char *) * 2);
+			cmd->cmd_args[0] = ft_strdup(cmd->token);
+			cmd->cmd_args[1] = NULL;
+			*/
+		}
 		list_iter = list_iter->next;
 	}
 	return (cmd_table);

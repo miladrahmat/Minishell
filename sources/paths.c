@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:38:19 by lemercie          #+#    #+#             */
-/*   Updated: 2024/09/27 15:44:11 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/10 14:18:13 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ static int	find_in_paths(char **paths, char **exec_args, int *path_error)
 	return (1);
 }
 
-static char	**search_paths(char **exec_args, char **envp, int *path_error)
+static char	**search_paths(char **exec_args, t_list *env, int *path_error)
 {
 	char	**paths;
 
-	paths = get_paths(envp);
+	paths = get_paths(env);
 	if (!paths)
 	{
 		print_error("Command not found", exec_args[0]);
@@ -85,7 +85,7 @@ static char	**search_paths(char **exec_args, char **envp, int *path_error)
 // if the cmd is a space ==> return 127
 // if the cmd is a real file but not executable ==> return 126
 // if the cmd is not found ==> return 127
-static char	**get_exec_path_more(char *command, char **envp, int *path_error)
+static char	**get_exec_path_more(char *command, t_list *env, int *path_error)
 {	
 	char	**exec_args;
 
@@ -111,10 +111,10 @@ static char	**get_exec_path_more(char *command, char **envp, int *path_error)
 			return (NULL);
 		}
 	}
-	return (search_paths(exec_args, envp, path_error));
+	return (search_paths(exec_args, env, path_error));
 }
 
-char	**get_exec_path(char *command, char **envp, int *path_error)
+char	**get_exec_path(char *command, t_list *env, int *path_error)
 {
 	if (!command || !command[0])
 	{
@@ -122,5 +122,5 @@ char	**get_exec_path(char *command, char **envp, int *path_error)
 		*path_error = 126;
 		return (NULL);
 	}
-	return (get_exec_path_more(command, envp, path_error));
+	return (get_exec_path_more(command, env, path_error));
 }
