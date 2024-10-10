@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 18:20:21 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/04 19:09:58 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/10 17:54:55 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,32 @@ t_env	*get_key_value(char *str)
 	}
 	node = ft_envnew(key, value);
 	return (node);
+}
+
+t_env	*ft_envcpy(t_env *envp)
+{
+	t_env	*new_env;
+	char	*key;
+	char	*value;
+
+	new_env = NULL;
+	while (envp != NULL)
+	{
+		key = ft_strdup(envp->key);
+		if (key == NULL)
+		{
+			ft_envclear(&new_env, &free);
+			return (NULL);
+		}
+		value = ft_strdup(envp->value);
+		if (value == NULL)
+		{
+			ft_envclear(&new_env, &free);
+			free(key);
+			return (NULL);
+		}
+		ft_envadd_back(&new_env, ft_envnew(key, value));
+		envp = envp->next;
+	}
+	return (new_env);
 }

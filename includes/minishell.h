@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/04 19:10:22 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/10 17:55:20 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,6 @@ void	ft_envdelone(t_env *lst, void (*del)(void *));
 void	ft_envclear(t_env **lst, void (*del)(void *));
 void	ft_env_free_add(t_env *lst, char *key, char *value);
 t_env	*get_key_value(char *str);
+t_env	*ft_envcpy(t_env *envp);
 
 #endif

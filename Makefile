@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/10/04 18:46:44 by mrahmat-         ###   ########.fr        #
+#    Updated: 2024/10/10 17:20:46 by mrahmat-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ SRCS	:= test.c paths.c path_utils.c path_helpers.c \
 			$(SRCDIR)env_cmd.c \
 			$(SRCDIR)builtin_helpers.c \
 			$(SRCDIR)environment.c \
-			$(SRCDIR)environment1.c
+			$(SRCDIR)environment1.c \
+			$(SRCDIR)export_cmd.c
 OBJS	:= ${SRCS:.c=.o}
 
 all: libft $(NAME)
