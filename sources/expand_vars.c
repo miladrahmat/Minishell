@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/11 15:45:45 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/11 17:06:41 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,25 @@ char	*ft_strndup(const char *s1, size_t len)
 	}
 	s2[i] = '\0';
 	return (s2);
+}
+
+char	*skip_word(char *s)
+{
+	if (!s)
+		return (NULL);
+	while (*s && is_whitespace(*s))
+	{
+		s++;
+	}
+	while (*s && !is_whitespace(*s))
+	{
+		s++;
+	}
+	while (*s && is_whitespace(*s))
+	{
+		s++;
+	}
+	return (s);
 }
 
 // TODO: create helper function skip_word()
@@ -57,14 +76,7 @@ char	*expand_vars(char *token, t_env *env)
 				return (NULL);
 			ret = ft_strjoin(ret, ft_env_get_value_by_key(varname, env));
 			free(varname);
-			while (*end && !is_whitespace(*end))
-			{
-				end++;
-			}
-			while (*end && is_whitespace(*end))
-			{
-				end++;
-			}
+			end = skip_word(end);
 			start = end;
 		}
 		else
