@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/11 17:06:41 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/11 17:19:46 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,15 @@ char	*skip_word(char *s)
 	return (s);
 }
 
-// TODO: create helper function skip_word()
+// creates a new string where $VAR in the token is replaced by the value of
+// $VAR in env
 char	*expand_vars(char *token, t_env *env)
 {
 	char	*ret;
 	char	*start;
 	char	*end;
 	char	*varname;
+	char	*temp;
 
 	start = token;
 	end = token;
@@ -64,29 +66,30 @@ char	*expand_vars(char *token, t_env *env)
 	while (*start)
 	{
 		while (*end && *end != '$')
-		{
 			end++;
-		}
-		ret = ft_strjoin(ret, ft_strndup(start, substr_len(start, end)));
-		if (*end == '$')
+		temp = ft_strndup(start, substr_len(start, end));
+		if (!temp)
 		{
-			printf("expand_vars() found variable\n");
-			varname = get_word(end + 1);
-			if (!varname)
-				return (NULL);
-			ret = ft_strjoin(ret, ft_env_get_value_by_key(varname, env));
-			free(varname);
-			end = skip_word(end);
-			start = end;
+			if (ret)
+				free (ret);
+			return (NULL);
 		}
-		else
+		ret = ft_strjoin(ret, temp);
+		free(temp);
+		if (!ret)
+			return (NULL);
+		if (*end != '$')
 			break ;
+		varname = get_word(end + 1);
+		if (!varname)
+		{
+			free(ret);
+			return (NULL);
+		}
+		ret = ft_strjoin(ret, ft_env_get_value_by_key(varname, env));
+		free(varname);
+		end = skip_word(end);
+		start = end;
 	}
-
-	// strjoin(strndup(substr_len)))
-	// strlcpy until $
-	// strjoin value of env variable
-	// skip env word
-	
 	return (ret);
 }

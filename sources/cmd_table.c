@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/11 15:26:57 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/11 17:22:37 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,7 @@ void	*init_t_cmd(void *content)
 	return (cmd);
 }
 
+// can return NULL in case of a failed malloc() in functions called from here
 t_list	*init_cmd_table(t_list *tokens, t_env *env)
 {
 	t_list	*cmd_table;
@@ -198,6 +199,8 @@ t_list	*init_cmd_table(t_list *tokens, t_env *env)
 	{
 		cmd = (t_cmd *) list_iter->content;
 		cmd->token = expand_vars(cmd->token, env);
+		if (!cmd->token)
+			return (NULL);
 		if (test_builtin_cmd(cmd->token) == false)
 			cmd->cmd_args = get_exec_path(cmd->token, env, &cmd->path_error);
 		else
