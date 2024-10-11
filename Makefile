@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/10/10 17:32:39 by lemercie         ###   ########.fr        #
+#    Updated: 2024/10/11 14:13:33 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,9 +18,22 @@ LIBFT	:= ./includes/libft
 
 HEADERS	:= -I $(LIBFT) -I includes/
 SRCDIR	:= ./sources/
-SRCS	:= $(addprefix $(SRCDIR),test.c parser.c paths.c path_utils.c \
-		   path_helpers.c builtin_cmds.c echo.c env_cmd.c cmd_table.c \
-		   string_utils.c, expand_vars.c)
+
+SRCS	:=  $(SRCDIR)builtin_cmds.c \
+			$(SRCDIR)echo.c \
+			$(SRCDIR)env_cmd.c \
+			$(SRCDIR)builtin_helpers.c \
+			$(SRCDIR)environment.c \
+			$(SRCDIR)environment1.c \
+			$(SRCDIR)export_cmd.c \
+			$(SRCDIR)test.c \
+			$(SRCDIR)paths.c \
+			$(SRCDIR)path_utils.c \
+			$(SRCDIR)path_helpers.c \
+			$(SRCDIR)parser.c \
+			$(SRCDIR)cmd_table.c \
+			$(SRCDIR)string_utils.c \
+			$(SRCDIR)expand_vars.c
 OBJS	:= ${SRCS:.c=.o}
 
 all: libft $(NAME)

@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:02:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/02 10:55:43 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/10 16:13:45 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,35 @@ static void	echo_print(char *str, int fd)
 	}
 }
 
+static int	echo_n(char *str)
+{
+	size_t	i;
+
+	i = 0;
+	if (str[i] == '-')
+		i++;
+	while (str[i] == 'n')
+		i++;
+	if (str[i] != '\0')
+		return (0);
+	else
+		return (1);
+}
+
 int	echo(char **str, int fd)
 {
 	int		n;
 
 	n = 0;
-	if (ft_strncmp(*str, "-n", ft_strlen(*str)) == 0)
+	if (*str == NULL)
+		return (0);
+	if (ft_strncmp(*str, "-n", 2) == 0)
 	{
-		n = 1;
-		str++;
+		if (echo_n(*str) == 1)
+		{
+			str++;
+			n = 1;
+		}
 	}
 	while (*str != NULL)
 	{

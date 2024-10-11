@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/10 17:32:53 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/11 15:26:57 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ void	*init_t_cmd(void *content)
 	return (cmd);
 }
 
-t_list	*init_cmd_table(t_list *tokens, t_list *env)
+t_list	*init_cmd_table(t_list *tokens, t_env *env)
 {
 	t_list	*cmd_table;
 	t_list	*list_iter;
@@ -196,8 +196,8 @@ t_list	*init_cmd_table(t_list *tokens, t_list *env)
 	list_iter = cmd_table;
 	while (list_iter)
 	{
-		cmd->token = expand_vars(cmd->token, env);
 		cmd = (t_cmd *) list_iter->content;
+		cmd->token = expand_vars(cmd->token, env);
 		if (test_builtin_cmd(cmd->token) == false)
 			cmd->cmd_args = get_exec_path(cmd->token, env, &cmd->path_error);
 		else

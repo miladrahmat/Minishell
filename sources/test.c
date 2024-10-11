@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/10 15:06:04 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/11 14:21:09 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,16 @@ void	split_free(char **str)
 	free(str);
 }
 
-t_list	*copy_env(char **envp)
+t_env	*copy_env(char **envp)
 {
-	t_list	*env;
-	t_list	*new_node;
-	char	*copy;
+	t_env	*env;
+	t_env	*new_node;
 
 	env = NULL;
 	while (*envp != NULL)
 	{
-		copy = ft_strdup(*envp);
-		if (copy == NULL)
-			ft_lstclear(&env, &free);
-		new_node = ft_lstnew(copy);
-		ft_lstadd_back(&env, new_node);
+		new_node = get_key_value(*envp);
+		ft_envadd_back(&env, new_node);
 		envp++;
 	}
 	return (env);
@@ -54,11 +50,11 @@ int	main(int ac, char **av, char **envp)
 {
 	char	*line;
 	char	**cmd;
-	t_list	*env;
 	t_list	*tokens;
 	t_list	*cmd_table;
 	t_list	*cmd_table_iter;
 	int		i;
+	t_env	*env;
 
 	(void)av;
 	(void)ac;
@@ -96,7 +92,7 @@ int	main(int ac, char **av, char **envp)
 			free(line);
 			if (cmd == NULL || *cmd == NULL)
 			{
-				ft_lstclear(&env, &free);
+				ft_envclear(&env, &free);
 				exit(1);
 			}
 			check_builtin_cmd(cmd, 1, &env);
@@ -104,4 +100,3 @@ int	main(int ac, char **av, char **envp)
 		}
 	}
 }
-

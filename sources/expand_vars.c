@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/10 17:24:04 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/11 15:45:45 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,17 @@ char	*ft_strndup(const char *s1, size_t len)
 	return (s2);
 }
 
-char	*get_var_value(char *key, t_list *env)
-{
-	t_list	*match;
-
-	match = get_key_value(key);
-	return (((t_env *)match->content)->value);
-}
-
 // TODO: create helper function skip_word()
-char	*expand_vars(char *token, t_list *env)
+char	*expand_vars(char *token, t_env *env)
 {
 	char	*ret;
 	char	*start;
 	char	*end;
+	char	*varname;
 
 	start = token;
 	end = token;
+	ret = NULL;
 	while (*start)
 	{
 		while (*end && *end != '$')
@@ -57,7 +51,12 @@ char	*expand_vars(char *token, t_list *env)
 		ret = ft_strjoin(ret, ft_strndup(start, substr_len(start, end)));
 		if (*end == '$')
 		{
-			ret = ft_strjoin(ret, get_var_value(end + 1, env));
+			printf("expand_vars() found variable\n");
+			varname = get_word(end + 1);
+			if (!varname)
+				return (NULL);
+			ret = ft_strjoin(ret, ft_env_get_value_by_key(varname, env));
+			free(varname);
 			while (*end && !is_whitespace(*end))
 			{
 				end++;
