@@ -150,5 +150,138 @@
    "includes/"
   ],
   "file": "sources/env_cmd.c"
+ },
+ {
+  "directory": "/home/lemercie/projects/minishell/repo",
+  "arguments": [
+   "cc",
+   "-g",
+   "-Wextra",
+   "-Wall",
+   "-Werror",
+   "-o",
+   "sources/builtin_helpers.o",
+   "-c",
+   "sources/builtin_helpers.c",
+   "-I",
+   "./includes/libft",
+   "-I",
+   "includes/"
+  ],
+  "file": "sources/builtin_helpers.c"
+ },
+ {
+  "directory": "/home/lemercie/projects/minishell/repo",
+  "arguments": [
+   "cc",
+   "-g",
+   "-Wextra",
+   "-Wall",
+   "-Werror",
+   "-o",
+   "sources/environment.o",
+   "-c",
+   "sources/environment.c",
+   "-I",
+   "./includes/libft",
+   "-I",
+   "includes/"
+  ],
+  "file": "sources/environment.c"
+ },
+ {
+  "directory": "/home/lemercie/projects/minishell/repo",
+  "arguments": [
+   "cc",
+   "-g",
+   "-Wextra",
+   "-Wall",
+   "-Werror",
+   "-o",
+   "sources/environment1.o",
+   "-c",
+   "sources/environment1.c",
+   "-I",
+   "./includes/libft",
+   "-I",
+   "includes/"
+  ],
+  "file": "sources/environment1.c"
+ },
+ {
+  "directory": "/home/lemercie/projects/minishell/repo",
+  "arguments": [
+   "cc",
+   "-g",
+   "-Wextra",
+   "-Wall",
+   "-Werror",
+   "-o",
+   "sources/export_cmd.o",
+   "-c",
+   "sources/export_cmd.c",
+   "-I",
+   "./includes/libft",
+   "-I",
+   "includes/"
+  ],
+  "file": "sources/export_cmd.c"
+ },
+ {
+  "directory": "/home/lemercie/projects/minishell/repo",
+  "arguments": [
+   "cc",
+   "-g",
+   "-Wextra",
+   "-Wall",
+   "-Werror",
+   "-o",
+   "sources/cmd_table.o",
+   "-c",
+   "sources/cmd_table.c",
+   "-I",
+   "./includes/libft",
+   "-I",
+   "includes/"
+  ],
+  "file": "sources/cmd_table.c"
+ },
+ {
+  "directory": "/home/lemercie/projects/minishell/repo",
+  "arguments": [
+   "cc",
+   "-g",
+   "-Wextra",
+   "-Wall",
+   "-Werror",
+   "-o",
+   "sources/string_utils.o",
+   "-c",
+   "sources/string_utils.c",
+   "-I",
+   "./includes/libft",
+   "-I",
+   "includes/"
+  ],
+  "file": "sources/string_utils.c"
+ },
+ {
+  "directory": "/home/lemercie/projects/minishell/repo",
+  "arguments": [
+   "cc",
+   "-g",
+   "-Wextra",
+   "-Wall",
+   "-Werror",
+   "-o",
+   "sources/expand_vars.o",
+   "-c",
+   "sources/expand_vars.c",
+   "-I",
+   "./includes/libft",
+   "-I",
+   "includes/"
+  ],
+  "file": "sources/expand_vars.c"
  }
 ]
