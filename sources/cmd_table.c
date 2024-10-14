@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/14 11:29:10 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/14 16:22:18 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,7 @@ t_list	*init_cmd_table(t_list *tokens, t_env *env)
 	while (list_iter)
 	{
 		cmd = (t_cmd *) list_iter->content;
-		cmd->token = expand_vars(cmd->token, env);
+		cmd->token = expand_vars2(cmd->token, env);
 		if (!cmd->token)
 			return (NULL);
 		if (!test_builtin_cmd(ft_split(cmd->token, ' ')))

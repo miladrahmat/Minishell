@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:20:32 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/14 11:37:05 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/14 13:42:29 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int	builtin_exit(char **cmd, t_env **envp)
 	exit(ret_val);
 }
 
+// returns false also when the ft_split in the caller fails
 bool	test_builtin_cmd(char **cmd)
 {
 	bool	ret;

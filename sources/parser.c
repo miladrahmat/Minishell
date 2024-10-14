@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 10:11:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/07 10:50:22 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/14 13:57:32 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ char	*get_token(char *start, char *end)
 	ft_strlcpy(token, start, len + 1);
 	return (token);
 }
-
+/*
 char	*get_quoted_string(char *start, t_list **new_token)
 {
 	char	quote;
@@ -105,7 +105,7 @@ char	*get_quoted_string(char *start, t_list **new_token)
 	*new_token = ft_lstnew(get_token(start, end));
 	return (end);
 }
-
+*/
 // lets make it so start is inclusive and end is not inclusive
 t_list	*tokenize(char *line)
 {
