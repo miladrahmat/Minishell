@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/11 17:19:46 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/14 10:41:41 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,25 +29,6 @@ char	*ft_strndup(const char *s1, size_t len)
 	}
 	s2[i] = '\0';
 	return (s2);
-}
-
-char	*skip_word(char *s)
-{
-	if (!s)
-		return (NULL);
-	while (*s && is_whitespace(*s))
-	{
-		s++;
-	}
-	while (*s && !is_whitespace(*s))
-	{
-		s++;
-	}
-	while (*s && is_whitespace(*s))
-	{
-		s++;
-	}
-	return (s);
 }
 
 // creates a new string where $VAR in the token is replaced by the value of
