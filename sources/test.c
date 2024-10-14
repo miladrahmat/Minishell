@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/11 14:21:09 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/14 11:34:24 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_env	*copy_env(char **envp)
 	env = NULL;
 	while (*envp != NULL)
 	{
-		new_node = get_key_value(*envp);
+		new_node = set_key_value(*envp);
 		ft_envadd_back(&env, new_node);
 		envp++;
 	}

@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 18:20:21 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/11 14:55:37 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/14 11:33:56 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_env_free_add(t_env *lst, char *key, char *value)
 		lst->flag = true;
 }
 
-t_env	*get_key_value(char *str)
+t_env	*set_key_value(char *str)
 {
 	t_env	*node;
 	char	*key;
