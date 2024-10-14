@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/14 10:58:44 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/14 11:29:10 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ t_list	*init_cmd_table(t_list *tokens, t_env *env)
 		cmd->token = expand_vars(cmd->token, env);
 		if (!cmd->token)
 			return (NULL);
-		if (test_builtin_cmd(cmd->token) == false)
+		if (!test_builtin_cmd(ft_split(cmd->token, ' ')))
 		{
 			printf("not a builtin command, %s\n", cmd->token);
 			cmd->cmd_args = get_exec_path(cmd->token, env, &cmd->path_error);

@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/14 10:40:02 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/14 11:35:04 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	**get_exec_path(char *command, t_env *env, int *path_error);
 t_list	*tokenize(char *line);
 
 //builtin_cmds
-bool	test_builtin_cmd(char *cmd);
+bool	test_builtin_cmd(char **cmd);
 int		check_builtin_cmd(char **cmd, int fd, t_env **envp);
 int		echo(char **str, int fd);
 int		env(char **cmd, int fd, t_env **envp);
