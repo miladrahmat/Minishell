@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/14 11:34:24 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/15 17:13:36 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,25 @@ int	main(int ac, char **av, char **envp)
 			tokens = tokenize(line);
 			ft_lstiter(tokens, &print_list);
 			cmd_table = init_cmd_table(tokens, env);
+			open_infiles(&cmd_table);
 			cmd_table_iter = cmd_table;
 			while (cmd_table_iter)
 			{
+				printf("entering main loop\n");
 				if (((t_cmd *)cmd_table_iter->content)->infiles)
+				{
+					printf("fd: %d\t", ((t_cmd *)cmd_table_iter->content)-> \
+						fd->infile);
 					printf("infile: %s\n", ((t_redir *)((t_cmd *)
 						cmd_table_iter->content)->infiles->content)->filename);
+				}
 				if (((t_cmd *)cmd_table_iter->content)->outfiles)
+				{
+					printf("fd: %dca\t", ((t_cmd *)cmd_table_iter->content)-> \
+						fd->outfile);
 					printf("outfile: %s\n", ((t_redir *)((t_cmd *)
 						cmd_table_iter->content)->outfiles->content)->filename);
+				}
 				i = 0;
 				while (((t_cmd *)cmd_table_iter->content)->cmd_args &&
 					((t_cmd *)cmd_table_iter->content)->cmd_args[i])
@@ -95,7 +105,8 @@ int	main(int ac, char **av, char **envp)
 				ft_envclear(&env, &free);
 				exit(1);
 			}
-			check_builtin_cmd(cmd, 1, &env);
+			check_builtin_cmd(cmd, ((t_cmd *)cmd_table->content)-> \
+						fd->outfile, &env);
 			split_free(cmd);
 		}
 	}

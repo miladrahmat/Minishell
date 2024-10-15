@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_table.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/14 11:29:10 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/15 16:54:07 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,12 +177,15 @@ void	parse_redirs(t_cmd *cmd, char *content)
 void	*init_t_cmd(void *content)
 {
 	t_cmd	*cmd;
-	
+
 	cmd = malloc(sizeof(t_cmd));
 	cmd->infiles = NULL;
 	cmd->outfiles = NULL;
 	cmd->path_error = 0;
 	parse_redirs(cmd, content);
+	cmd->fd = malloc(sizeof(t_files));
+	cmd->fd->infile = 0;
+	cmd->fd->outfile = 1;
 	return (cmd);
 }
 

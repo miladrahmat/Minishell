@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/14 11:49:35 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/14 15:00:23 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_cmd
 	t_list	*outfiles;
 	char	**envp;
 	int		path_error;
+	t_files	*fd;
 }	t_cmd;
 
 // cmd_table.c
@@ -112,4 +113,10 @@ char	*skip_word(char *s);
 
 // expand_vars.c
 char	*expand_vars(char *token, t_env *env);
+
+// file_handler.c
+int		open_infiles(t_list **cmd_table);
+int		open_outfiles(t_list **cmd_table);
+int		close_in_out(t_list **cmd_table);
+
 #endif

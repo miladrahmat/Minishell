@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:13:40 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/14 11:35:20 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/15 16:15:56 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,8 @@ int	export(char **cmd, int fd, t_env **envp)
 		if (export_existing_key(*(cmd + cmd_nbr), envp) == false)
 		{
 			new = set_key_value(*(cmd + cmd_nbr));
-			if (new == NULL)
-				return (0);
-			ft_envadd_back(envp, new);
+			if (new != NULL)
+				ft_envadd_back(envp, new);
 		}
 		cmd_nbr++;
 	}
