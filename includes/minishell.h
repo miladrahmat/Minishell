@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/14 16:17:03 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/16 12:04:41 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,4 @@ char	*skip_word(char *s);
 
 // expand_vars.c
 char	*expand_vars(char *token, t_env *env);
-char	*expand_vars2(char *token, t_env *env);
 #endif

@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/14 16:59:10 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/16 12:04:48 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,30 @@ char	*concatenate_until(char **dst, char *src, char delim)
 	return (src_end);
 }
 
+char	*skip_varname(char *s)
+{
+	if (!s)
+		return (NULL);
+	if (*s == '$')
+		s++;
+	while (ft_isalnum(*s) || *s == '_')
+	{
+		s++;
+	}
+	return (s);
+}
+
+char	*get_varname(char *start)
+{
+	char	*end;
+
+	end = start;
+	while (ft_isalnum(*end) || *end == '_')
+	{
+		end++;
+	}
+	return (strndup(start, substr_len(start, end)));
+}
 // join until $ or single quote (that is not inside of doubles)
 // if $, get word and expand
 // if single quote join until next single quote
@@ -60,12 +84,7 @@ char	*concatenate_until(char **dst, char *src, char delim)
 // creates a new string where $VAR in the token is replaced by the value of
 // $VAR in env
 // TODO: expand in double quotes but not in single quotes
-// TODO: variable name can contain alphanumeric chars and underscore
-// 		after that it ends
-// 			so: $HOMEA => variable not found
-//				$HOMEa => variable not found
-//				$HOME- => /home/lemercie-
-char	*expand_vars2(char *token, t_env *env)
+char	*expand_vars(char *token, t_env *env)
 {
 	char	*ret;
 	char	*start;
@@ -81,12 +100,7 @@ char	*expand_vars2(char *token, t_env *env)
 		end = concatenate_until(&ret, start, '$');
 		if (!ret)
 			return (NULL);
-	//	if (!*end)
-	//		return (ret);
-		//TODO: has to NOT be until whitespace but until non alphanum 
-		//or underscore
-		varname = get_word(end + 1);
-		printf("%s\n", varname);
+		varname = get_varname(end + 1);
 		if (!varname)
 		{
 			free(ret);
@@ -103,12 +117,12 @@ char	*expand_vars2(char *token, t_env *env)
 			}
 		}
 		free(varname);
-		end = skip_word(end);
+		end = skip_varname(end);
 		start = end;
 	}
 	return (ret);
 }
-
+/*
 char	*expand_vars(char *token, t_env *env)
 {
 	char	*ret;
@@ -161,3 +175,4 @@ char	*expand_vars(char *token, t_env *env)
 	}
 	return (ret);
 }
+*/
