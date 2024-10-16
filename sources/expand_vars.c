@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/16 12:04:48 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/16 13:40:21 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,27 @@ char	*concatenate_until(char **dst, char *src, char delim)
 	return (src_end);
 }
 
+char	*concatenate_until2(char **dst, char *src, char *delim)
+{
+	char	*src_end;
+	char	*temp;
+	char	*temp_joined;
+
+	printf("concat delims %c - %c\n", delim[0], delim[1]);
+	src_end = src;
+	while (*src_end && *src_end != delim[0] && *src_end != delim[1])
+	{
+		src_end++;
+	}
+	temp = ft_strndup(src, substr_len(src, src_end));
+	if (!temp)
+		return (NULL);
+	temp_joined = ft_strjoin(*dst, temp);
+	if (temp_joined)
+		*dst = temp_joined;
+	return (src_end);
+}
+
 char	*skip_varname(char *s)
 {
 	if (!s)
@@ -66,6 +87,7 @@ char	*skip_varname(char *s)
 	return (s);
 }
 
+// TODO: replace loop with call to skip_varname()
 char	*get_varname(char *start)
 {
 	char	*end;
@@ -97,27 +119,38 @@ char	*expand_vars(char *token, t_env *env)
 	ret = NULL;
 	while (*start)
 	{
-		end = concatenate_until(&ret, start, '$');
+		end = concatenate_until2(&ret, start, "$'");
 		if (!ret)
 			return (NULL);
-		varname = get_varname(end + 1);
-		if (!varname)
+		if (*end == '$')
 		{
-			free(ret);
-			return (NULL);
-		}
-		value = ft_env_get_value_by_key(varname, env);
-		if (value)
-		{
-			ret = ft_strjoin(ret, value);
-			if (!ret)
+			varname = get_varname(end + 1);
+			if (!varname)
 			{
-				free(varname);
+				free(ret);
 				return (NULL);
 			}
+			value = ft_env_get_value_by_key(varname, env);
+			if (value)
+			{
+				ret = ft_strjoin(ret, value);
+				if (!ret)
+				{
+					free(varname);
+					return (NULL);
+				}
+			}
+			free(varname);
+			end = skip_varname(end);
 		}
-		free(varname);
-		end = skip_varname(end);
+		else if (*end == '\'')
+		{
+			end++;
+			start = end;
+			printf("peruna\n");
+			end = concatenate_until2(&ret, start, "''");
+			printf("end: %s\n", end);
+		}
 		start = end;
 	}
 	return (ret);

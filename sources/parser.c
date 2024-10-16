@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 10:11:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/14 13:57:32 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/16 14:37:38 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ char	*get_quoted_string(char *start, t_list **new_token)
 }
 */
 // lets make it so start is inclusive and end is not inclusive
+// basically splits the argument on pipes, taking quotes into account
 t_list	*tokenize(char *line)
 {
 	char	*start;
@@ -144,7 +145,7 @@ t_list	*tokenize(char *line)
 					quotes = 1;
 				else if (*end == '\"')
 					quotes = 2;
-				else if (*end == '|')
+				else if (*end == '|') 
 					break ;
 			}
 			else if (quotes == 1 && *end == '\'')

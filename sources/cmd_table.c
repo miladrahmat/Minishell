@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/16 12:04:11 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/16 17:11:48 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,19 +186,33 @@ void	*init_t_cmd(void *content)
 	return (cmd);
 }
 
-// can return NULL in case of a failed malloc() in functions called from here
-t_list	*init_cmd_table(t_list *tokens, t_env *env)
+void	print_list(void *arg)
 {
+	printf("%s\n", (char *) arg);
+}
+
+//TODO: after splitting on pipes (taking quotes into account)
+//	=> split further into redirs commands and arguments
+//
+// can return NULL in case of a failed malloc() in functions called from here
+t_list	*init_cmd_table(char *line, t_env *env)
+{
+	t_list	*tokens;
 	t_list	*cmd_table;
 	t_list	*list_iter;
 	t_cmd	*cmd;
 
+	tokens = tokenize(line);
+	ft_lstiter(tokens, &print_list);
+	// TODO: tokenize further before parsing redirs and expanding variables,
+	// so that quotes are not that hard every time
 	cmd_table = ft_lstmap(tokens, &init_t_cmd, &free);
 	list_iter = cmd_table;
 	while (list_iter)
 	{
 		cmd = (t_cmd *) list_iter->content;
-		cmd->token = expand_vars(cmd->token, env);
+		printf("token: %s\n", cmd->token);
+	//	cmd->token = expand_vars(cmd->token, env);
 		if (!cmd->token)
 			return (NULL);
 		if (!test_builtin_cmd(ft_split(cmd->token, ' ')))

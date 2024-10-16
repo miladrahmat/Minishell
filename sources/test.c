@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/11 14:21:09 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/16 17:11:01 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	split_free(char **str)
 		free(str[i]);
 		i++;
 	}
-	free(str[i]);
+	free(str[i]); //why is this line here?
 	free(str);
 }
 
@@ -41,16 +41,11 @@ t_env	*copy_env(char **envp)
 	return (env);
 }
 
-void	print_list(void *arg)
-{
-	printf("%s\n", (char *) arg);
-}
 
 int	main(int ac, char **av, char **envp)
 {
 	char	*line;
 	char	**cmd;
-	t_list	*tokens;
 	t_list	*cmd_table;
 	t_list	*cmd_table_iter;
 	int		i;
@@ -64,9 +59,7 @@ int	main(int ac, char **av, char **envp)
 		line = readline("\e[1;32m[MINISHELL]$> \e[0m");
 		if (line && *line)
 		{
-			tokens = tokenize(line);
-			ft_lstiter(tokens, &print_list);
-			cmd_table = init_cmd_table(tokens, env);
+			cmd_table = init_cmd_table(line, env);
 			cmd_table_iter = cmd_table;
 			while (cmd_table_iter)
 			{

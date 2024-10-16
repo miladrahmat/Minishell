@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/16 12:04:41 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/16 17:11:21 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ typedef struct s_cmd
 }	t_cmd;
 
 // cmd_table.c
-t_list	*init_cmd_table(t_list *tokens, t_env *env);
+t_list	*init_cmd_table(char *line, t_env *env);
 // path_utils.c
 void	open_files(t_files *files, char *infile_name, char *outfile_name);
 void	close_all(t_files files, int pipefd[2]);
