@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:20:32 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/14 11:37:05 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/16 14:49:14 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,8 @@ int	pwd(int fd)
 	getcwd(res, PATH_MAX);
 	if (errno != 0)
 	{
-		perror(strerror(errno));
 		free(res);
-		return (0);
+		return (print_builtin_error("pwd", NULL, NULL, false));
 	}
 	ft_putendl_fd(res, fd);
 	free(res);
@@ -33,41 +32,10 @@ int	pwd(int fd)
 
 int	cd(char **cmd, t_env **envp)
 {
-	t_env	*list_iter;
-	char	*res;
-	char	*old_pwd;
-
 	chdir(*cmd);
-	res = malloc(PATH_MAX * sizeof(char));
-	if (res == NULL)
-		return (0);
-	getcwd(res, PATH_MAX);
 	if (errno != 0)
-	{
-		ft_putstr_fd("cd: ", 2);
-		ft_putstr_fd(*cmd, 2);
-		ft_putstr_fd(": ", 2);
-		ft_putendl_fd(strerror(errno), 2);
-		errno = 0;
-		return (0);
-	}
-	old_pwd = NULL;
-	list_iter = *envp;
-	while (list_iter != NULL)
-	{
-		if (ft_strcmp(list_iter->key, "PWD") == 0 && old_pwd == NULL)
-		{
-			old_pwd = list_iter->value;
-			list_iter->value = res;
-			list_iter = *envp;
-		}
-		if (ft_strcmp(list_iter->key, "OLDPWD") == 0 && old_pwd != NULL)
-		{
-			free(list_iter->value);
-			list_iter->value = old_pwd;
-		}
-		list_iter = list_iter->next;
-	}
+		return (print_builtin_error("cd", *cmd, NULL, false));
+	update_pwd(envp);
 	return (0);
 }
 
@@ -75,11 +43,19 @@ int	builtin_exit(char **cmd, t_env **envp)
 {
 	int	ret_val;
 
+	ft_putendl_fd(*cmd, 2);
 	ret_val = 0;
 	if (cmd[1] != NULL)
-		ret_val = ft_atoi(cmd[1]);
-	ft_putendl_fd(*cmd, 2);
-	split_free(cmd);
+	{
+		if (validate_str(cmd[1], "0123456789") == -1)
+		{
+			print_builtin_error("exit", cmd[1], "numeric argument required", \
+				false);
+			ret_val = 2;
+		}
+		else
+			ret_val = ft_atoi(cmd[1]);
+	}
 	ft_envclear(envp, &free);
 	exit(ret_val);
 }
@@ -101,6 +77,8 @@ bool	test_builtin_cmd(char **cmd)
 	else if (ft_strncmp(cmd[0], "env", 4) == 0)
 		ret = true;
 	else if (ft_strncmp(cmd[0], "unset", 6) == 0)
+		ret = true;
+	else if (ft_strncmp(cmd[0], "export", 7) == 0)
 		ret = true;
 	else
 		ret = false;

@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/14 15:00:23 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/16 14:13:19 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,9 @@ int		echo(char **str, int fd);
 int		env(char **cmd, int fd, t_env **envp);
 int		unset(char **cmd, t_env **envp);
 int		export(char **cmd, int fd, t_env **envp);
+int		print_builtin_error(char *cmd, char *arg, char *err, bool alloc);
+t_env	*print_export_error(char **variable);
+void	update_pwd(t_env **envp);
 
 //helper functions
 void	split_free(char **str);
@@ -92,6 +95,7 @@ void	connect_list(t_env **list, t_env **node);
 bool	check_key(char *cmd, t_env *node);
 size_t	get_cmd_amount(char **cmd);
 size_t	ft_strlen_eq(char *str);
+int		validate_str(char *str, char *acc_values);
 
 //env struct functions
 t_env	*ft_envnew(char *key, char *value);

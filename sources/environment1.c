@@ -6,22 +6,11 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 18:20:21 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/15 16:25:31 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/16 12:28:19 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static t_env	*print_export_error(char **variable)
-{
-	ft_putstr_fd("minishell: export: ", 2);
-	ft_putchar_fd('`', 2);
-	ft_putstr_fd(*variable, 2);
-	ft_putstr_fd("\'", 2);
-	ft_putstr_fd(": not a valid identifier\n", 2);
-	free(*variable);
-	return (NULL);
-}
 
 void	ft_env_free_add(t_env *lst, char *key, char *value)
 {

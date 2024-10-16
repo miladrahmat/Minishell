@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/10/14 15:09:06 by mrahmat-         ###   ########.fr        #
+#    Updated: 2024/10/16 12:12:58 by mrahmat-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,8 @@ SRCS	:=  $(SRCDIR)builtin_cmds.c \
 			$(SRCDIR)cmd_table.c \
 			$(SRCDIR)string_utils.c \
 			$(SRCDIR)expand_vars.c \
-			$(SRCDIR)file_handler.c
+			$(SRCDIR)file_handler.c \
+			$(SRCDIR)builtin_error.c
 OBJS	:= ${SRCS:.c=.o}
 
 all: libft $(NAME)

@@ -6,11 +6,40 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 18:32:17 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/10 17:41:30 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/16 12:35:41 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	update_pwd(t_env **envp)
+{
+	t_env	*list_iter;
+	char	*res;
+	char	*old_pwd;
+
+	res = malloc(PATH_MAX * sizeof(char));
+	if (res == NULL)
+		return ;
+	getcwd(res, PATH_MAX);
+	old_pwd = NULL;
+	list_iter = *envp;
+	while (list_iter != NULL)
+	{
+		if (ft_strcmp(list_iter->key, "PWD") == 0 && old_pwd == NULL)
+		{
+			old_pwd = list_iter->value;
+			list_iter->value = res;
+			list_iter = *envp;
+		}
+		if (ft_strcmp(list_iter->key, "OLDPWD") == 0 && old_pwd != NULL)
+		{
+			free(list_iter->value);
+			list_iter->value = old_pwd;
+		}
+		list_iter = list_iter->next;
+	}
+}
 
 void	connect_list(t_env **list, t_env **node)
 {

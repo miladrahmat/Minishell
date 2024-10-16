@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/15 16:54:07 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/16 11:36:45 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,7 @@ t_list	*init_cmd_table(t_list *tokens, t_env *env)
 		}
 		else
 		{
-			cmd->cmd_args = NULL;
+			cmd->cmd_args = ft_split(cmd->token, ' ');
 			/*
 			cmd->cmd_args = malloc(sizeof(char *) * 2);
 			cmd->cmd_args[0] = ft_strdup(cmd->token);

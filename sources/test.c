@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/15 17:13:36 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/16 13:11:52 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,11 @@ t_env	*copy_env(char **envp)
 	while (*envp != NULL)
 	{
 		new_node = set_key_value(*envp);
+		if (new_node == NULL)
+		{
+			ft_envclear(&env, &free);
+			return (NULL);
+		}
 		ft_envadd_back(&env, new_node);
 		envp++;
 	}
@@ -49,7 +54,6 @@ void	print_list(void *arg)
 int	main(int ac, char **av, char **envp)
 {
 	char	*line;
-	char	**cmd;
 	t_list	*tokens;
 	t_list	*cmd_table;
 	t_list	*cmd_table_iter;
@@ -59,6 +63,8 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	(void)ac;
 	env = copy_env(envp);
+	if (env == NULL)
+		exit(1);
 	while (true)
 	{
 		line = readline("\e[1;32m[MINISHELL]$> \e[0m");
@@ -67,7 +73,11 @@ int	main(int ac, char **av, char **envp)
 			tokens = tokenize(line);
 			ft_lstiter(tokens, &print_list);
 			cmd_table = init_cmd_table(tokens, env);
-			open_infiles(&cmd_table);
+			if (open_infiles(&cmd_table) == -1)
+			{
+				((t_cmd *)cmd_table->content)->fd->infile = 0;
+				((t_cmd *)cmd_table->content)->fd->outfile = 1;
+			}
 			cmd_table_iter = cmd_table;
 			while (cmd_table_iter)
 			{
@@ -97,17 +107,10 @@ int	main(int ac, char **av, char **envp)
 				cmd_table_iter = cmd_table_iter->next;
 			}
 			printf("done\n");
-			cmd = ft_split(line, ' ');
 			add_history(line);
 			free(line);
-			if (cmd == NULL || *cmd == NULL)
-			{
-				ft_envclear(&env, &free);
-				exit(1);
-			}
-			check_builtin_cmd(cmd, ((t_cmd *)cmd_table->content)-> \
+			check_builtin_cmd(((t_cmd *)cmd_table->content)->cmd_args, ((t_cmd *)cmd_table->content)-> \
 						fd->outfile, &env);
-			split_free(cmd);
 		}
 	}
 }
