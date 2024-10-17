@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/16 17:11:48 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/17 17:04:32 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,25 +173,86 @@ void	parse_redirs(t_cmd *cmd, char *content)
 	cmd->token = cmd_no_redir;
 }
 
+// split a string on whitespace and arrows, but not in quotes
+t_list	*split_token(char *cmd_token)
+{
+	char	*start;
+	char	*end;
+	t_list	*new_token;
+	t_list	*tokens;
+	int		quotes;
+
+	if (!cmd_token)
+		return NULL;
+	start = cmd_token;
+	tokens = NULL;
+	end = start;
+	quotes = 0;
+	printf("split_token incoming token: %s\n", end);
+	while (*start && *end)
+	{
+		start = skip_whitespace(start);
+		end = start;
+		if (*end == '<' || *end == '>')
+			end++;
+		while (*end)
+		{
+			if (quotes == 0)
+			{
+				if (*end == '\'')
+					quotes = 1;
+				else if (*end == '\"')
+					quotes = 2;
+				else if (*end == '<' || *end == '>' || is_whitespace(*end))
+					break ;
+			}
+			else if (quotes == 1 && *end == '\'')
+				quotes = 0;
+			else if (quotes == 2 && *end == '\"')
+				quotes = 0;
+			end++;
+		}
+		new_token = ft_lstnew(get_token(start, end));
+		ft_lstadd_back(&tokens, new_token);
+			start = end;
+	}
+	return (tokens);
+}
+
+void	print_list(void *arg)
+{
+	printf("pl: %s\n", (char *) arg);
+}
+
 // init each t_cmd of the list (but not cmd->cmd_args yet)
+// for each node in t_list tokens, creates a node in t_list of t_cmd
 void	*init_t_cmd(void *content)
 {
 	t_cmd	*cmd;
+	static int i = 0;
+	printf("init_t_cmd %ith cmd\n", i);
+	i++;
 	
 	cmd = malloc(sizeof(t_cmd));
 	cmd->infiles = NULL;
 	cmd->outfiles = NULL;
 	cmd->path_error = 0;
-	parse_redirs(cmd, content);
+	printf("init_t_cmd input: %s\n", (char*)content);
+	cmd->split_token = split_token(content);
+	ft_lstiter(cmd->split_token, &print_list);
+	// now we are inside of a single t_cmd node; so loop through the tokens
+//	parse_redirs(cmd, content);
 	return (cmd);
 }
 
-void	print_list(void *arg)
-{
-	printf("%s\n", (char *) arg);
-}
 
 //TODO: after splitting on pipes (taking quotes into account)
+//
+// env vars can expand into commands, arguments or redir filenames,
+// 		but cannot contain < or > in themselves
+// 	==> split on spaces and redir symbols
+//
+//if a token is not a redir, its a command or an argument
 //	=> split further into redirs commands and arguments
 //
 // can return NULL in case of a failed malloc() in functions called from here
@@ -202,17 +263,24 @@ t_list	*init_cmd_table(char *line, t_env *env)
 	t_list	*list_iter;
 	t_cmd	*cmd;
 
-	tokens = tokenize(line);
-	ft_lstiter(tokens, &print_list);
+	// split line at pipes into t_list of strings
+	tokens = split_on_pipes(line);
+//	ft_lstiter(tokens, &print_list);
+	printf("init_cmd_table(): n tokens: %i\n", ft_lstsize(tokens));
+	printf("=========\n");
 	// TODO: tokenize further before parsing redirs and expanding variables,
 	// so that quotes are not that hard every time
+	//
+	// convert t_list of strings into t_list of t_cmd
 	cmd_table = ft_lstmap(tokens, &init_t_cmd, &free);
 	list_iter = cmd_table;
 	while (list_iter)
 	{
 		cmd = (t_cmd *) list_iter->content;
-		printf("token: %s\n", cmd->token);
+//		printf("token: %s\n", cmd->token);
+	//	ft_lstiter(cmd->split_token, &print_list);
 	//	cmd->token = expand_vars(cmd->token, env);
+		/*
 		if (!cmd->token)
 			return (NULL);
 		if (!test_builtin_cmd(ft_split(cmd->token, ' ')))
@@ -222,13 +290,15 @@ t_list	*init_cmd_table(char *line, t_env *env)
 		}
 		else
 		{
+		*/
+		(void) env;
 			cmd->cmd_args = NULL;
 			/*
 			cmd->cmd_args = malloc(sizeof(char *) * 2);
 			cmd->cmd_args[0] = ft_strdup(cmd->token);
 			cmd->cmd_args[1] = NULL;
 			*/
-		}
+	//	}
 		list_iter = list_iter->next;
 	}
 	return (cmd_table);

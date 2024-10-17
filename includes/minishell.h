@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/16 17:11:21 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/17 15:40:28 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ typedef struct s_files
 
 typedef struct s_cmd
 {
-	char	*token;
+	char	*token; //maybe unnecessary
+	t_list	*split_token;
 	char	**cmd_args;
 	t_list	*infiles;
 	t_list	*outfiles;
@@ -74,8 +75,8 @@ int		check_exec_access(char *cmd);
 char	**get_paths(t_env *env);
 // paths.c
 char	**get_exec_path(char *command, t_env *env, int *path_error);
-// parser.c
-t_list	*tokenize(char *line);
+// split_on_pipes.c
+t_list	*split_on_pipes(char *line);
 
 //builtin_cmds
 bool	test_builtin_cmd(char **cmd);
@@ -112,4 +113,8 @@ char	*skip_word(char *s);
 
 // expand_vars.c
 char	*expand_vars(char *token, t_env *env);
+
+// tokenizing_utils.c
+char	*get_token(char *start, char *end);
+
 #endif

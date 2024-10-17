@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/16 17:11:01 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/17 14:05:48 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int	main(int ac, char **av, char **envp)
 		if (line && *line)
 		{
 			cmd_table = init_cmd_table(line, env);
+			printf("test.c: cmd table initialized\n");
 			cmd_table_iter = cmd_table;
 			while (cmd_table_iter)
 			{

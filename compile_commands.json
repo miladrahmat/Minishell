@@ -283,5 +283,24 @@
    "includes/"
   ],
   "file": "sources/expand_vars.c"
+ },
+ {
+  "directory": "/home/lemercie/projects/minishell/repo",
+  "arguments": [
+   "cc",
+   "-g",
+   "-Wextra",
+   "-Wall",
+   "-Werror",
+   "-o",
+   "sources/tokenizing_utils.o",
+   "-c",
+   "sources/tokenizing_utils.c",
+   "-I",
+   "./includes/libft",
+   "-I",
+   "includes/"
+  ],
+  "file": "sources/tokenizing_utils.c"
  }
 ]

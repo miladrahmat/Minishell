@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/10/11 14:13:33 by lemercie         ###   ########.fr        #
+#    Updated: 2024/10/17 15:40:45 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,10 +30,11 @@ SRCS	:=  $(SRCDIR)builtin_cmds.c \
 			$(SRCDIR)paths.c \
 			$(SRCDIR)path_utils.c \
 			$(SRCDIR)path_helpers.c \
-			$(SRCDIR)parser.c \
+			$(SRCDIR)split_on_pipes.c \
 			$(SRCDIR)cmd_table.c \
 			$(SRCDIR)string_utils.c \
-			$(SRCDIR)expand_vars.c
+			$(SRCDIR)expand_vars.c \
+			$(SRCDIR)tokenizing_utils.c
 OBJS	:= ${SRCS:.c=.o}
 
 all: libft $(NAME)
