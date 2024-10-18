@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/17 17:04:32 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/18 14:30:31 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,10 @@ int	get_redir(t_cmd *cmd, char *content, int i_content)
 	return (i_content);
 }
 */
-// find redirects and remove them from the token
+//TODO: to be refactored:  will iterate through the t_list: split_tokens
+// inside the t_cmd 
+// if an individual token is a redir, it can be eliminated from the list
+// completely (?)
 void	parse_redirs(t_cmd *cmd, char *content)
 {
 	char	*cmd_no_redir;
@@ -245,9 +248,6 @@ void	*init_t_cmd(void *content)
 	return (cmd);
 }
 
-
-//TODO: after splitting on pipes (taking quotes into account)
-//
 // env vars can expand into commands, arguments or redir filenames,
 // 		but cannot contain < or > in themselves
 // 	==> split on spaces and redir symbols
