@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/18 14:30:31 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/21 11:55:08 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,135 +45,57 @@ t_redir_type	get_redir_type(char *content)
 	return (error);
 }
 
-// TODO: heredoc
-// Returns index to part of content that is after the redir.
-int	get_redir(t_cmd *cmd, char *content, int i_content)
+bool	get_redir(t_cmd *cmd, char *content)
 {
 	t_redir	*redir;
 
 	redir = malloc(sizeof(t_redir));
-	redir->redir_type = get_redir_type(&content[i_content]);
+	redir->redir_type = get_redir_type(content);
 	if (redir->redir_type == out_append)
 	{
-		redir->filename = get_word(&content[i_content + 2]);
+		redir->filename = get_word(content + 2);
 		ft_lstadd_back(&cmd->outfiles, ft_lstnew(redir));
-		i_content += 2;
+		return (true);
 	}
 	else if (redir->redir_type == out_trunc)
 	{
-		redir->filename = get_word(&content[i_content + 1]);
+		redir->filename = get_word(content + 1);
 		ft_lstadd_back(&cmd->outfiles, ft_lstnew(redir));
-		i_content++;
+			return (true);
 	}
 	else if (redir->redir_type == input)
 	{
-		redir->filename = get_word(&content[i_content + 1]);
+		redir->filename = get_word(content + 1);
 		ft_lstadd_back(&cmd->infiles, ft_lstnew(redir));
-		i_content++;
+		return (true);
 	}
 	else if (redir->redir_type == heredoc)
 	{
 		printf("get_redir(): TODO: implement heredoc\n");
-		i_content += 2;
+		return (true);
 	}
 	else
 	{
-		free(redir);
+		return (false);
 	}
-	while (content[i_content] && is_whitespace(content[i_content]))
-	{
-		i_content++;
-	}
-	while (content[i_content] && !is_whitespace(content[i_content]))
-	{
-		i_content++;
-	}
-	return (i_content);
 }
 
-//	For output, it has to end up in the rightmost outfile, but intermediary 
-// 		files have to be created too.
-// 		For input, only the rightmost file is used, but it will try to open
-// 		all files. 
-/*
-int	get_redir(t_cmd *cmd, char *content, int i_content)
+void	parse_redirs(t_cmd *cmd)
 {
-	t_redir_type	redir_type;
-	char			*filename;
+	t_list	*tokens;
+	t_list	*tokens_iter;
+	bool	valid_redir;
 
-	redir_type = get_redir_type(&content[i_content]);
-	if (redir_type == out_append)
+	tokens = cmd->split_token;
+	tokens_iter = tokens;
+	while (tokens_iter)
 	{
-		ft_lstadd_back(&cmd->infiles, ft_lstnew(get_word(&content[i_content + 2])));
-		filename = get_word(&content[i_content + 2]);
-		cmd->outfile = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0666);
-		if (cmd->outfile == -1)
-			print_error("Failed to open file", filename);
-		free(filename);
-		i_content += 2;
+		valid_redir = get_redir(cmd, tokens_iter->content);
+		(void) valid_redir;
+//		if (valid_redir)
+			// delete token from list
+		tokens_iter = tokens_iter->next;
 	}
-	else if (redir_type == out_trunc)
-	{
-		filename = get_word(&content[i_content + 1]);
-		cmd->outfile = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-		if (cmd->outfile == -1)
-			print_error("Failed to open file", filename);
-		free(filename);
-		i_content++;
-	}
-	else if (redir_type == input)
-	{
-		filename = get_word(&content[i_content + 1]);
-		cmd->infile = open(filename, O_RDONLY);
-		if (cmd->infile == -1)
-			print_error("Failed to open file", filename);
-		free(filename);
-		i_content++;
-	}
-	else if (redir_type == heredoc)
-	{
-		printf("get_redir(): TODO: implement heredoc\n");
-		i_content += 2;
-	}
-	while (content[i_content] && is_whitespace(content[i_content]))
-	{
-		i_content++;
-	}
-	while (content[i_content] && !is_whitespace(content[i_content]))
-	{
-		i_content++;
-	}
-	return (i_content);
-}
-*/
-//TODO: to be refactored:  will iterate through the t_list: split_tokens
-// inside the t_cmd 
-// if an individual token is a redir, it can be eliminated from the list
-// completely (?)
-void	parse_redirs(t_cmd *cmd, char *content)
-{
-	char	*cmd_no_redir;
-	int		i_content;
-	int		i_cmd;
-
-	cmd_no_redir = malloc(sizeof(char) * (ft_strlen(content) + 1));
-	i_content = 0;
-	i_cmd = 0;
-	while (content[i_content])
-	{
-		if (content[i_content] == '<' || content[i_content] == '>')
-		{
-			i_content = get_redir(cmd, content, i_content);
-		}
-		else
-		{
-			cmd_no_redir[i_cmd] = content[i_content];
-			i_content++;
-			i_cmd++;
-		}
-	}
-	cmd_no_redir[i_cmd] = '\0';
-	cmd->token = cmd_no_redir;
 }
 
 // split a string on whitespace and arrows, but not in quotes
@@ -197,7 +119,11 @@ t_list	*split_token(char *cmd_token)
 		start = skip_whitespace(start);
 		end = start;
 		if (*end == '<' || *end == '>')
+		{
 			end++;
+			if (*end == '<' || *end == '>')
+				end++;
+		}
 		while (*end)
 		{
 			if (quotes == 0)
@@ -244,7 +170,7 @@ void	*init_t_cmd(void *content)
 	cmd->split_token = split_token(content);
 	ft_lstiter(cmd->split_token, &print_list);
 	// now we are inside of a single t_cmd node; so loop through the tokens
-//	parse_redirs(cmd, content);
+	parse_redirs(cmd);
 	return (cmd);
 }
 
@@ -268,17 +194,14 @@ t_list	*init_cmd_table(char *line, t_env *env)
 //	ft_lstiter(tokens, &print_list);
 	printf("init_cmd_table(): n tokens: %i\n", ft_lstsize(tokens));
 	printf("=========\n");
-	// TODO: tokenize further before parsing redirs and expanding variables,
-	// so that quotes are not that hard every time
-	//
 	// convert t_list of strings into t_list of t_cmd
 	cmd_table = ft_lstmap(tokens, &init_t_cmd, &free);
 	list_iter = cmd_table;
 	while (list_iter)
 	{
 		cmd = (t_cmd *) list_iter->content;
-//		printf("token: %s\n", cmd->token);
-	//	ft_lstiter(cmd->split_token, &print_list);
+		printf("num of infiles: %i\n", ft_lstsize(cmd->infiles));
+		printf("num of outfiles: %i\n", ft_lstsize(cmd->outfiles));
 	//	cmd->token = expand_vars(cmd->token, env);
 		/*
 		if (!cmd->token)
