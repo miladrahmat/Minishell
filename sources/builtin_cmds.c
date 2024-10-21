@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:20:32 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/14 13:42:29 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/21 15:59:52 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,27 +85,26 @@ int	builtin_exit(char **cmd, t_env **envp)
 }
 
 // returns false also when the ft_split in the caller fails
-bool	test_builtin_cmd(char **cmd)
+bool	test_builtin_cmd(char *cmd)
 {
 	bool	ret;
 
 	if (!cmd)
 		return (false);
-	if (ft_strncmp(cmd[0], "pwd", 4) == 0)
+	if (ft_strncmp(cmd, "pwd", 4) == 0)
 		ret = true;
-	else if (ft_strncmp("cd", cmd[0], 3) == 0)
+	else if (ft_strncmp("cd", cmd, 3) == 0)
 		ret = true;
-	else if (ft_strncmp(cmd[0], "echo", 5) == 0)
+	else if (ft_strncmp(cmd, "echo", 5) == 0)
 		ret = true;
-	else if (ft_strncmp(cmd[0], "exit", 5) == 0)
+	else if (ft_strncmp(cmd, "exit", 5) == 0)
 		ret = true;
-	else if (ft_strncmp(cmd[0], "env", 4) == 0)
+	else if (ft_strncmp(cmd, "env", 4) == 0)
 		ret = true;
-	else if (ft_strncmp(cmd[0], "unset", 6) == 0)
+	else if (ft_strncmp(cmd, "unset", 6) == 0)
 		ret = true;
 	else
 		ret = false;
-	free_strv(cmd);
 	return (ret);
 }
 
