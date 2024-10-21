@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/21 15:02:14 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/21 15:39:16 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,8 @@ t_list	*init_cmd_table(char *line, t_env *env)
 	t_list	*cmd_table;
 	t_list	*list_iter;
 	t_cmd	*cmd;
-	t_list	*split_tokens;
+	t_list	*split_tokens_iter;
+	int		i;
 
 	// split line at pipes into t_list of strings
 	tokens = split_on_pipes(line);
@@ -203,34 +204,35 @@ t_list	*init_cmd_table(char *line, t_env *env)
 		printf("num of infiles: %i\n", ft_lstsize(cmd->infiles));
 		printf("num of outfiles: %i\n", ft_lstsize(cmd->outfiles));
 		ft_lstiter(cmd->split_token, &print_list);
-		split_tokens = cmd->split_token;
-		while (split_tokens)
+		split_tokens_iter = cmd->split_token;
+		while (split_tokens_iter)
 		{
-			split_tokens->content = expand_vars(split_tokens->content, env);
-			split_tokens = split_tokens->next;
+			split_tokens_iter->content =
+				expand_vars(split_tokens_iter->content, env);
+			split_tokens_iter = split_tokens_iter->next;
 		}
-
 		ft_lstiter(cmd->split_token, &print_list);
-	//	cmd->token = expand_vars(cmd->token, env);
-		/*
-		if (!cmd->token)
-			return (NULL);
-		if (!test_builtin_cmd(ft_split(cmd->token, ' ')))
+		if (!test_builtin_cmd(ft_split(cmd->split_token->content, ' ')))
 		{
-			printf("not a builtin command, %s\n", cmd->token);
-			cmd->cmd_args = get_exec_path(cmd->token, env, &cmd->path_error);
+			printf("not a builtin command, %s\n", (char *) cmd->split_token->content);
+			// TODO: allocate strings for each token
+			// 		result of get_exec_path goes into cmd_args[0]
+			cmd->cmd_args = malloc(sizeof(char *) * (ft_lstsize(cmd->split_token) + 1));
+			cmd->cmd_args[0] = get_exec_path(cmd->split_token->content, env, &cmd->path_error)[0];
+			i = 1;
+			split_tokens_iter = cmd->split_token;
+			while (split_tokens_iter)
+			{
+				cmd->cmd_args[i] = ft_strdup(split_tokens_iter->content);
+				split_tokens_iter = split_tokens_iter->next;
+				i++;
+			}
+			cmd->cmd_args[i] = NULL;
 		}
 		else
 		{
-		*/
-		(void) env;
 			cmd->cmd_args = NULL;
-			/*
-			cmd->cmd_args = malloc(sizeof(char *) * 2);
-			cmd->cmd_args[0] = ft_strdup(cmd->token);
-			cmd->cmd_args[1] = NULL;
-			*/
-	//	}
+		}
 		list_iter = list_iter->next;
 	}
 	return (cmd_table);
