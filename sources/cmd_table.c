@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/21 11:55:08 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/21 12:09:59 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,8 @@ void	parse_redirs(t_cmd *cmd)
 	while (tokens_iter)
 	{
 		valid_redir = get_redir(cmd, tokens_iter->content);
-		(void) valid_redir;
-//		if (valid_redir)
-			// delete token from list
+		if (valid_redir)
+			ft_lstdel_and_connect(&cmd->split_token, &tokens_iter);
 		tokens_iter = tokens_iter->next;
 	}
 }
@@ -202,6 +201,7 @@ t_list	*init_cmd_table(char *line, t_env *env)
 		cmd = (t_cmd *) list_iter->content;
 		printf("num of infiles: %i\n", ft_lstsize(cmd->infiles));
 		printf("num of outfiles: %i\n", ft_lstsize(cmd->outfiles));
+		ft_lstiter(cmd->split_token, &print_list);
 	//	cmd->token = expand_vars(cmd->token, env);
 		/*
 		if (!cmd->token)
