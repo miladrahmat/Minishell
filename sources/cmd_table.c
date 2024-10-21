@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/21 12:09:59 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/21 15:02:14 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,7 @@ t_list	*init_cmd_table(char *line, t_env *env)
 	t_list	*cmd_table;
 	t_list	*list_iter;
 	t_cmd	*cmd;
+	t_list	*split_tokens;
 
 	// split line at pipes into t_list of strings
 	tokens = split_on_pipes(line);
@@ -201,6 +202,14 @@ t_list	*init_cmd_table(char *line, t_env *env)
 		cmd = (t_cmd *) list_iter->content;
 		printf("num of infiles: %i\n", ft_lstsize(cmd->infiles));
 		printf("num of outfiles: %i\n", ft_lstsize(cmd->outfiles));
+		ft_lstiter(cmd->split_token, &print_list);
+		split_tokens = cmd->split_token;
+		while (split_tokens)
+		{
+			split_tokens->content = expand_vars(split_tokens->content, env);
+			split_tokens = split_tokens->next;
+		}
+
 		ft_lstiter(cmd->split_token, &print_list);
 	//	cmd->token = expand_vars(cmd->token, env);
 		/*

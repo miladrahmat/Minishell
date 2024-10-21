@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/16 13:40:21 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/21 15:04:46 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,13 @@ char	*get_varname(char *start)
 	}
 	return (strndup(start, substr_len(start, end)));
 }
+
 // join until $ or single quote (that is not inside of doubles)
 // if $, get word and expand
 // if single quote join until next single quote
 
 // creates a new string where $VAR in the token is replaced by the value of
 // $VAR in env
-// TODO: expand in double quotes but not in single quotes
 char	*expand_vars(char *token, t_env *env)
 {
 	char	*ret;
@@ -121,13 +121,17 @@ char	*expand_vars(char *token, t_env *env)
 	{
 		end = concatenate_until2(&ret, start, "$'");
 		if (!ret)
+		{
+			free(token);
 			return (NULL);
+		}
 		if (*end == '$')
 		{
 			varname = get_varname(end + 1);
 			if (!varname)
 			{
 				free(ret);
+				free(token);
 				return (NULL);
 			}
 			value = ft_env_get_value_by_key(varname, env);
@@ -137,6 +141,7 @@ char	*expand_vars(char *token, t_env *env)
 				if (!ret)
 				{
 					free(varname);
+					free(token);
 					return (NULL);
 				}
 			}
@@ -153,59 +158,6 @@ char	*expand_vars(char *token, t_env *env)
 		}
 		start = end;
 	}
+	free(token);
 	return (ret);
 }
-/*
-char	*expand_vars(char *token, t_env *env)
-{
-	char	*ret;
-	char	*start;
-	char	*end;
-	char	*varname;
-	char	*temp;
-	char	*value;
-
-	start = token;
-	end = token;
-	ret = NULL;
-	printf("expand_tokens() before: %s\n", token);
-	while (*start)
-	{
-		while (*end && *end != '$')
-			end++;
-		temp = ft_strndup(start, substr_len(start, end));
-		if (!temp)
-		{
-			if (ret)
-				free (ret);
-			return (NULL);
-		}
-		ret = ft_strjoin(ret, temp);
-		free(temp);
-		if (!ret)
-			return (NULL);
-		if (*end != '$')
-			break ;
-		varname = get_word(end + 1);
-		if (!varname)
-		{
-			free(ret);
-			return (NULL);
-		}
-		value = ft_env_get_value_by_key(varname, env);
-		if (value)
-		{
-			ret = ft_strjoin(ret, value);
-			if (!ret)
-			{
-				free(varname);
-				return (NULL);
-			}
-		}
-		free(varname);
-		end = skip_word(end);
-		start = end;
-	}
-	return (ret);
-}
-*/
