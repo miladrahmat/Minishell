@@ -6,26 +6,11 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:02:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/10 16:13:45 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/22 16:44:05 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	echo_print(char *str, int fd)
-{
-	while (*str != '\0')
-	{
-		if (*str == '\'')
-			while (*str++ != '\'' && *str != '\0')
-				ft_putchar_fd(*str, fd);
-		else if (*str == '"')
-			while (*str++ != '"' && *str != '\0')
-				ft_putchar_fd(*str, fd);
-		else
-			ft_putchar_fd(*str++, fd);
-	}
-}
 
 static int	echo_n(char *str)
 {
@@ -59,7 +44,7 @@ int	echo(char **str, int fd)
 	}
 	while (*str != NULL)
 	{
-		echo_print(*str, fd);
+		ft_putstr_fd(*str, fd);
 		str++;
 		if (*str != NULL)
 			ft_putchar_fd(' ', fd);
