@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/10/22 12:49:25 by mrahmat-         ###   ########.fr        #
+#    Updated: 2024/10/22 15:59:58 by mrahmat-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,25 +53,31 @@ OBJS	:= $(addprefix $(OBJDIR), $(SRC_FILES:.c=.o))
 all: $(OBJDIR) libft $(NAME)
 
 $(OBJDIR):
-	mkdir -p objects
+	@mkdir -p objects
 
-libft: 
-	make bonus -C $(LIBFT)
+libft:
+	@echo "\e[1;93m Compiling Libft ⏳ \e[0;37m"
+	@make -s bonus -C $(LIBFT) \
+		|| echo "\e[1;31m Failed to compile Libft 😔 \e[0;37m"; exit
+	@echo "\e[1;93m Libft compiled! 💪 \e[0;37m"
 
 $(OBJDIR)%.o: $(SRCDIR)%.c
-	$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) 
+	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) 
 
 $(NAME): $(OBJS) ./includes/minishell.h
-	$(CC) $(LDFLAGS) $(OBJS) $(LIBFT)/libft.a $(HEADERS) -o $(NAME)
+	@$(CC) $(LDFLAGS) $(OBJS) $(LIBFT)/libft.a $(HEADERS) -o $(NAME) \
+	&& echo "\e[1;92m Minishell ready! \e[0;37m"
 
 clean:
-	rm -rf $(OBJDIR)
-	make clean -C $(LIBFT)
+	@rm -rf $(OBJDIR)
+	@make -s clean -C $(LIBFT) \
+		&& echo "\e[1;96m Removed all object files 🧹 \e[0;37m"
 
 fclean: clean
-	rm -rf $(NAME)
-	make fclean -C $(LIBFT)
+	@rm -rf $(NAME)
+	@make -s fclean -C $(LIBFT) \
+		&& echo "\e[1;96m Removed all executables 🧹 \e[0;37m"
 
-re: clean all
+re: fclean all
 
 .PHONY: all, clean, fclean, re, libft
