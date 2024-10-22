@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/22 11:11:42 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/22 11:41:04 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,45 @@ t_env	*copy_env(char **envp)
 	return (env);
 }
 
+void	print_tlist_string(void *arg)
+{
+	t_redir	*redir;
+
+	redir = (t_redir *) arg;
+	printf("%s;", redir->filename);
+}
+
+// to be passed to ft_lstiter()
+void	print_cmd_list(void *arg)
+{
+	t_cmd	*node;
+	int		i;
+
+	node = (t_cmd *) arg;
+	printf("cmd_args: ");
+	i = 0;
+	while (node->cmd_args[i])
+	{
+		printf("%s;", node->cmd_args[i]);
+		i++;
+	}
+	printf("\n");
+	printf("infiles: ");
+	ft_lstiter(node->infiles, &print_tlist_string);
+	printf("\n");
+	printf("outfiles: ");
+	ft_lstiter(node->infiles, &print_tlist_string);
+}
 
 int	main(int ac, char **av, char **envp)
 {
 	char	*line;
 	t_list	*tokens;
 	t_list	*cmd_table;
-	t_list	*cmd_table_iter;
-	int		i;
+//	t_list	*cmd_table_iter;
+//	int		i;
 	t_env	*env;
-	t_cmd	*cur_cmd;
+//	t_cmd	*cur_cmd;
 
 	(void)av;
 	(void)ac;
@@ -67,14 +96,10 @@ int	main(int ac, char **av, char **envp)
 		line = readline("\e[1;32m[MINISHELL]$> \e[0m");
 		if (line && *line)
 		{
-			tokens = tokenize(line);
-			ft_lstiter(tokens, &print_list);
-			cmd_table = init_cmd_table(tokens, env);
-			if (open_infiles(&cmd_table) == -1)
-			{
-				((t_cmd *)cmd_table->content)->fd->infile = 0;
-				((t_cmd *)cmd_table->content)->fd->outfile = 1;
-			}
+			cmd_table = init_cmd_table(line, env);
+			ft_lstiter(cmd_table, &print_cmd_list);
+			/*
+			printf("test.c: cmd table initialized\n");
 			cmd_table_iter = cmd_table;
 			while (cmd_table_iter)
 			{
@@ -104,6 +129,7 @@ int	main(int ac, char **av, char **envp)
 				}
 				cmd_table_iter = cmd_table_iter->next;
 			}
+			*/
 			printf("done\n");
 			add_history(line);
 			free(line);
