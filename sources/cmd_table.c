@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/22 12:19:09 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/22 15:15:56 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,8 @@ void	*init_t_cmd(void *content)
 //	=> split further into redirs commands and arguments
 //
 // can return NULL in case of a failed malloc() in functions called from here
+// TODO: when an incorrect variable name is given, expand_vars() will return 
+// an empty string. Do we then need to remove the token from the list?
 t_list	*init_cmd_table(char *line, t_env *env)
 {
 	t_list	*tokens;
@@ -196,6 +198,7 @@ t_list	*init_cmd_table(char *line, t_env *env)
 	t_cmd	*cmd;
 	t_list	*split_tokens_iter;
 	int		i;
+	char	*expanded_token;
 
 	// split line at pipes into t_list of strings
 	tokens = split_on_pipes(line);
@@ -209,8 +212,18 @@ t_list	*init_cmd_table(char *line, t_env *env)
 		split_tokens_iter = cmd->split_token;
 		while (split_tokens_iter)
 		{
-			split_tokens_iter->content =
-				expand_vars(split_tokens_iter->content, env);
+			expanded_token = expand_vars(split_tokens_iter->content, env);
+			split_tokens_iter->content = expanded_token;
+			/*
+			if (ft_strlen(expanded_token) > 0)
+			{
+				split_tokens_iter->content = expanded_token;
+			}
+			else
+			{
+				ft_lstdel_and_connect(&cmd->split_token, &split_tokens_iter);
+			}
+			*/
 			split_tokens_iter = split_tokens_iter->next;
 		}
 		cmd->cmd_args =

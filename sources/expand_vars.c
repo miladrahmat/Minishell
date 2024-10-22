@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/22 14:53:14 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/22 14:59:33 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ char	*expand_vars(char *token, t_env *env)
 		if (!ret)
 		{
 			free(token);
+			printf("expand_vars() returning NULL\n");
 			return (NULL);
 		}
 		if (*end == '$')
@@ -136,5 +137,7 @@ char	*expand_vars(char *token, t_env *env)
 		start = end;
 	}
 	free(token);
+	if (ft_strlen(ret) <= 0)
+		printf("expand_vars() returning empty string\n");
 	return (ret);
 }
