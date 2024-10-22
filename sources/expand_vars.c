@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/22 12:20:12 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:50:13 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,27 +33,8 @@ char	*ft_strndup(const char *s1, size_t len)
 
 // return pointer to the last char copied from src
 // replace dst
-char	*concatenate_until(char **dst, char *src, char delim)
-{
-	char	*src_end;
-	char	*temp;
-	char	*temp_joined;
-
-	src_end = src;
-	while (*src_end && *src_end != delim)
-	{
-		src_end++;
-	}
-	temp = ft_strndup(src, substr_len(src, src_end));
-	if (!temp)
-		return (NULL);
-	temp_joined = ft_strjoin(*dst, temp);
-	if (temp_joined)
-		*dst = temp_joined;
-	return (src_end);
-}
-
-char	*concatenate_until2(char **dst, char *src, char *delim)
+// assumes that delim has exactly 2 chars
+char	*concatenate_until(char **dst, char *src, char *delim)
 {
 	char	*src_end;
 	char	*temp;
@@ -121,7 +102,7 @@ char	*expand_vars(char *token, t_env *env)
 	ret = NULL;
 	while (*start)
 	{
-		end = concatenate_until2(&ret, start, "$'");
+		end = concatenate_until(&ret, start, "$'");
 		if (!ret)
 		{
 			free(token);
@@ -155,7 +136,7 @@ char	*expand_vars(char *token, t_env *env)
 			end++;
 			start = end;
 			printf("peruna\n");
-			end = concatenate_until2(&ret, start, "''");
+			end = concatenate_until(&ret, start, "''");
 			printf("end: %s\n", end);
 		}
 		start = end;
