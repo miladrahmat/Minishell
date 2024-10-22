@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/22 14:59:33 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/22 18:04:51 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ char	*expand_vars(char *token, t_env *env)
 			end++;
 			start = end;
 			printf("peruna\n");
-			end = concatenate_until(&ret, start, "''");
+			end = concatenate_until(&ret, start, "'");
 			printf("end: %s\n", end);
 		}
 		start = end;

@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/22 17:00:06 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/22 17:43:26 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,24 +216,22 @@ t_list	*init_cmd_table(char *line, t_env *env)
 			split_tokens_iter->content = expanded_token;
 			/*
 			if (ft_strlen(expanded_token) > 0)
-			{
 				split_tokens_iter->content = expanded_token;
-			}
 			else
-			{
 				ft_lstdel_and_connect(&cmd->split_token, &split_tokens_iter);
-			}
 			*/
 			split_tokens_iter = split_tokens_iter->next;
 		}
 		cmd->cmd_args =
 			malloc(sizeof(char *) * (ft_lstsize(cmd->split_token) + 1));
 		if (!cmd->cmd_args)
-			printf("AAAAAAAAAAA\n");
+		{
+			// free stuff ?
+			return (NULL);
+		}
 		if (!test_builtin_cmd(cmd->split_token->content))
 		{
-			printf("not a builtin command, %s\n",
-		  		(char *) cmd->split_token->content);
+			printf("not builtin cmd, %s\n", (char *) cmd->split_token->content);
 			cmd->cmd_args[0] =
 				get_exec_path(cmd->split_token->content, env, &cmd->path_error);
 				
