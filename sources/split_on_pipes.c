@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   split_on_pipes.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 10:11:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/07 10:50:22 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/17 15:38:47 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,54 +60,9 @@
 // 	3. transform into command table
 // 	4. expand variables (also inside of double quotes)
 // 	5. remove quotes
-bool	is_operator(char c)
-{
-	return (c == '|' || c == '<' || c == '>');
-}
 
-size_t	get_token_len(char *start, char *end)
-{
-	size_t	len;
-
-	len = 0;
-	while (start != end)
-	{
-		start++;
-		len++;
-	}
-	return (len);
-}
-
-char	*get_token(char *start, char *end)
-{
-	char	*token;
-	int		len;
-
-	len = get_token_len(start, end);
-	token = malloc(sizeof(char) * (len + 1));
-	ft_strlcpy(token, start, len + 1);
-	return (token);
-}
-
-char	*get_quoted_string(char *start, t_list **new_token)
-{
-	char	quote;
-	char	*end;
-
-
-	quote = *start;
-	start++;
-	end = start;
-	while (*end != quote)
-	{
-		end++;
-	}
-	*new_token = ft_lstnew(get_token(start, end));
-	return (end);
-}
-
-// lets make it so start is inclusive and end is not inclusive
-t_list	*tokenize(char *line)
+// basically splits the argument on pipes, taking quotes into account
+t_list	*split_on_pipes(char *line)
 {
 	char	*start;
 	char	*end;
@@ -123,19 +78,10 @@ t_list	*tokenize(char *line)
 	quotes = 0;
 	while (*start && *end)
 	{
-		start = skip_whitespace(start);
-		end = start;
-		/*
-		if (*start == '\'' || *start == '\"')
-		{
-			start = get_quoted_string(start, &new_token);
-			ft_lstadd_back(&tokens, new_token);
+		if (*start == '|')
 			start++;
-			end = start;
-			continue ;
-		}
-		*/
-		//while (*end && !is_whitespace(*end))
+		start = skip_whitespace(start);
+		end = start + 1;
 		while (*end)
 		{
 			if (quotes == 0)
@@ -144,7 +90,7 @@ t_list	*tokenize(char *line)
 					quotes = 1;
 				else if (*end == '\"')
 					quotes = 2;
-				else if (*end == '|')
+				else if (*end == '|') 
 					break ;
 			}
 			else if (quotes == 1 && *end == '\'')
@@ -155,10 +101,6 @@ t_list	*tokenize(char *line)
 		}
 		new_token = ft_lstnew(get_token(start, end));
 		ft_lstadd_back(&tokens, new_token);
-		if (*(end + 1))
-			end++;
-		else
-			break ;
 		start = end;
 	}
 	return (tokens);

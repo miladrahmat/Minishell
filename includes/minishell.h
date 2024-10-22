@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/16 14:13:19 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/22 11:14:10 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ typedef struct s_files
 
 typedef struct s_cmd
 {
-	char	*token;
+	char	*token; //maybe unnecessary
+	t_list	*split_token;
 	char	**cmd_args;
 	t_list	*infiles;
 	t_list	*outfiles;
@@ -63,7 +64,7 @@ typedef struct s_cmd
 }	t_cmd;
 
 // cmd_table.c
-t_list	*init_cmd_table(t_list *tokens, t_env *env);
+t_list	*init_cmd_table(char *line, t_env *env);
 // path_utils.c
 void	open_files(t_files *files, char *infile_name, char *outfile_name);
 void	close_all(t_files files, int pipefd[2]);
@@ -75,11 +76,11 @@ int		check_exec_access(char *cmd);
 char	**get_paths(t_env *env);
 // paths.c
 char	**get_exec_path(char *command, t_env *env, int *path_error);
-// parser.c
-t_list	*tokenize(char *line);
+// split_on_pipes.c
+t_list	*split_on_pipes(char *line);
 
 //builtin_cmds
-bool	test_builtin_cmd(char **cmd);
+bool	test_builtin_cmd(char *cmd);
 int		check_builtin_cmd(char **cmd, int fd, t_env **envp);
 int		echo(char **str, int fd);
 int		env(char **cmd, int fd, t_env **envp);
@@ -122,5 +123,7 @@ char	*expand_vars(char *token, t_env *env);
 int		open_infiles(t_list **cmd_table);
 int		open_outfiles(t_list **cmd_table);
 int		close_in_out(t_list **cmd_table);
+// tokenizing_utils.c
+char	*get_token(char *start, char *end);
 
 #endif

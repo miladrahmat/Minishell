@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/16 13:11:52 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/22 11:11:42 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	split_free(char **str)
 		free(str[i]);
 		i++;
 	}
-	free(str[i]);
+	free(str[i]); //why is this line here?
 	free(str);
 }
 
@@ -46,10 +46,6 @@ t_env	*copy_env(char **envp)
 	return (env);
 }
 
-void	print_list(void *arg)
-{
-	printf("%s\n", (char *) arg);
-}
 
 int	main(int ac, char **av, char **envp)
 {
@@ -59,6 +55,7 @@ int	main(int ac, char **av, char **envp)
 	t_list	*cmd_table_iter;
 	int		i;
 	t_env	*env;
+	t_cmd	*cur_cmd;
 
 	(void)av;
 	(void)ac;
@@ -95,7 +92,8 @@ int	main(int ac, char **av, char **envp)
 						fd->outfile);
 					printf("outfile: %s\n", ((t_redir *)((t_cmd *)
 						cmd_table_iter->content)->outfiles->content)->filename);
-				}
+				printf("num of infiles: %i\n", ft_lstsize(cur_cmd->infiles));
+				printf("num of outfiles: %i\n", ft_lstsize(cur_cmd->outfiles));
 				i = 0;
 				while (((t_cmd *)cmd_table_iter->content)->cmd_args &&
 					((t_cmd *)cmd_table_iter->content)->cmd_args[i])

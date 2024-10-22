@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 10:49:45 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/14 10:39:41 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/21 11:48:03 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*get_word(char *start)
 
 	start = skip_whitespace(start);
 	end = start;
-	while (!is_whitespace(*end))
+	while (*end && !is_whitespace(*end))
 	{
 		end++;
 	}
@@ -63,6 +63,6 @@ char	*skip_word(char *s)
 	{
 		s++;
 	}
-	s = skip_whitespace(s);
+//	s = skip_whitespace(s);
 	return (s);
 }
