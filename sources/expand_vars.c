@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/21 15:04:46 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:20:12 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	*concatenate_until2(char **dst, char *src, char *delim)
 	char	*temp;
 	char	*temp_joined;
 
-	printf("concat delims %c - %c\n", delim[0], delim[1]);
+//	printf("concat delims %c - %c\n", delim[0], delim[1]);
 	src_end = src;
 	while (*src_end && *src_end != delim[0] && *src_end != delim[1])
 	{
@@ -114,6 +114,8 @@ char	*expand_vars(char *token, t_env *env)
 	char	*varname;
 	char	*value;
 
+	if (!token)
+		return (NULL);
 	start = token;
 	end = token;
 	ret = NULL;

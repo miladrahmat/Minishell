@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/22 11:32:28 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/22 11:57:03 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ void	print_cmd_list(void *arg)
 	ft_lstiter(node->infiles, &print_tlist_string);
 	printf("\n");
 	printf("outfiles: ");
-	ft_lstiter(node->infiles, &print_tlist_string);
+	ft_lstiter(node->outfiles, &print_tlist_string);
+	printf("\n");
 }
 
 int	main(int ac, char **av, char **envp)
