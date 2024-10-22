@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/22 14:48:43 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/22 14:53:14 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,11 @@ char	*skip_varname(char *s)
 	return (s);
 }
 
-// TODO: replace loop with call to skip_varname()
 char	*get_varname(char *start)
 {
 	char	*end;
 
-	end = start;
-	while (ft_isalnum(*end) || *end == '_')
-	{
-		end++;
-	}
+	end  = skip_varname(start);
 	return (strndup(start, substr_len(start, end)));
 }
 
