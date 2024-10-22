@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 10:26:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/17 15:36:16 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:19:29 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*get_token(char *start, char *end)
 	int		len;
 
 	if (start == end)
-		printf("get_token: start and end same\n");
+		printf("get_token(): start and end same\n");
 	len = get_token_len(start, end);
 	if (len == 0)
 	{

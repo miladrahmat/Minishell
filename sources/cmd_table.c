@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/22 11:50:18 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:53:08 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 // << input heredoc
 t_redir_type	get_redir_type(char *content)
 {
+	if (!content || !*content)
+		return (error);
 	if (!content[1])
 			return (error);
 		if (content[0] == '>')
@@ -105,6 +107,7 @@ t_list	*split_token(char *cmd_token)
 	t_list	*new_token;
 	t_list	*tokens;
 	int		quotes;
+	char	*new_str;
 
 	if (!cmd_token)
 		return NULL;
@@ -112,7 +115,7 @@ t_list	*split_token(char *cmd_token)
 	tokens = NULL;
 	end = start;
 	quotes = 0;
-	printf("split_token incoming token: %s\n", end);
+//	printf("split_token incoming token: %s\n", end);
 	while (*start && *end)
 	{
 		start = skip_whitespace(start);
@@ -140,8 +143,12 @@ t_list	*split_token(char *cmd_token)
 				quotes = 0;
 			end++;
 		}
-		new_token = ft_lstnew(get_token(start, end));
-		ft_lstadd_back(&tokens, new_token);
+		new_str = get_token(start, end);
+		if (new_str)
+		{
+			new_token = ft_lstnew(new_str);
+			ft_lstadd_back(&tokens, new_token);
+		}
 			start = end;
 	}
 	return (tokens);
@@ -157,17 +164,17 @@ void	print_list(void *arg)
 void	*init_t_cmd(void *content)
 {
 	t_cmd	*cmd;
-	static int i = 0;
-	printf("init_t_cmd %ith cmd\n", i);
-	i++;
+//	static int i = 0;
+//	printf("init_t_cmd %ith cmd\n", i);
+//	i++;
 	
 	cmd = malloc(sizeof(t_cmd));
 	cmd->infiles = NULL;
 	cmd->outfiles = NULL;
 	cmd->path_error = 0;
-	printf("init_t_cmd input: %s\n", (char*)content);
+//	printf("init_t_cmd input: %s\n", (char*)content);
 	cmd->split_token = split_token(content);
-	ft_lstiter(cmd->split_token, &print_list);
+//	ft_lstiter(cmd->split_token, &print_list);
 	// now we are inside of a single t_cmd node; so loop through the tokens
 	parse_redirs(cmd);
 	cmd->fd = malloc(sizeof(t_files));
@@ -195,7 +202,7 @@ t_list	*init_cmd_table(char *line, t_env *env)
 
 	// split line at pipes into t_list of strings
 	tokens = split_on_pipes(line);
-	printf("init_cmd_table(): %i tokens\n", ft_lstsize(tokens));
+//	printf("init_cmd_table(): %i tokens\n", ft_lstsize(tokens));
 	// convert t_list of strings into t_list of t_cmd
 	cmd_table = ft_lstmap(tokens, &init_t_cmd, &free);
 	list_iter = cmd_table;
@@ -222,6 +229,7 @@ t_list	*init_cmd_table(char *line, t_env *env)
 			cmd->cmd_args[0] = cmd->split_token->content;
 		i = 1;
 		split_tokens_iter = cmd->split_token;
+		split_tokens_iter = split_tokens_iter->next;
 		while (split_tokens_iter)
 		{
 			cmd->cmd_args[i] = ft_strdup(split_tokens_iter->content);

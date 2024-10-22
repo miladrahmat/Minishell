@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/22 12:49:03 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:53:38 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	print_cmd_list(void *arg)
 	printf("\n");
 	printf("outfiles: ");
 	ft_lstiter(node->outfiles, &print_tlist_string);
+	printf("\n");
 }
 
 int	main(int ac, char **av, char **envp)
