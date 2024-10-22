@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/22 11:12:55 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/22 11:50:18 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,11 @@ void	*init_t_cmd(void *content)
 	cmd->infiles = NULL;
 	cmd->outfiles = NULL;
 	cmd->path_error = 0;
-	parse_redirs(cmd, content);
+	printf("init_t_cmd input: %s\n", (char*)content);
+	cmd->split_token = split_token(content);
+	ft_lstiter(cmd->split_token, &print_list);
+	// now we are inside of a single t_cmd node; so loop through the tokens
+	parse_redirs(cmd);
 	cmd->fd = malloc(sizeof(t_files));
 	cmd->fd->infile = 0;
 	cmd->fd->outfile = 1;

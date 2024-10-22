@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/10/22 11:08:57 by mrahmat-         ###   ########.fr        #
+#    Updated: 2024/10/22 12:49:25 by mrahmat-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,12 +37,14 @@ SRC_FILES	:= builtin_cmds.c \
 			paths.c \
 			path_utils.c \
 			path_helpers.c \
-			parser.c \
+			split_on_pipes.c \
 			cmd_table.c \
 			string_utils.c \
 			expand_vars.c \
 			file_handler.c \
-			builtin_error.c
+			builtin_error.c \
+			tokenizing_utils.c \
+			pipe_file_handler.c
 			
 SRCS	:= $(addprefix $(SRCDIR), $(SRC_FILES))
 

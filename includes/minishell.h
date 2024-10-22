@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/22 11:14:10 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:48:41 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,10 @@ char	*expand_vars(char *token, t_env *env);
 int		open_infiles(t_list **cmd_table);
 int		open_outfiles(t_list **cmd_table);
 int		close_in_out(t_list **cmd_table);
+
+// pipe_file_handler.c
+int		check_pipe_fd(t_list **cmd_table);
+
 // tokenizing_utils.c
 char	*get_token(char *start, char *end);
 

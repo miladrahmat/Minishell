@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:20:32 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/22 11:13:29 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/22 11:37:48 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ bool	test_builtin_cmd(char *cmd)
 		ret = true;
 	else if (ft_strncmp(cmd, "unset", 6) == 0)
 		ret = true;
-	else if (ft_strncmp(cmd[0], "export", 7) == 0)
+	else if (ft_strncmp(cmd, "export", 7) == 0)
 		ret = true;
 	else
 		ret = false;
