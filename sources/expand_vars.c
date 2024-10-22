@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/22 12:50:13 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/22 14:48:43 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ char	*ft_strndup(const char *s1, size_t len)
 
 // return pointer to the last char copied from src
 // replace dst
-// assumes that delim has exactly 2 chars
 char	*concatenate_until(char **dst, char *src, char *delim)
 {
 	char	*src_end;
@@ -42,7 +41,7 @@ char	*concatenate_until(char **dst, char *src, char *delim)
 
 //	printf("concat delims %c - %c\n", delim[0], delim[1]);
 	src_end = src;
-	while (*src_end && *src_end != delim[0] && *src_end != delim[1])
+	while (*src_end && !ft_strchr(delim, *src_end))
 	{
 		src_end++;
 	}
