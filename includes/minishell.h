@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/21 16:00:15 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/22 16:59:01 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ bool	is_abs_or_pwd_path(char *cmd);
 int		check_exec_access(char *cmd);
 char	**get_paths(t_env *env);
 // paths.c
-char	**get_exec_path(char *command, t_env *env, int *path_error);
+char	*get_exec_path(char *command, t_env *env, int *path_error);
 // split_on_pipes.c
 t_list	*split_on_pipes(char *line);
 
