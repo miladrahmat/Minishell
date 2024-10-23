@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/23 09:47:14 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/23 14:46:34 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,20 +94,25 @@ int	main(int ac, char **av, char **envp)
 		if (line && *line)
 		{
 			cmd_table = init_cmd_table(line, env);
-			check_pipe_fd(&cmd_table);
-			open_infiles(&cmd_table);
-			t_list	*cmd_iter = cmd_table;
-			while (cmd_iter != NULL)
+			if (cmd_table != NULL)
 			{
-				printf("infile fd: %d	outfile fd: %d\n", ((t_files *)((t_cmd *)cmd_iter->content)->fd)->infile, \
-				((t_files *)((t_cmd *)cmd_iter->content)->fd)->outfile);
-				cmd_iter = cmd_iter->next;
+				check_pipe_fd(&cmd_table);
+				open_infiles(&cmd_table);
+				t_list	*cmd_iter = cmd_table;
+				while (cmd_iter != NULL)
+				{
+					printf("infile fd: %d	outfile fd: %d\n", \
+						((t_files *)((t_cmd *)cmd_iter->content)->fd)->infile, \
+						((t_files *)((t_cmd *)cmd_iter->content)->fd)->outfile);
+					cmd_iter = cmd_iter->next;
+				}
+				ft_lstiter(cmd_table, &print_cmd_list);
+				check_builtin_cmd(((t_cmd *)cmd_table->content)->cmd_args, \
+				((t_cmd *)cmd_table->content)->fd->outfile, &env);
 			}
-			ft_lstiter(cmd_table, &print_cmd_list);
 			add_history(line);
 			free(line);
-			check_builtin_cmd(((t_cmd *)cmd_table->content)->cmd_args, \
-				((t_cmd *)cmd_table->content)->fd->outfile, &env);
+			
 		}
 	}
 }
