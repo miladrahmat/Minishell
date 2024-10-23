@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/23 14:38:18 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/23 16:41:57 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ bool	get_redir(t_cmd *cmd, char *content)
 	}
 	else if (redir->redir_type == heredoc)
 	{
+		// TODO: add into infiles just like other cases, filename stores
+		// the delimiter
 		printf("get_redir(): TODO: implement heredoc\n");
 		return (true);
 	}
