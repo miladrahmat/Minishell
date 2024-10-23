@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:07:28 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/22 12:47:15 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/23 14:44:39 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	check_pipe_fd(t_list **cmd_table)
 	int		pipe_fd[2];
 	t_list	*cmd_iter;
 
+	if (*cmd_table == NULL)
+		return (1);
 	cmd_iter = *cmd_table;
 	while (cmd_iter->next != NULL)
 	{
