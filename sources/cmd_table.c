@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/23 13:35:19 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/23 13:55:00 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ t_list	*init_cmd_table(char *line, t_env *env)
 			malloc(sizeof(char *) * (ft_lstsize(cmd->split_token) + 1));
 		if (!cmd->cmd_args)
 		{
-			// free stuff ?
+			//cleanup function in case of malloc fails
 			return (NULL);
 		}
 		if (!test_builtin_cmd(cmd->split_token->content))
