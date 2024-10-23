@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/22 12:20:12 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/22 18:04:51 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,27 +33,7 @@ char	*ft_strndup(const char *s1, size_t len)
 
 // return pointer to the last char copied from src
 // replace dst
-char	*concatenate_until(char **dst, char *src, char delim)
-{
-	char	*src_end;
-	char	*temp;
-	char	*temp_joined;
-
-	src_end = src;
-	while (*src_end && *src_end != delim)
-	{
-		src_end++;
-	}
-	temp = ft_strndup(src, substr_len(src, src_end));
-	if (!temp)
-		return (NULL);
-	temp_joined = ft_strjoin(*dst, temp);
-	if (temp_joined)
-		*dst = temp_joined;
-	return (src_end);
-}
-
-char	*concatenate_until2(char **dst, char *src, char *delim)
+char	*concatenate_until(char **dst, char *src, char *delim)
 {
 	char	*src_end;
 	char	*temp;
@@ -61,7 +41,7 @@ char	*concatenate_until2(char **dst, char *src, char *delim)
 
 //	printf("concat delims %c - %c\n", delim[0], delim[1]);
 	src_end = src;
-	while (*src_end && *src_end != delim[0] && *src_end != delim[1])
+	while (*src_end && !ft_strchr(delim, *src_end))
 	{
 		src_end++;
 	}
@@ -87,16 +67,11 @@ char	*skip_varname(char *s)
 	return (s);
 }
 
-// TODO: replace loop with call to skip_varname()
 char	*get_varname(char *start)
 {
 	char	*end;
 
-	end = start;
-	while (ft_isalnum(*end) || *end == '_')
-	{
-		end++;
-	}
+	end  = skip_varname(start);
 	return (strndup(start, substr_len(start, end)));
 }
 
@@ -121,10 +96,11 @@ char	*expand_vars(char *token, t_env *env)
 	ret = NULL;
 	while (*start)
 	{
-		end = concatenate_until2(&ret, start, "$'");
+		end = concatenate_until(&ret, start, "$'");
 		if (!ret)
 		{
 			free(token);
+			printf("expand_vars() returning NULL\n");
 			return (NULL);
 		}
 		if (*end == '$')
@@ -155,11 +131,13 @@ char	*expand_vars(char *token, t_env *env)
 			end++;
 			start = end;
 			printf("peruna\n");
-			end = concatenate_until2(&ret, start, "''");
+			end = concatenate_until(&ret, start, "'");
 			printf("end: %s\n", end);
 		}
 		start = end;
 	}
 	free(token);
+	if (ft_strlen(ret) <= 0)
+		printf("expand_vars() returning empty string\n");
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:38:19 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/11 15:04:24 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/22 16:58:42 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,13 +114,18 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 	return (search_paths(exec_args, env, path_error));
 }
 
-char	**get_exec_path(char *command, t_env *env, int *path_error)
+char	*get_exec_path(char *command, t_env *env, int *path_error)
 {
+	char	**ret;
+
 	if (!command || !command[0])
 	{
 		print_error("Command not found", NULL);
 		*path_error = 126;
 		return (NULL);
 	}
-	return (get_exec_path_more(command, env, path_error));
+	ret = get_exec_path_more(command, env, path_error);
+	if (ret)
+		return (ret[0]);
+	return (NULL);
 }

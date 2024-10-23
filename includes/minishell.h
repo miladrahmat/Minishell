@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/22 12:48:41 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/23 09:37:59 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ typedef struct s_files
 
 typedef struct s_cmd
 {
-	char	*token; //maybe unnecessary
 	t_list	*split_token;
 	char	**cmd_args;
 	t_list	*infiles;
@@ -75,7 +74,7 @@ bool	is_abs_or_pwd_path(char *cmd);
 int		check_exec_access(char *cmd);
 char	**get_paths(t_env *env);
 // paths.c
-char	**get_exec_path(char *command, t_env *env, int *path_error);
+char	*get_exec_path(char *command, t_env *env, int *path_error);
 // split_on_pipes.c
 t_list	*split_on_pipes(char *line);
 
