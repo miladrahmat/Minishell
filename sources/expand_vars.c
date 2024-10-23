@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/22 18:04:51 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/23 12:25:55 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ char	*ft_strndup(const char *s1, size_t len)
 
 // return pointer to the last char copied from src
 // replace dst
+// NULL pointer is returned in case of malloc() failure in ft_strndup() or 
+// ft_strjoin()
 char	*concatenate_until(char **dst, char *src, char *delim)
 {
 	char	*src_end;
@@ -49,8 +51,9 @@ char	*concatenate_until(char **dst, char *src, char *delim)
 	if (!temp)
 		return (NULL);
 	temp_joined = ft_strjoin(*dst, temp);
-	if (temp_joined)
-		*dst = temp_joined;
+	if (!temp_joined)
+		return (NULL);
+	*dst = temp_joined;
 	return (src_end);
 }
 
@@ -71,8 +74,18 @@ char	*get_varname(char *start)
 {
 	char	*end;
 
-	end  = skip_varname(start);
+	end = skip_varname(start);
 	return (strndup(start, substr_len(start, end)));
+}
+
+// returns NULL so that it can be used inside of a return statement
+void	*expand_vars_fail(char *s1, char *s2)
+{
+	if (s1)
+		free(s1);
+	if (s2)
+		free(s2);
+	return (NULL);
 }
 
 // join until $ or single quote (that is not inside of doubles)
@@ -81,6 +94,8 @@ char	*get_varname(char *start)
 
 // creates a new string where $VAR in the token is replaced by the value of
 // $VAR in env
+// token is NOT freed here because it is contained in a list node in the caller
+// returns NULL in case of malloc fails
 char	*expand_vars(char *token, t_env *env)
 {
 	char	*ret;
@@ -94,49 +109,42 @@ char	*expand_vars(char *token, t_env *env)
 	start = token;
 	end = token;
 	ret = NULL;
+	varname = NULL;
 	while (*start)
 	{
 		end = concatenate_until(&ret, start, "$'");
+		if (!end)
+			return (expand_vars_fail(ret, varname));
 		if (!ret)
 		{
-			free(token);
 			printf("expand_vars() returning NULL\n");
-			return (NULL);
+			return (expand_vars_fail(ret, varname));
 		}
 		if (*end == '$')
 		{
 			varname = get_varname(end + 1);
 			if (!varname)
-			{
-				free(ret);
-				free(token);
-				return (NULL);
-			}
+				return (expand_vars_fail(ret, varname));
 			value = ft_env_get_value_by_key(varname, env);
+			free(varname);
 			if (value)
 			{
 				ret = ft_strjoin(ret, value);
 				if (!ret)
-				{
-					free(varname);
-					free(token);
-					return (NULL);
-				}
+					return (expand_vars_fail(ret, varname));
 			}
-			free(varname);
 			end = skip_varname(end);
 		}
 		else if (*end == '\'')
 		{
 			end++;
 			start = end;
-			printf("peruna\n");
 			end = concatenate_until(&ret, start, "'");
-			printf("end: %s\n", end);
+			if (!end)
+				return (expand_vars_fail(ret, varname));
 		}
 		start = end;
 	}
-	free(token);
 	if (ft_strlen(ret) <= 0)
 		printf("expand_vars() returning empty string\n");
 	return (ret);
