@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/23 14:52:08 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/23 16:49:19 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <fcntl.h> // open()
 # include <errno.h>
 # include <unistd.h>
+# include <sys/wait.h>
 # include "libft.h"
 
 typedef struct s_env
@@ -105,6 +106,7 @@ void	ft_envclear(t_env **lst, void (*del)(void *));
 void	ft_env_free_add(t_env *lst, char *key, char *value);
 t_env	*set_key_value(char *str);
 t_env	*ft_envcpy(t_env *envp);
+int		ft_envsize(t_env *env);
 char	*ft_env_get_value_by_key(char *key, t_env *env);
 
 // string_utils.c
@@ -127,5 +129,8 @@ int		check_pipe_fd(t_list **cmd_table);
 
 // tokenizing_utils.c
 char	*get_token(char *start, char *end);
+
+//execute
+int		prepare_exec(t_list *cmd_table, t_env **env);
 
 #endif

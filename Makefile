@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/10/23 12:14:19 by mrahmat-         ###   ########.fr        #
+#    Updated: 2024/10/23 16:52:18 by mrahmat-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,8 @@ ENV_DIR	:= $(SRCDIR)environment/
 
 FILE_HANDLER_DIR := $(SRCDIR)file_handler/
 
+EXEC_DIR	:= $(SRCDIR)execution/
+
 OBJDIR := ./objects/
 
 MAIN_FILES	:= test.c
@@ -60,17 +62,21 @@ ENV_FILES	:= environment.c \
 FILE_HANDLER_FILES	:= file_handler.c \
 					pipe_file_handler.c
 
+EXEC_FILES	:= prepare_exec.c
+
 SRCS	:= $(addprefix $(SRCDIR), $(MAIN_FILES)) \
 		$(addprefix $(BUILTIN_DIR), $(BUILTIN_FILES)) \
 		$(addprefix $(PARSING_DIR), $(PARSING_FILES)) \
 		$(addprefix $(ENV_DIR), $(ENV_FILES)) \
-		$(addprefix $(FILE_HANDLER_DIR), $(FILE_HANDLER_FILES))
+		$(addprefix $(FILE_HANDLER_DIR), $(FILE_HANDLER_FILES)) \
+		$(addprefix $(EXEC_DIR), $(EXEC_FILES))
 
 OBJS	:= $(addprefix $(OBJDIR), $(MAIN_FILES:.c=.o)) \
 		$(addprefix $(OBJDIR), $(BUILTIN_FILES:.c=.o)) \
 		$(addprefix $(OBJDIR), $(PARSING_FILES:.c=.o)) \
 		$(addprefix $(OBJDIR), $(ENV_FILES:.c=.o)) \
-		$(addprefix $(OBJDIR), $(FILE_HANDLER_FILES:.c=.o))
+		$(addprefix $(OBJDIR), $(FILE_HANDLER_FILES:.c=.o)) \
+		$(addprefix $(OBJDIR), $(EXEC_FILES:.c=.o))
 
 all: $(OBJDIR) $(LIBFT) $(NAME)
 
@@ -96,6 +102,9 @@ $(OBJDIR)%.o: $(ENV_DIR)%.c
 	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS)
 
 $(OBJDIR)%.o: $(FILE_HANDLER_DIR)%.c
+	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS)
+
+$(OBJDIR)%.o: $(EXEC_DIR)%.c
 	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS)
 
 $(NAME): $(OBJS) ./includes/minishell.h
