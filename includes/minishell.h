@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/23 09:37:59 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/23 14:52:08 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ typedef struct s_cmd
 	char	**cmd_args;
 	t_list	*infiles;
 	t_list	*outfiles;
-	char	**envp;
 	int		path_error;
 	t_files	*fd;
 }	t_cmd;
