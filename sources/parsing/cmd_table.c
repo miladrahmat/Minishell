@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/23 09:37:49 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/23 14:38:18 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,27 +195,34 @@ void	*init_t_cmd(void *content)
 // an empty string. Do we then need to remove the token from the list?
 t_list	*init_cmd_table(char *line, t_env *env)
 {
-	t_list	*tokens;
+	t_list	*pipe_tokens;
 	t_list	*cmd_table;
-	t_list	*list_iter;
+	t_list	*cmd_table_iter;
 	t_cmd	*cmd;
 	t_list	*split_tokens_iter;
 	int		i;
 	char	*expanded_token;
 
 	// split line at pipes into t_list of strings
-	tokens = split_on_pipes(line);
+	pipe_tokens = split_on_pipes(line);
 //	printf("init_cmd_table(): %i tokens\n", ft_lstsize(tokens));
 	// convert t_list of strings into t_list of t_cmd
-	cmd_table = ft_lstmap(tokens, &init_t_cmd, &free);
-	list_iter = cmd_table;
-	while (list_iter)
+	cmd_table = ft_lstmap(pipe_tokens, &init_t_cmd, &free);
+	cmd_table_iter = cmd_table;
+	while (cmd_table_iter)
 	{
-		cmd = (t_cmd *) list_iter->content;
+		cmd = (t_cmd *) cmd_table_iter->content;
 		split_tokens_iter = cmd->split_token;
 		while (split_tokens_iter)
 		{
 			expanded_token = expand_vars(split_tokens_iter->content, env);
+			if (!expanded_token)
+			{
+				//cleanup function in case of malloc fails
+				return (NULL);
+			}
+			// expanded_token can also be an empty string (in case of a 
+			// non-existant variable), but that is currently allowed
 			split_tokens_iter->content = expanded_token;
 			/*
 			if (ft_strlen(expanded_token) > 0)
@@ -229,7 +236,7 @@ t_list	*init_cmd_table(char *line, t_env *env)
 			malloc(sizeof(char *) * (ft_lstsize(cmd->split_token) + 1));
 		if (!cmd->cmd_args)
 		{
-			// free stuff ?
+			//cleanup function in case of malloc fails
 			return (NULL);
 		}
 		if (!test_builtin_cmd(cmd->split_token->content))
@@ -237,7 +244,11 @@ t_list	*init_cmd_table(char *line, t_env *env)
 			printf("not builtin cmd, %s\n", (char *) cmd->split_token->content);
 			cmd->cmd_args[0] =
 				get_exec_path(cmd->split_token->content, env, &cmd->path_error);
-				
+			if (!cmd->cmd_args[0])
+			{
+				//cleanup function in case of malloc fails
+				return (NULL);
+			}
 		}
 		else
 			cmd->cmd_args[0] = cmd->split_token->content;
@@ -251,7 +262,7 @@ t_list	*init_cmd_table(char *line, t_env *env)
 			i++;
 		}
 		cmd->cmd_args[i] = NULL;
-		list_iter = list_iter->next;
+		cmd_table_iter = cmd_table_iter->next;
 	}
 	return (cmd_table);
 }
