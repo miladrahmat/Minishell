@@ -6,30 +6,18 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:06:58 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/23 16:54:14 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/24 17:26:17 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	close_in_out(t_list **cmd_table)
+void	close_cmd_fd(t_cmd *curr_cmd)
 {
-	t_list	*cmd_iter;
-	int		fd_in;
-	int		fd_out;
-
-	cmd_iter = *cmd_table;
-	while (cmd_iter != NULL)
-	{
-		fd_in = ((t_cmd *)cmd_iter->content)->fd->infile;
-		if (fd_in != 0)
-			close(fd_in);
-		fd_out = ((t_cmd *)cmd_iter->content)->fd->outfile;
-		if (fd_out != 1)
-			close(fd_out);
-		cmd_iter = cmd_iter->next;
-	}
-	return (-1);
+	if (curr_cmd->fd->infile > 0)
+		close(curr_cmd->fd->infile);
+	if (curr_cmd->fd->outfile > 1)
+		close(curr_cmd->fd->outfile);
 }
 
 static int	set_infile(t_list **current, t_list **cmd)

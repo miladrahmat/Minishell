@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/10/23 16:52:18 by mrahmat-         ###   ########.fr        #
+#    Updated: 2024/10/24 17:39:57 by mrahmat-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,7 +62,8 @@ ENV_FILES	:= environment.c \
 FILE_HANDLER_FILES	:= file_handler.c \
 					pipe_file_handler.c
 
-EXEC_FILES	:= prepare_exec.c
+EXEC_FILES	:= prepare_exec.c \
+			exec_utils.c
 
 SRCS	:= $(addprefix $(SRCDIR), $(MAIN_FILES)) \
 		$(addprefix $(BUILTIN_DIR), $(BUILTIN_FILES)) \

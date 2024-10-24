@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/23 16:49:19 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/24 17:31:33 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,15 +122,18 @@ char	*expand_vars(char *token, t_env *env);
 // file_handler.c
 int		open_infiles(t_list **cmd_table);
 int		open_outfiles(t_list **cmd_table);
-int		close_in_out(t_list **cmd_table);
+// int		close_in_out(t_list **cmd_table);
 
 // pipe_file_handler.c
-int		check_pipe_fd(t_list **cmd_table);
+// int		check_pipe_fd(t_list **cmd_table);
+int		check_pipe_fd(t_cmd **curr_cmd, t_cmd **next_cmd);
+void	close_cmd_fd(t_cmd *curr_cmd);
 
 // tokenizing_utils.c
 char	*get_token(char *start, char *end);
 
 //execute
 int		prepare_exec(t_list *cmd_table, t_env **env);
+char	*copy_env_node(t_env *env);
 
 #endif
