@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/24 17:47:21 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/24 18:01:33 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ char	*create_filename()
 	return (filename);
 }
 
+// TODO: use readline
 void	read_into_file(int fd, char *delim)
 {
 	char	*line;
@@ -72,6 +73,7 @@ void	read_into_file(int fd, char *delim)
 	}
 }
 
+// TODO: put into history
 int	get_heredoc(char *delim)
 {	//create unique filename
 	// open file

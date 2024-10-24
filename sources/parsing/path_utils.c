@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 13:57:01 by lemercie          #+#    #+#             */
-/*   Updated: 2024/09/27 15:48:45 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/24 18:10:52 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	print_error(char *message, char *filename)
 	ft_putstr_fd("\n", 2);
 }
 
+//TODO: does this free the null terminator
 void	free_strv(char **strv)
 {
 	int	i;
