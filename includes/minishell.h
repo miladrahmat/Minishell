@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/24 17:31:33 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/24 18:22:48 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ t_env	*print_export_error(char **variable);
 void	update_pwd(t_env **envp);
 
 //helper functions
-void	split_free(char **str);
+int		split_free(char **str, int ret_val);
 void	connect_list(t_env **list, t_env **node);
 bool	check_key(char *cmd, t_env *node);
 size_t	get_cmd_amount(char **cmd);
@@ -135,5 +135,6 @@ char	*get_token(char *start, char *end);
 //execute
 int		prepare_exec(t_list *cmd_table, t_env **env);
 char	*copy_env_node(t_env *env);
+int		execute_one_builtin(t_list *cmd_table, t_env **env);
 
 #endif

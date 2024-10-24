@@ -6,13 +6,13 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/24 17:15:03 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/24 18:08:59 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	split_free(char **str)
+int	split_free(char **str, int ret_val)
 {
 	size_t	i;
 
@@ -24,6 +24,7 @@ void	split_free(char **str)
 	}
 	free(str[i]);
 	free(str);
+	return (ret_val);
 }
 
 t_env	*copy_env(char **envp)
