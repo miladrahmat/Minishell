@@ -6,33 +6,21 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:06:58 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/16 14:04:18 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/24 17:26:17 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	close_in_out(t_list **cmd_table)
+void	close_cmd_fd(t_cmd *curr_cmd)
 {
-	t_list	*cmd_iter;
-	int		fd_in;
-	int		fd_out;
-
-	cmd_iter = *cmd_table;
-	while (cmd_iter != NULL)
-	{
-		fd_in = ((t_cmd *)cmd_iter->content)->fd->infile;
-		if (fd_in != 0)
-			close(fd_in);
-		fd_out = ((t_cmd *)cmd_iter->content)->fd->outfile;
-		if (fd_out != 1)
-			close(fd_out);
-		cmd_iter = cmd_iter->next;
-	}
-	return (-1);
+	if (curr_cmd->fd->infile > 0)
+		close(curr_cmd->fd->infile);
+	if (curr_cmd->fd->outfile > 1)
+		close(curr_cmd->fd->outfile);
 }
 
-static int	set_infile(t_list **current, t_list **cmd, t_list **cmd_table)
+static int	set_infile(t_list **current, t_list **cmd)
 {
 	t_redir	*file;
 	int		fd;
@@ -44,7 +32,10 @@ static int	set_infile(t_list **current, t_list **cmd, t_list **cmd_table)
 	if (fd == -1)
 	{
 		print_builtin_error(file->filename, NULL, NULL, false);
-		return (close_in_out(cmd_table));
+		if (((t_cmd *)(*cmd)->content)->fd->infile != 0)
+			close(((t_cmd *)(*cmd)->content)->fd->infile);
+		((t_cmd *)(*cmd)->content)->fd->infile = fd;
+		return (-1);
 	}
 	if (((t_cmd *)(*cmd)->content)->fd->infile != 0)
 		close(((t_cmd *)(*cmd)->content)->fd->infile);
@@ -63,7 +54,7 @@ int	open_infiles(t_list **cmd_table)
 		fd_iter = ((t_cmd *)cmd_iter->content)->infiles;
 		while (fd_iter != NULL)
 		{
-			if (set_infile(&fd_iter, &cmd_iter, cmd_table) == -1)
+			if (set_infile(&fd_iter, &cmd_iter) == -1)
 				return (-1);
 			fd_iter = fd_iter->next;
 		}
@@ -72,7 +63,7 @@ int	open_infiles(t_list **cmd_table)
 	return (open_outfiles(cmd_table));
 }
 
-static int	set_outfile(t_list **current, t_list **cmd, t_list **cmd_table)
+static int	set_outfile(t_list **current, t_list **cmd)
 {
 	t_redir	*file;
 	int		fd;
@@ -86,7 +77,10 @@ static int	set_outfile(t_list **current, t_list **cmd, t_list **cmd_table)
 	if (fd == -1)
 	{
 		print_builtin_error(file->filename, NULL, NULL, false);
-		return (close_in_out(cmd_table));
+		if (((t_cmd *)(*cmd)->content)->fd->outfile != 1)
+			close(((t_cmd *)(*cmd)->content)->fd->outfile);
+		((t_cmd *)(*cmd)->content)->fd->outfile = fd;
+		return (-1);
 	}
 	if (((t_cmd *)(*cmd)->content)->fd->outfile != 1)
 		close(((t_cmd *)(*cmd)->content)->fd->outfile);
@@ -105,7 +99,7 @@ int	open_outfiles(t_list **cmd_table)
 		fd_iter = ((t_cmd *)cmd_iter->content)->outfiles;
 		while (fd_iter != NULL)
 		{
-			if (set_outfile(&fd_iter, &cmd_iter, cmd_table) == -1)
+			if (set_outfile(&fd_iter, &cmd_iter) == -1)
 				return (-1);
 			fd_iter = fd_iter->next;
 		}

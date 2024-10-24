@@ -6,11 +6,24 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 18:20:21 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/16 12:28:19 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/23 16:35:33 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	ft_envsize(t_env *env)
+{
+	int	size;
+
+	size = 0;
+	while (env != NULL)
+	{
+		env = env->next;
+		size++;
+	}
+	return (size);
+}
 
 void	ft_env_free_add(t_env *lst, char *key, char *value)
 {

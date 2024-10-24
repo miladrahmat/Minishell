@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/24 17:39:35 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/24 17:56:03 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,23 +97,12 @@ int	main(int ac, char **av, char **envp)
 			ft_lstiter(cmd_table, &process_heredocs);
 			if (cmd_table != NULL)
 			{
-				check_pipe_fd(&cmd_table);
 				open_infiles(&cmd_table);
-				t_list	*cmd_iter = cmd_table;
-				while (cmd_iter != NULL)
-				{
-					printf("infile fd: %d	outfile fd: %d\n", \
-						((t_files *)((t_cmd *)cmd_iter->content)->fd)->infile, \
-						((t_files *)((t_cmd *)cmd_iter->content)->fd)->outfile);
-					cmd_iter = cmd_iter->next;
-				}
-				ft_lstiter(cmd_table, &print_cmd_list);
-				check_builtin_cmd(((t_cmd *)cmd_table->content)->cmd_args, \
-				((t_cmd *)cmd_table->content)->fd->outfile, &env);
+				//ft_lstiter(cmd_table, &print_cmd_list);
+				prepare_exec(cmd_table, &env);
 			}
 			add_history(line);
 			free(line);
-			
 		}
 	}
 }

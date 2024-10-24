@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe_file_handler.c                                :+:      :+:    :+:   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/22 12:07:28 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/24 17:41:40 by mrahmat-         ###   ########.fr       */
+/*   Created: 2024/10/24 17:23:18 by mrahmat-          #+#    #+#             */
+/*   Updated: 2024/10/24 17:30:50 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_pipe_fd(t_cmd **curr_cmd, t_cmd **next_cmd)
+char	*copy_env_node(t_env *env)
 {
-	int	pipe_fd[2];
+	char	*node_cpy;
+	char	*temp;
 
-	if (pipe(pipe_fd) == -1)
-		return (-1);
-	if ((*next_cmd)->fd->infile == 0)
-		(*next_cmd)->fd->infile = pipe_fd[0];
-	else
-		close(pipe_fd[0]);
-	if ((*curr_cmd)->fd->outfile == 1)
-		(*curr_cmd)->fd->outfile = pipe_fd[1];
-	else
-		close(pipe_fd[1]);
-	return (0);
+	node_cpy = ft_strdup(env->key);
+	if (node_cpy == NULL)
+		return (NULL);
+	temp = node_cpy;
+	node_cpy = ft_strjoin(node_cpy, "=");
+	free(temp);
+	if (node_cpy == NULL)
+		return (NULL);
+	temp = node_cpy;
+	node_cpy = ft_strjoin(node_cpy, env->value);
+	free(temp);
+	if (node_cpy == NULL)
+		return (NULL);
+	return (node_cpy);
 }

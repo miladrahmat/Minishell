@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/23 16:53:56 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/24 17:55:19 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <fcntl.h> // open()
 # include <errno.h>
 # include <unistd.h>
+# include <sys/wait.h>
 # include "libft.h"
 
 typedef struct s_env
@@ -107,6 +108,7 @@ void	ft_envclear(t_env **lst, void (*del)(void *));
 void	ft_env_free_add(t_env *lst, char *key, char *value);
 t_env	*set_key_value(char *str);
 t_env	*ft_envcpy(t_env *envp);
+int		ft_envsize(t_env *env);
 char	*ft_env_get_value_by_key(char *key, t_env *env);
 
 // string_utils.c
@@ -122,12 +124,18 @@ char	*expand_vars(char *token, t_env *env);
 // file_handler.c
 int		open_infiles(t_list **cmd_table);
 int		open_outfiles(t_list **cmd_table);
-int		close_in_out(t_list **cmd_table);
+// int		close_in_out(t_list **cmd_table);
 
 // pipe_file_handler.c
-int		check_pipe_fd(t_list **cmd_table);
+// int		check_pipe_fd(t_list **cmd_table);
+int		check_pipe_fd(t_cmd **curr_cmd, t_cmd **next_cmd);
+void	close_cmd_fd(t_cmd *curr_cmd);
 
 // tokenizing_utils.c
 char	*get_token(char *start, char *end);
+
+//execute
+int		prepare_exec(t_list *cmd_table, t_env **env);
+char	*copy_env_node(t_env *env);
 
 #endif
