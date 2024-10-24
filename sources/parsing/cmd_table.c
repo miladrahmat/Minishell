@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/23 16:41:57 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/24 17:25:06 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ t_redir_type	get_redir_type(char *content)
 	return (error);
 }
 
+// TODO: handle NULLs coming from get_word() inn case of malloc fail
 bool	get_redir(t_cmd *cmd, char *content)
 {
 	t_redir	*redir;
@@ -73,9 +74,8 @@ bool	get_redir(t_cmd *cmd, char *content)
 	}
 	else if (redir->redir_type == heredoc)
 	{
-		// TODO: add into infiles just like other cases, filename stores
-		// the delimiter
-		printf("get_redir(): TODO: implement heredoc\n");
+		redir->filename = get_word(content + 2);
+		ft_lstadd_back(&cmd->infiles, ft_lstnew(redir));
 		return (true);
 	}
 	else
@@ -217,6 +217,7 @@ t_list	*init_cmd_table(char *line, t_env *env)
 		split_tokens_iter = cmd->split_token;
 		while (split_tokens_iter)
 		{
+			// TODO: remove some quotation marks
 			expanded_token = expand_vars(split_tokens_iter->content, env);
 			if (!expanded_token)
 			{

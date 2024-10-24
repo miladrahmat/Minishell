@@ -6,19 +6,57 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/23 17:39:52 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/24 17:47:21 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // MULTIPLE HEREDOCS IN BASH
-// have to be opened and closed in trder from left to right
+// have to be opened and closed in order from left to right
 // but only the input from the last one is passed forward
+//
+// vars are expanded inside of heredocs
+// but not if the delimiter is in quotes!
+
+
+char	*increment_suffix(char	*s)
+{
+	char	*ret;
+
+	if (!s)
+	{
+		ret = malloc(sizeof(char) * 3);
+		if (!ret)
+			return (NULL);
+		ret[0] = '-';
+		ret[1] = 'a';
+		ret[2] = 0;
+		return (ret);
+	}
+	s[1]++;
+	if (s[1] > 'z')
+		printf("increment_suffix(): too many heredocs\n");
+	return (s);
+}
 
 char	*create_filename()
 {
-	return ("asd");
+	const char	*prefix = ".minishell-heredoc";
+	char		*suffix;
+	char		*filename;
+
+	suffix = NULL;
+//	filename = ft_strjoin(prefix, suffix);
+	filename = (char *) prefix;
+	while (access(filename, F_OK) == 0)
+	{
+	//	free(filename);
+		suffix = increment_suffix(suffix);
+		filename = ft_strjoin(prefix, suffix);
+	}
+	printf("create_filename(): %s\n", filename);
+	return (filename);
 }
 
 void	read_into_file(int fd, char *delim)
@@ -26,13 +64,9 @@ void	read_into_file(int fd, char *delim)
 	char	*line;
 
 	line = get_next_line(fd);
-	while (line)
+	while (line && ft_strcmp(line, delim) != 0)
 	{
-		// if line contains delim
-		// write into file the part until delim
-		// break
-		// else
-		// write into file
+		write(fd, line, ft_strlen(line));
 		free(line);
 		line = get_next_line(fd);
 	}
@@ -52,8 +86,9 @@ int	get_heredoc(char *delim)
 	int		read_fd;
 
 	filename = create_filename();
-	write_fd = open(filename, O_WRONLY | O_CREAT, 0666);
-	free(filename);
+	write_fd = open(filename, O_WRONLY | O_APPEND | O_CREAT, 0666);
+	printf("get_heredoc(): write_fd: %i\n", write_fd);
+//	free(filename);
 	read_into_file(write_fd, delim);
 	close(write_fd);
 	read_fd = open(filename, O_RDONLY);
@@ -75,6 +110,7 @@ void	process_heredocs(void *arg)
 		if (((t_redir *) infiles_iter->content)->redir_type == heredoc)
 		{
 			fd = get_heredoc(((t_redir *) infiles_iter->content)->filename);
+			printf("process_heredocs(): fd: %i\n", fd);
 			cmd->fd->infile = fd;
 		}
 		infiles_iter = infiles_iter->next;
