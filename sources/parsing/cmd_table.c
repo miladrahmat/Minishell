@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/24 17:25:06 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/25 16:50:01 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ t_redir_type	get_redir_type(char *content)
 	return (error);
 }
 
-// TODO: handle NULLs coming from get_word() inn case of malloc fail
+// TODO: handle NULLs coming from get_word() in case of malloc fail
+// TODO: maybe have true/false in a variable and return 0/1 for malloc fails
 bool	get_redir(t_cmd *cmd, char *content)
 {
 	t_redir	*redir;
@@ -75,6 +76,9 @@ bool	get_redir(t_cmd *cmd, char *content)
 	else if (redir->redir_type == heredoc)
 	{
 		redir->filename = get_word(content + 2);
+		printf("get_redir(): heredoc delim: %s\n", redir->filename);
+		// TODO: maybe at this point record in a variable that the delimiter 
+		// was quoted?
 		ft_lstadd_back(&cmd->infiles, ft_lstnew(redir));
 		return (true);
 	}
@@ -102,6 +106,8 @@ void	parse_redirs(t_cmd *cmd)
 }
 
 // split a string on whitespace and arrows, but not in quotes
+// TODO: if we remove quotes here, we need to somehow retai the information
+// about whether heredoc delimiter was quoted or not
 t_list	*split_token(char *cmd_token)
 {
 	char	*start;

@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/25 13:59:01 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/25 16:30:21 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ char	*create_filename()
 	return (filename);
 }
 
-// TODO: use readline
 void	read_into_file(int fd, char *delim)
 {
 	char	*line;
@@ -77,7 +76,7 @@ void	read_into_file(int fd, char *delim)
 //	printf("read_into_file(): delim: %sX\n", delim);
 	while (line && ft_strcmp(line, delim) != 0)
 	{
-		// expand vars here
+		// TODO:expand vars here
 		write(fd, line, ft_strlen(line));
 		free(line);
 		line = readline(">");
@@ -85,8 +84,6 @@ void	read_into_file(int fd, char *delim)
 //	printf("leaving read_into_file()\n");
 }
 
-// TODO: put into history
-//int	get_heredoc(char *delim)
 char	*get_heredoc(char *delim)
 {	//create unique filename
 	// open file
@@ -95,7 +92,6 @@ char	*get_heredoc(char *delim)
 	// close file
 	// then
 	// return filename
-
 	char	*filename;
 	int		write_fd;
 
