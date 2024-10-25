@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:06:58 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/24 17:26:17 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/25 10:49:05 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	set_infile(t_list **current, t_list **cmd)
 
 	fd = 0;
 	file = (t_redir *)(*current)->content;
-	if (file->redir_type == input)
+	if (file->redir_type == heredoc || file->redir_type == input)
 		fd = open(file->filename, O_RDONLY);
 	if (fd == -1)
 	{
