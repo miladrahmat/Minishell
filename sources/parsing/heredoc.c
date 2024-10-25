@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/25 12:36:11 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/25 13:54:58 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,22 @@ char	*create_filename()
 	char		*filename;
 
 	suffix = NULL;
-//	filename = ft_strjoin(prefix, suffix);
-	filename = (char *) prefix;
+	filename = ft_strdup(prefix);
+	if (!filename)
+		return (NULL);
 	while (access(filename, F_OK) == 0)
 	{
-	//	free(filename);
+		free(filename);
 		suffix = increment_suffix(suffix);
+		if (!suffix)
+			return (NULL);
 		filename = ft_strjoin(prefix, suffix);
+		if (!filename)
+		{
+			if (suffix)
+				free(suffix);
+			return (NULL);
+		}
 	}
 //	printf("create_filename(): %s\n", filename);
 	return (filename);
@@ -86,32 +95,28 @@ char	*get_heredoc(char *delim)
 	// close file
 	// then
 	// return filename
-	// OR
-	// open file for reading
-	// return fd for reading
 
 	char	*filename;
 	int		write_fd;
-//	int		read_fd;
 
 	filename = create_filename();
+	if (!filename)
+		return (NULL);
 	write_fd = open(filename, O_WRONLY | O_APPEND | O_CREAT, 0666);
-//	printf("get_heredoc(): write_fd: %i\n", write_fd);
-//	free(filename);
 	read_into_file(write_fd, delim);
 	close(write_fd);
-//	read_fd = open(filename, O_RDONLY);
-//	return (read_fd);
 	return (filename);
 }
 
 // in case of heredoc, the filename field initially used to store the delimiter
 // and after processing stores the filename to the temporary file
-void	process_heredocs(t_list *cmd_table, t_env *env)
+// returns 1 in case of malloc fail
+int	process_heredocs(t_list *cmd_table, t_env *env)
 {
 	t_cmd	*cmd;
 	t_list	*infiles_iter;
 	t_list	*cmd_table_iter;
+	char	*filename;
 
 	(void) env;
 	cmd_table_iter = cmd_table;
@@ -123,11 +128,16 @@ void	process_heredocs(t_list *cmd_table, t_env *env)
 		{
 			if (((t_redir *) infiles_iter->content)->redir_type == heredoc)
 			{
-				((t_redir *) infiles_iter->content)->filename = 
-					get_heredoc(((t_redir *) infiles_iter->content)->filename);
+				filename = get_heredoc(((t_redir *) infiles_iter->content)->
+						   filename);
+				if (filename)
+					((t_redir *) infiles_iter->content)->filename = filename;
+				else
+					return (1);
 			}
 			infiles_iter = infiles_iter->next;
 		}
 		cmd_table_iter = cmd_table_iter->next;
 	}
+	return (0);
 }
