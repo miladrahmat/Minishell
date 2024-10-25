@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/24 18:22:48 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/25 14:48:17 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <errno.h>
 # include <unistd.h>
 # include <sys/wait.h>
+# include <signal.h>
 # include "libft.h"
 
 typedef struct s_env
@@ -88,6 +89,7 @@ int		export(char **cmd, int fd, t_env **envp);
 int		print_builtin_error(char *cmd, char *arg, char *err, bool alloc);
 t_env	*print_export_error(char **variable);
 void	update_pwd(t_env **envp);
+int		builtin_exit(char **cmd, t_env **envp);
 
 //helper functions
 int		split_free(char **str, int ret_val);
@@ -136,5 +138,9 @@ char	*get_token(char *start, char *end);
 int		prepare_exec(t_list *cmd_table, t_env **env);
 char	*copy_env_node(t_env *env);
 int		execute_one_builtin(t_list *cmd_table, t_env **env);
+
+//signals
+void	define_sig_func(struct sigaction *signal, void *func);
+void	handle_signals(int signal, siginfo_t *info, void *content);
 
 #endif
