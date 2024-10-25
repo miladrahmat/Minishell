@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/25 10:50:25 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/25 12:36:11 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	read_into_file(int fd, char *delim)
 //	printf("read_into_file(): delim: %sX\n", delim);
 	while (line && ft_strcmp(line, delim) != 0)
 	{
+		// expand vars here
 		write(fd, line, ft_strlen(line));
 		free(line);
 		line = readline(">");
@@ -80,7 +81,7 @@ void	read_into_file(int fd, char *delim)
 char	*get_heredoc(char *delim)
 {	//create unique filename
 	// open file
-	// gnl until delimiter
+	// readline until delimiter
 	// and write into the file
 	// close file
 	// then
@@ -104,31 +105,29 @@ char	*get_heredoc(char *delim)
 	return (filename);
 }
 
-// to be used with ft_lstiter()
-// in case of heredoc, the filename field is reused to store the delimiter
-// TODO: store list of heredoc filenames and delete them after execution is done
-void	process_heredocs(void *arg)
+// in case of heredoc, the filename field initially used to store the delimiter
+// and after processing stores the filename to the temporary file
+void	process_heredocs(t_list *cmd_table, t_env *env)
 {
 	t_cmd	*cmd;
 	t_list	*infiles_iter;
-//	int		fd;
+	t_list	*cmd_table_iter;
 
-	cmd = (t_cmd *) arg;
-	infiles_iter = cmd->infiles;
-	while (infiles_iter)
+	(void) env;
+	cmd_table_iter = cmd_table;
+	while (cmd_table_iter)
 	{
-		if (((t_redir *) infiles_iter->content)->redir_type == heredoc)
+		cmd = (t_cmd *) cmd_table_iter->content;
+		infiles_iter = cmd->infiles;
+		while (infiles_iter)
 		{
-			/*
-			fd = get_heredoc(((t_redir *) infiles_iter->content)->filename);
-			printf("process_heredocs(): fd: %i\n", fd);
-			cmd->fd->infile = fd;
-			*/
-	((t_redir *) infiles_iter->content)->filename = 
-				get_heredoc(((t_redir *) infiles_iter->content)->filename);
-
+			if (((t_redir *) infiles_iter->content)->redir_type == heredoc)
+			{
+				((t_redir *) infiles_iter->content)->filename = 
+					get_heredoc(((t_redir *) infiles_iter->content)->filename);
+			}
+			infiles_iter = infiles_iter->next;
 		}
-		infiles_iter = infiles_iter->next;
+		cmd_table_iter = cmd_table_iter->next;
 	}
-
 }
