@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/25 13:54:58 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/25 13:59:01 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ int	process_heredocs(t_list *cmd_table, t_env *env)
 	t_list	*infiles_iter;
 	t_list	*cmd_table_iter;
 	char	*filename;
+	t_redir	*redir;
 
 	(void) env;
 	cmd_table_iter = cmd_table;
@@ -126,12 +127,12 @@ int	process_heredocs(t_list *cmd_table, t_env *env)
 		infiles_iter = cmd->infiles;
 		while (infiles_iter)
 		{
-			if (((t_redir *) infiles_iter->content)->redir_type == heredoc)
+			redir = (t_redir *) infiles_iter->content;
+			if (redir->redir_type == heredoc)
 			{
-				filename = get_heredoc(((t_redir *) infiles_iter->content)->
-						   filename);
+				filename = get_heredoc(redir->filename);
 				if (filename)
-					((t_redir *) infiles_iter->content)->filename = filename;
+					redir->filename = filename;
 				else
 					return (1);
 			}
