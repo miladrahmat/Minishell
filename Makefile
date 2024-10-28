@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/10/24 17:54:45 by lemercie         ###   ########.fr        #
+#    Updated: 2024/10/28 15:46:07 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,14 +71,14 @@ SRCS	:= $(addprefix $(SRCDIR), $(MAIN_FILES)) \
 		$(addprefix $(PARSING_DIR), $(PARSING_FILES)) \
 		$(addprefix $(ENV_DIR), $(ENV_FILES)) \
 		$(addprefix $(FILE_HANDLER_DIR), $(FILE_HANDLER_FILES)) \
-		$(addprefix $(EXEC_DIR), $(EXEC_FILES))
+		$(addprefix $(EXEC_DIR), $(EXEC_FILES)) \
 
 OBJS	:= $(addprefix $(OBJDIR), $(MAIN_FILES:.c=.o)) \
 		$(addprefix $(OBJDIR), $(BUILTIN_FILES:.c=.o)) \
 		$(addprefix $(OBJDIR), $(PARSING_FILES:.c=.o)) \
 		$(addprefix $(OBJDIR), $(ENV_FILES:.c=.o)) \
 		$(addprefix $(OBJDIR), $(FILE_HANDLER_FILES:.c=.o)) \
-		$(addprefix $(OBJDIR), $(EXEC_FILES:.c=.o))
+		$(addprefix $(OBJDIR), $(EXEC_FILES:.c=.o)) \
 
 all: $(OBJDIR) $(LIBFT) $(NAME)
 
@@ -111,7 +111,8 @@ $(OBJDIR)%.o: $(EXEC_DIR)%.c
 
 $(NAME): $(OBJS) ./includes/minishell.h
 	@$(CC) $(LDFLAGS) $(OBJS) $(LIBFT) $(HEADERS) -o $(NAME) \
-	&& echo "\e[1;92m Minishell compiled successfully! \e[0;37m"
+	&& echo "\e[1;92m Minishell compiled successfully! \e[0;37m" \
+	|| echo "\e[1;31m Failed to compile minishell 😔 \e[0;37m"
 
 clean:
 	@rm -rf $(OBJDIR)

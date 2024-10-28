@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/28 10:53:49 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/28 15:46:34 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <errno.h>
 # include <unistd.h>
 # include <sys/wait.h>
+# include <signal.h>
 # include "libft.h"
 
 typedef struct s_env
@@ -91,9 +92,10 @@ int		export(char **cmd, int fd, t_env **envp);
 int		print_builtin_error(char *cmd, char *arg, char *err, bool alloc);
 t_env	*print_export_error(char **variable);
 void	update_pwd(t_env **envp);
+int		builtin_exit(char **cmd, t_env **envp);
 
 //helper functions
-void	split_free(char **str);
+int		split_free(char **str, int ret_val);
 void	connect_list(t_env **list, t_env **node);
 bool	check_key(char *cmd, t_env *node);
 size_t	get_cmd_amount(char **cmd);
@@ -138,5 +140,11 @@ char	*get_token(char *start, char *end);
 //execute
 int		prepare_exec(t_list *cmd_table, t_env **env);
 char	*copy_env_node(t_env *env);
+int		execute_one_builtin(t_list *cmd_table, t_env **env);
+
+//signals
+void	handle_signals(int signal);
+void	ignore_sigint(void);
+void	handle_sigint(void *func);
 
 #endif
