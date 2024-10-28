@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/28 10:36:28 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/28 11:20:18 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char	*create_filename()
 	return (filename);
 }
 
-void	read_into_file(int fd, char *delim, t_env *env)
+void	read_into_file(int fd, char *delim, t_env *env, bool expand)
 {
 	char	*line;
 	char	*expanded_line;
@@ -77,17 +77,22 @@ void	read_into_file(int fd, char *delim, t_env *env)
 //	printf("read_into_file(): delim: %sX\n", delim);
 	while (line && ft_strcmp(line, delim) != 0)
 	{
-		expanded_line = expand_vars(line, env);
-		write(fd, expanded_line, ft_strlen(expanded_line));
+		if (expand)
+		{
+			expanded_line = expand_vars(line, env);
+			write(fd, expanded_line, ft_strlen(expanded_line));
+			free(expanded_line);
+		}
+		else
+			write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
-		free(expanded_line);
 		free(line);
 		line = readline(">");
 	}
 //	printf("leaving read_into_file()\n");
 }
 
-char	*get_heredoc(char *delim, t_env *env)
+char	*get_heredoc(char *delim, t_env *env, bool expand)
 {	//create unique filename
 	// open file
 	// readline until delimiter
@@ -102,7 +107,7 @@ char	*get_heredoc(char *delim, t_env *env)
 	if (!filename)
 		return (NULL);
 	write_fd = open(filename, O_WRONLY | O_APPEND | O_CREAT, 0666);
-	read_into_file(write_fd, delim, env);
+	read_into_file(write_fd, delim, env, expand);
 	close(write_fd);
 	return (filename);
 }
@@ -129,7 +134,10 @@ int	process_heredocs(t_list *cmd_table, t_env *env)
 			redir = (t_redir *) infiles_iter->content;
 			if (redir->redir_type == heredoc)
 			{
-				filename = get_heredoc(redir->filename, env);
+				if (redir->heredoc_quoted_delim)
+					filename = get_heredoc(redir->filename, env, true);
+				else
+					filename = get_heredoc(redir->filename, env, false);
 				if (filename)
 					redir->filename = filename;
 				else

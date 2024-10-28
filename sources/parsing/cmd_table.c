@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/25 16:50:01 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/28 11:12:09 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,35 @@ t_redir_type	get_redir_type(char *content)
 	return (error);
 }
 
+bool	is_quoted_str(char *s)
+{
+	return (s[0] == '"' && s[ft_strlen(s) - 1] == '"'); 
+}
+
+void	str_del_first_last(char *s)
+{
+	int	i;
+	int	len;
+
+	len = ft_strlen(s);
+	i = 0;
+	while (s[i] && s[i + 1])
+	{
+		s[i] = s[i + 1];
+		i++;
+	}
+	s[len - 2] = 0;
+}
+
+void	check_quoted_heredoc_delim(t_redir *redir)
+{
+	if (is_quoted_str(redir->filename))
+	{
+		str_del_first_last(redir->filename);
+		redir->heredoc_quoted_delim = true;
+	}
+}
+
 // TODO: handle NULLs coming from get_word() in case of malloc fail
 // TODO: maybe have true/false in a variable and return 0/1 for malloc fails
 bool	get_redir(t_cmd *cmd, char *content)
@@ -54,6 +83,7 @@ bool	get_redir(t_cmd *cmd, char *content)
 	t_redir	*redir;
 
 	redir = malloc(sizeof(t_redir));
+	redir->heredoc_quoted_delim = false;
 	redir->redir_type = get_redir_type(content);
 	if (redir->redir_type == out_append)
 	{
@@ -76,6 +106,7 @@ bool	get_redir(t_cmd *cmd, char *content)
 	else if (redir->redir_type == heredoc)
 	{
 		redir->filename = get_word(content + 2);
+		check_quoted_heredoc_delim(redir);
 		printf("get_redir(): heredoc delim: %s\n", redir->filename);
 		// TODO: maybe at this point record in a variable that the delimiter 
 		// was quoted?

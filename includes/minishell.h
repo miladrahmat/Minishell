@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/25 13:51:11 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/28 10:53:49 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_redir
 {
 	t_redir_type	redir_type;
 	char			*filename;
+	bool			heredoc_quoted_delim;
 }	t_redir;
 
 typedef struct s_files
