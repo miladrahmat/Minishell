@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/28 11:20:18 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/28 15:41:34 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 // vars are expanded inside of heredocs
 // but not if the delimiter is in quotes!
 
-
+// TODO: lots!
 char	*increment_suffix(char	*s)
 {
 	char	*ret;
@@ -103,6 +103,7 @@ char	*get_heredoc(char *delim, t_env *env, bool expand)
 	char	*filename;
 	int		write_fd;
 
+//	printf("get_heredoc()\n");
 	filename = create_filename();
 	if (!filename)
 		return (NULL);

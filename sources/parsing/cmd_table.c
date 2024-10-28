@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/28 11:12:09 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/28 15:42:06 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,61 +76,60 @@ void	check_quoted_heredoc_delim(t_redir *redir)
 	}
 }
 
-// TODO: handle NULLs coming from get_word() in case of malloc fail
-// TODO: maybe have true/false in a variable and return 0/1 for malloc fails
-bool	get_redir(t_cmd *cmd, char *content)
+int	get_redir(t_cmd *cmd, char *content, bool *is_valid_redir)
 {
 	t_redir	*redir;
+	t_list	*new_node;
 
+	if (get_redir_type(content) == error)
+		return (0);
 	redir = malloc(sizeof(t_redir));
+	if (!redir)
+		return (1);
 	redir->heredoc_quoted_delim = false;
 	redir->redir_type = get_redir_type(content);
 	if (redir->redir_type == out_append)
 	{
 		redir->filename = get_word(content + 2);
-		ft_lstadd_back(&cmd->outfiles, ft_lstnew(redir));
-		return (true);
+		*is_valid_redir = true;
 	}
 	else if (redir->redir_type == out_trunc)
 	{
 		redir->filename = get_word(content + 1);
-		ft_lstadd_back(&cmd->outfiles, ft_lstnew(redir));
-			return (true);
+		*is_valid_redir = true;
 	}
 	else if (redir->redir_type == input)
 	{
 		redir->filename = get_word(content + 1);
-		ft_lstadd_back(&cmd->infiles, ft_lstnew(redir));
-		return (true);
+		*is_valid_redir = true;
 	}
 	else if (redir->redir_type == heredoc)
 	{
 		redir->filename = get_word(content + 2);
 		check_quoted_heredoc_delim(redir);
-		printf("get_redir(): heredoc delim: %s\n", redir->filename);
-		// TODO: maybe at this point record in a variable that the delimiter 
-		// was quoted?
-		ft_lstadd_back(&cmd->infiles, ft_lstnew(redir));
-		return (true);
+//		printf("get_redir(): heredoc delim: %s\n", redir->filename);
+		*is_valid_redir = true;
 	}
-	else
-	{
-		return (false);
-	}
+	new_node = ft_lstnew(redir);
+	if (!new_node || !redir->filename)
+		return (1);
+	ft_lstadd_back(&cmd->infiles, new_node);
+	return (0);
 }
 
 void	parse_redirs(t_cmd *cmd)
 {
 	t_list	*tokens;
 	t_list	*tokens_iter;
-	bool	valid_redir;
+	bool	is_valid_redir;
 
 	tokens = cmd->split_token;
 	tokens_iter = tokens;
 	while (tokens_iter)
 	{
-		valid_redir = get_redir(cmd, tokens_iter->content);
-		if (valid_redir)
+		is_valid_redir = false;
+		get_redir(cmd, tokens_iter->content, &is_valid_redir);
+		if (is_valid_redir)
 			ft_lstdel_and_connect(&cmd->split_token, &tokens_iter);
 		tokens_iter = tokens_iter->next;
 	}
@@ -281,7 +280,7 @@ t_list	*init_cmd_table(char *line, t_env *env)
 		}
 		if (!test_builtin_cmd(cmd->split_token->content))
 		{
-			printf("not builtin cmd, %s\n", (char *) cmd->split_token->content);
+//			printf("not builtin cmd, %s\n", (char *) cmd->split_token->content);
 			cmd->cmd_args[0] =
 				get_exec_path(cmd->split_token->content, env, &cmd->path_error);
 			if (!cmd->cmd_args[0])

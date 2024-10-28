@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/25 13:54:30 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/28 15:14:43 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ void	print_cmd_list(void *arg)
 	printf("\n");
 }
 
+// TODO: send last exit value to init_cmd_table() and expand in case of $?
 int	main(int ac, char **av, char **envp)
 {
 	char	*line;
@@ -99,7 +100,7 @@ int	main(int ac, char **av, char **envp)
 			if (cmd_table != NULL)
 			{
 				open_infiles(&cmd_table);
-				//ft_lstiter(cmd_table, &print_cmd_list);
+			//	ft_lstiter(cmd_table, &print_cmd_list);
 				prepare_exec(cmd_table, &env);
 			}
 			add_history(line);
