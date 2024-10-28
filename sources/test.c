@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/28 15:48:53 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/28 16:53:30 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ int	main(int ac, char **av, char **envp)
 		line = readline("\e[1;32m[MINISHELL]$> \e[0m");
 		if (line)
 		{
-			cmd_table = init_cmd_table(line, env);
+			cmd_table = init_cmd_table(line, env, g_last_ret_val);
 			process_heredocs(cmd_table, env); // returns 1 in case of malloc fail
 //			ft_lstiter(cmd_table, &process_heredocs);
 			if (cmd_table != NULL)

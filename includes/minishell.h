@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/28 15:46:34 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/28 15:53:13 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef struct s_cmd
 }	t_cmd;
 
 // cmd_table.c
-t_list	*init_cmd_table(char *line, t_env *env);
+t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val);
 // path_utils.c
 void	open_files(t_files *files, char *infile_name, char *outfile_name);
 void	close_all(t_files files, int pipefd[2]);
@@ -122,7 +122,7 @@ char	*get_word(char *start);
 char	*skip_word(char *s);
 
 // expand_vars.c
-char	*expand_vars(char *token, t_env *env);
+char	*expand_vars(char *token, t_env *env, int last_ret_val);
 
 // file_handler.c
 int		open_infiles(t_list **cmd_table);

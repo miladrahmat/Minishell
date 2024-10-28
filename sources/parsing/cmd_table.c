@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/28 15:42:06 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/28 15:52:22 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,7 +231,7 @@ void	*init_t_cmd(void *content)
 // can return NULL in case of a failed malloc() in functions called from here
 // TODO: when an incorrect variable name is given, expand_vars() will return 
 // an empty string. Do we then need to remove the token from the list?
-t_list	*init_cmd_table(char *line, t_env *env)
+t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 {
 	t_list	*pipe_tokens;
 	t_list	*cmd_table;
@@ -254,7 +254,8 @@ t_list	*init_cmd_table(char *line, t_env *env)
 		while (split_tokens_iter)
 		{
 			// TODO: remove some quotation marks
-			expanded_token = expand_vars(split_tokens_iter->content, env);
+			expanded_token = expand_vars(
+				split_tokens_iter->content, env, last_ret_val);
 			if (!expanded_token)
 			{
 				//cleanup function in case of malloc fails

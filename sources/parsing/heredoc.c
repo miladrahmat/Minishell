@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/28 15:41:34 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/28 16:43:07 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	read_into_file(int fd, char *delim, t_env *env, bool expand)
 	{
 		if (expand)
 		{
-			expanded_line = expand_vars(line, env);
+			expanded_line = expand_vars(line, env, 0);
 			write(fd, expanded_line, ft_strlen(expanded_line));
 			free(expanded_line);
 		}
