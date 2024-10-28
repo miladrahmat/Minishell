@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/25 16:03:46 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/28 14:25:08 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,38 @@
 
 int	g_last_ret_val = 0;
 
-void	define_sig_func(struct sigaction *signal, void *func)
+void	handle_sigint(void *func)
 {
-	signal->sa_sigaction = func;
-	signal->sa_flags = SA_SIGINFO;
-	sigemptyset(&signal->sa_mask);
-	sigaction(SIGINT, signal, NULL);
-	sigaction(SIGQUIT, signal, NULL);
+	struct sigaction	sigint;
+	struct sigaction	sigquit;
+
+	sigint.sa_handler = func;
+	sigint.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigint.sa_mask);
+	sigaction(SIGINT, &sigint, NULL);
+	sigquit.sa_handler = SIG_IGN;
+	sigquit.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigquit.sa_mask);
+	sigaction(SIGQUIT, &sigquit, NULL);
 }
 
-void	handle_signals(int signal, siginfo_t *info, void *content)
+void	ignore_sigint(void)
 {
-	(void)content;
-	(void)info;
+	struct sigaction	sigint;
+	struct sigaction	sigquit;
+
+	sigint.sa_handler = SIG_IGN;
+	sigint.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigint.sa_mask);
+	sigaction(SIGINT, &sigint, NULL);
+	sigquit.sa_handler = SIG_IGN;
+	sigquit.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigquit.sa_mask);
+	sigaction(SIGQUIT, &sigquit, NULL);
+}
+
+void	handle_signals(int signal)
+{
 	if (signal == SIGINT)
 	{
 		g_last_ret_val = 130;
@@ -41,6 +60,15 @@ void	handle_signals(int signal, siginfo_t *info, void *content)
 		g_last_ret_val = 0;
 		return ;
 	}
+}
+
+void	exit_signal(t_list **cmd_table, t_env **env)
+{
+	(void)cmd_table;
+	ft_envclear(env, &free);
+	//need to free cmd_table
+	printf("exit\n");
+	exit(0);
 }
 
 int	split_free(char **str, int ret_val)
@@ -111,14 +139,13 @@ void	print_cmd_list(void *arg)
 
 int	main(int ac, char **av, char **envp)
 {
-	struct sigaction	new_signal;
 	char				*line;
 	t_list				*cmd_table;
 	t_env				*env;
 
 	(void)av;
 	(void)ac;
-	define_sig_func(&new_signal, &handle_signals);
+	handle_sigint(&handle_signals);
 	env = copy_env(envp);
 	if (env == NULL)
 		exit(1);
@@ -138,6 +165,6 @@ int	main(int ac, char **av, char **envp)
 			free(line);
 		}
 		else
-			builtin_exit(((t_cmd *)cmd_table->content)->cmd_args, &env);
+			exit_signal(&cmd_table, &env);
 	}
 }

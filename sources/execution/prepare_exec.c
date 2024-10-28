@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/24 18:29:49 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/28 14:09:58 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static int	wait_pids(pid_t **pid, int index)
 	}
 	waitpid((*pid)[iter], &ret_val, 0);
 	free(*pid);
+	handle_sigint(&handle_signals);
 	if (WIFEXITED(ret_val))
 		return (WEXITSTATUS(ret_val));
 	return (ret_val);
@@ -64,6 +65,7 @@ static pid_t	prepare_child(t_list *cmd, t_env **env, char **env_copy)
 {
 	pid_t	pid;
 
+	pid = 0;
 	if (cmd->next != NULL)
 	{
 		if (check_pipe_fd(((t_cmd **)&cmd->content), \
@@ -75,6 +77,8 @@ static pid_t	prepare_child(t_list *cmd, t_env **env, char **env_copy)
 		return (-1);
 	if (pid == 0)
 		execute_cmd(((t_cmd *)cmd->content), env_copy, env);
+	else
+		ignore_sigint();
 	close_cmd_fd(((t_cmd *)cmd->content));
 	return (pid);
 }

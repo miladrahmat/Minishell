@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/25 14:48:17 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/28 14:29:12 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,8 @@ char	*copy_env_node(t_env *env);
 int		execute_one_builtin(t_list *cmd_table, t_env **env);
 
 //signals
-void	define_sig_func(struct sigaction *signal, void *func);
-void	handle_signals(int signal, siginfo_t *info, void *content);
+void	handle_signals(int signal);
+void	ignore_sigint(void);
+void	handle_sigint(void *func);
 
 #endif
