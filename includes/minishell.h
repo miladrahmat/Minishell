@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/28 15:53:13 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/29 14:18:00 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,5 +146,10 @@ int		execute_one_builtin(t_list *cmd_table, t_env **env);
 void	handle_signals(int signal);
 void	ignore_sigint(void);
 void	handle_sigint(void *func);
+void	signal_handling_child(void);
+void	exit_signal(t_list **cmd_table, t_env **env);
+
+//utils
+void	destroy_tlist_of_tcmd(void	*arg);
 
 #endif

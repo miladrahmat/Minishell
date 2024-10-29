@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_vars.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/28 17:20:31 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/29 14:40:54 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ char	*expand_vars(char *token, t_env *env, int last_ret_val)
 			return (expand_vars_fail(ret, varname));
 		if (!ret)
 		{
-			printf("expand_vars() returning NULL\n");
+			//printf("expand_vars() returning NULL\n");
 			return (expand_vars_fail(ret, varname));
 		}
 		if (*end == '$')
@@ -160,7 +160,7 @@ char	*expand_vars(char *token, t_env *env, int last_ret_val)
 		}
 		start = end;
 	}
-	if (ft_strlen(ret) <= 0)
-		printf("expand_vars() returning empty string\n");
+	// if (ft_strlen(ret) <= 0)
+	// 	printf("expand_vars() returning empty string\n");
 	return (ret);
 }
