@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 17:31:09 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/30 18:00:29 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,12 +135,15 @@ void	parse_redirs(t_cmd *cmd)
 		get_redir(cmd, tokens_iter->content, &is_valid_redir);
 		if (is_valid_redir)
 			ft_lstdel_and_connect(&cmd->split_token, &tokens_iter);
+		if (!tokens_iter)
+			return ;
 		tokens_iter = tokens_iter->next;
 	}
 }
 
-// split a string on whitespace and arrows, but not in quotes
-// also quotes are not removed yet
+// env vars can expand into commands, arguments or redir filenames,
+// 		but cannot contain < or > in themselves
+// 	==> split on spaces and redir symbols
 t_list	*split_token(char *cmd_token)
 {
 	char	*start;
@@ -270,10 +273,7 @@ void	strip_quotes(char *s)
 	if (is_quoted_str(s))
 		str_del_first_last(s);
 }
-// env vars can expand into commands, arguments or redir filenames,
-// 		but cannot contain < or > in themselves
-// 	==> split on spaces and redir symbols
-//
+
 // Can return NULL in case of a failed malloc() in functions called from here
 //
 // When an incorrect variable name is given, expand_vars() will return 
@@ -281,6 +281,8 @@ void	strip_quotes(char *s)
 //
 // After parsing redirs AND exppanding variables, we can assume that 
 // the first token is the cmd (?)
+// TODO: stop removing single quotes from inside of double quotes
+// TODO: stop removing singular $ signs inside of double quotes (expand_vars())
 t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 {
 	t_list	*pipe_tokens;
@@ -299,6 +301,11 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 	while (cmd_table_iter)
 	{
 		cmd = (t_cmd *) cmd_table_iter->content;
+		if (!cmd->split_token)
+		{
+			cmd_table_iter = cmd_table_iter->next;
+			continue ;
+		}
 		split_tokens_iter = cmd->split_token;
 	//	ft_lstiter(cmd->split_token, &print_list);
 		while (split_tokens_iter)
