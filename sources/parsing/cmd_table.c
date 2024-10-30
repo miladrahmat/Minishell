@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/28 15:52:22 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/30 11:40:40 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,8 +136,7 @@ void	parse_redirs(t_cmd *cmd)
 }
 
 // split a string on whitespace and arrows, but not in quotes
-// TODO: if we remove quotes here, we need to somehow retai the information
-// about whether heredoc delimiter was quoted or not
+// also quotes are not removed yet
 t_list	*split_token(char *cmd_token)
 {
 	char	*start;
@@ -184,6 +183,7 @@ t_list	*split_token(char *cmd_token)
 		new_str = get_token(start, end);
 		if (new_str)
 		{
+//			printf("split_token(): %s\n", new_str);
 			new_token = ft_lstnew(new_str);
 			ft_lstadd_back(&tokens, new_token);
 		}
@@ -215,10 +215,53 @@ void	*init_t_cmd(void *content)
 //	ft_lstiter(cmd->split_token, &print_list);
 	// now we are inside of a single t_cmd node; so loop through the tokens
 	parse_redirs(cmd);
+	//printf("after parse_redirs()\n");
+	//ft_lstiter(cmd->split_token, &print_list);
 	cmd->fd = malloc(sizeof(t_files));
 	cmd->fd->infile = 0;
 	cmd->fd->outfile = 1;
 	return (cmd);
+}
+
+// checks first token for a cmd, then just appends the rest of the tokens
+int	build_cmd_args(t_cmd *cmd, t_env *env)
+{	
+	int		i;
+	t_list	*split_tokens_iter;
+
+	cmd->cmd_args =
+		malloc(sizeof(char *) * (ft_lstsize(cmd->split_token) + 1));
+	if (!cmd->cmd_args)
+	{
+		//cleanup function in case of malloc fails
+		return (1);
+	}
+	if (!test_builtin_cmd(cmd->split_token->content))
+	{
+//		printf("not builtin cmd, %s\n", (char *) cmd->split_token->content);
+		cmd->cmd_args[0] =
+			get_exec_path(cmd->split_token->content, env, &cmd->path_error);
+		if (!cmd->cmd_args[0])
+		{
+			//TODO: if we end up here, it can either be malloc fail or 
+			// command not found, so we need to check path_error
+			// and cleanup in case of malloc fails
+			printf("init_cmd_table(): cmd not found\n");
+		}
+	}
+	else
+		cmd->cmd_args[0] = cmd->split_token->content;
+	i = 1;
+	split_tokens_iter = cmd->split_token;
+	split_tokens_iter = split_tokens_iter->next;
+	while (split_tokens_iter)
+	{
+		cmd->cmd_args[i] = ft_strdup(split_tokens_iter->content);
+		split_tokens_iter = split_tokens_iter->next;
+		i++;
+	}
+	cmd->cmd_args[i] = NULL;
+	return (0);
 }
 
 // env vars can expand into commands, arguments or redir filenames,
@@ -231,6 +274,9 @@ void	*init_t_cmd(void *content)
 // can return NULL in case of a failed malloc() in functions called from here
 // TODO: when an incorrect variable name is given, expand_vars() will return 
 // an empty string. Do we then need to remove the token from the list?
+//
+// after parsing redirs AND exppanding variables, 
+// 		we can assume that the first token is the cmd (?)
 t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 {
 	t_list	*pipe_tokens;
@@ -238,7 +284,7 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 	t_list	*cmd_table_iter;
 	t_cmd	*cmd;
 	t_list	*split_tokens_iter;
-	int		i;
+//	int		i;
 	char	*expanded_token;
 
 	// split line at pipes into t_list of strings
@@ -250,9 +296,11 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 	while (cmd_table_iter)
 	{
 		cmd = (t_cmd *) cmd_table_iter->content;
+		ft_lstiter(cmd->split_token, &print_list);
 		split_tokens_iter = cmd->split_token;
 		while (split_tokens_iter)
 		{
+		//	printf("init_cmd_table: %s\n", (char *) split_tokens_iter->content);
 			// TODO: remove some quotation marks
 			expanded_token = expand_vars(
 				split_tokens_iter->content, env, last_ret_val);
@@ -272,36 +320,7 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 			*/
 			split_tokens_iter = split_tokens_iter->next;
 		}
-		cmd->cmd_args =
-			malloc(sizeof(char *) * (ft_lstsize(cmd->split_token) + 1));
-		if (!cmd->cmd_args)
-		{
-			//cleanup function in case of malloc fails
-			return (NULL);
-		}
-		if (!test_builtin_cmd(cmd->split_token->content))
-		{
-//			printf("not builtin cmd, %s\n", (char *) cmd->split_token->content);
-			cmd->cmd_args[0] =
-				get_exec_path(cmd->split_token->content, env, &cmd->path_error);
-			if (!cmd->cmd_args[0])
-			{
-				//cleanup function in case of malloc fails
-				return (NULL);
-			}
-		}
-		else
-			cmd->cmd_args[0] = cmd->split_token->content;
-		i = 1;
-		split_tokens_iter = cmd->split_token;
-		split_tokens_iter = split_tokens_iter->next;
-		while (split_tokens_iter)
-		{
-			cmd->cmd_args[i] = ft_strdup(split_tokens_iter->content);
-			split_tokens_iter = split_tokens_iter->next;
-			i++;
-		}
-		cmd->cmd_args[i] = NULL;
+		build_cmd_args(cmd, env);
 		cmd_table_iter = cmd_table_iter->next;
 	}
 	return (cmd_table);

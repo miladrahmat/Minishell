@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/28 17:20:31 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/30 11:03:45 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,5 +162,6 @@ char	*expand_vars(char *token, t_env *env, int last_ret_val)
 	}
 	if (ft_strlen(ret) <= 0)
 		printf("expand_vars() returning empty string\n");
+//	printf("expand_vars: %s\n", ret);
 	return (ret);
 }
