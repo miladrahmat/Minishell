@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 14:07:21 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/30 17:17:03 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,10 @@
 
 char	*increment_suffix(char	*s)
 {
-	char	*ret;
+	static int	suffix = 0;
 
-	if (!s)
-	{
-		ret = malloc(sizeof(char) * 3);
-		if (!ret)
-			return (NULL);
-		ret[0] = '-';
-		ret[1] = 'a';
-		ret[2] = 0;
-		return (ret);
-	}
-	s[1]++;
-	if (s[1] > 'z')
-		printf("increment_suffix(): too many heredocs\n");
+	s = ft_itoa(suffix);
+	suffix++;
 	return (s);
 }
 
