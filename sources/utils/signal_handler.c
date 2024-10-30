@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:16:52 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/30 14:07:09 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:51:37 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,21 @@ void	signal_handling_child(void)
 	sigemptyset(&sigint.sa_mask);
 	sigaction(SIGINT, &sigint, NULL);
 	sigquit.sa_handler = SIG_DFL;
+	sigquit.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigquit.sa_mask);
+	sigaction(SIGQUIT, &sigquit, NULL);
+}
+
+void	heredoc_signal(void)
+{
+	struct sigaction	sigint;
+	struct sigaction	sigquit;
+
+	sigint.sa_handler = SIG_DFL;
+	sigint.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigint.sa_mask);
+	sigaction(SIGINT, &sigint, NULL);
+	sigquit.sa_handler = SIG_IGN;
 	sigquit.sa_flags = SA_SIGINFO;
 	sigemptyset(&sigquit.sa_mask);
 	sigaction(SIGQUIT, &sigquit, NULL);
