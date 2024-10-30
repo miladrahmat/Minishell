@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 12:01:27 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 14:58:06 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:57:31 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ static void	clean_files(void *arg)
 	file = arg;
 	if (file->filename != NULL)
 	{
+		if (file->redir_type == heredoc)
+			unlink(file->filename);
 		free(file->filename);
 		file->filename = NULL;
 	}
