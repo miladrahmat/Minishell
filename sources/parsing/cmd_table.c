@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 14:48:36 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/30 17:27:19 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ t_redir_type	get_redir_type(char *content)
 
 bool	is_quoted_str(char *s)
 {
-	return (s[0] == '"' && s[ft_strlen(s) - 1] == '"'); 
+	return ((s[0] == '\"' && s[ft_strlen(s) - 1] == '\"') ||
+		(s[0] == '\'' && s[ft_strlen(s) - 1] == '\'')); 
 }
 
 void	str_del_first_last(char *s)
@@ -264,20 +265,22 @@ int	build_cmd_args(t_cmd *cmd, t_env *env)
 	return (0);
 }
 
+void	strip_quotes(char *s)
+{
+	if (is_quoted_str(s))
+		str_del_first_last(s);
+}
 // env vars can expand into commands, arguments or redir filenames,
 // 		but cannot contain < or > in themselves
 // 	==> split on spaces and redir symbols
 //
-//if a token is not a redir, its a command or an argument
-//	=> split further into redirs commands and arguments
+// Can return NULL in case of a failed malloc() in functions called from here
 //
-// can return NULL in case of a failed malloc() in functions called from here
-// TODO: when an incorrect variable name is given, expand_vars() will return 
-// an empty string. Do we then need to remove the token from the list?
+// When an incorrect variable name is given, expand_vars() will return 
+// an empty string. 
 //
-// after parsing redirs AND exppanding variables, 
-// 		we can assume that the first token is the cmd (?)
-// TODO: remove some quotation marks after expanding vars
+// After parsing redirs AND exppanding variables, we can assume that 
+// the first token is the cmd (?)
 t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 {
 	t_list	*pipe_tokens;
@@ -310,6 +313,7 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 			}
 			// expanded_token can also be an empty string (in case of a 
 			// non-existant variable), but that is currently allowed
+			strip_quotes(expanded_token);
 			if (split_tokens_iter->content)
 				free(split_tokens_iter->content);
 			split_tokens_iter->content = expanded_token;

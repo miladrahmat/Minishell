@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 12:13:42 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:52:22 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ char	*expand_vars(char *token, t_env *env, int last_ret_val)
 		}
 		else if (*end == '\'')
 		{
-		//	end++;
+			end++;
 			start = end;
 			end = concatenate_until(&ret, start, "'");
 			if (!end)
