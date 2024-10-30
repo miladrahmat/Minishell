@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 10:11:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/17 15:38:47 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/30 10:35:17 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,48 +60,52 @@
 // 	3. transform into command table
 // 	4. expand variables (also inside of double quotes)
 // 	5. remove quotes
+char	*skip_until(char *s, char delim)
+{
+	while (s && *s && *s != delim)
+	{
+		s++;
+	}
+	return (s);
+}
 
 // basically splits the argument on pipes, taking quotes into account
+// TODO: handle malloc fail in get_token() and ft_lstnew()
 t_list	*split_on_pipes(char *line)
 {
 	char	*start;
 	char	*end;
 	t_list	*new_token;
 	t_list	*tokens;
-	int		quotes;
+	char	*new_string;
 
 	if (!line)
 		return NULL;
 	start = line;
 	tokens = NULL;
 	end = start;
-	quotes = 0;
 	while (*start && *end)
 	{
 		if (*start == '|')
 			start++;
 		start = skip_whitespace(start);
-		end = start + 1;
+		end = start;
 		while (*end)
 		{
-			if (quotes == 0)
-			{
-				if (*end == '\'')
-					quotes = 1;
-				else if (*end == '\"')
-					quotes = 2;
-				else if (*end == '|') 
-					break ;
-			}
-			else if (quotes == 1 && *end == '\'')
-				quotes = 0;
-			else if (quotes == 2 && *end == '\"')
-				quotes = 0;
+			if (*end == '|') 
+				break ;
+			else if (*end == '\'')
+				end = skip_until(end + 1, '\'');
+			else if (*end == '\"')
+				end = skip_until(end + 1, '\"');
 			end++;
 		}
-		new_token = ft_lstnew(get_token(start, end));
+		new_string = get_token(start, end);
+//		printf("split_on_pipes(): %s\n", new_string);
+		new_token = ft_lstnew(new_string);
 		ft_lstadd_back(&tokens, new_token);
 		start = end;
 	}
+//	printf("split_on_pipes(): returning\n");
 	return (tokens);
 }

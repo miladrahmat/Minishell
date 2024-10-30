@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 14:45:35 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:55:49 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	print_cmd_list(void *arg)
 	printf("\n");
 }
 
-// TODO: send last exit value to init_cmd_table() and expand in case of $?
+// TODO: variable names cannot start with number
 int	main(int ac, char **av, char **envp)
 {
 	char				*line;

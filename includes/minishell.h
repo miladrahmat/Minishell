@@ -6,12 +6,13 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 14:15:23 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:54:25 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+# define _GNU_SOURCE
 # include <stdio.h> // printf
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -20,6 +21,8 @@
 # include <fcntl.h> // open()
 # include <errno.h>
 # include <unistd.h>
+//# include <sys/stat.h>
+//# include <sys/types.h>
 # include <sys/wait.h>
 # include <signal.h>
 # include "libft.h"
