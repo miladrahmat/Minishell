@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 12:01:27 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 16:57:31 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/30 17:59:06 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static void	clean_files(void *arg)
 	t_redir	*file;
 
 	file = arg;
+	if (file == NULL)
+		return ;
 	if (file->filename != NULL)
 	{
 		if (file->redir_type == heredoc)
@@ -38,6 +40,8 @@ void	destroy_tlist_of_tcmd(void	*arg)
 	if (arg == NULL)
 		return ;
 	cmd = arg;
+	if (cmd == NULL)
+		return ;
 	if (cmd->cmd_args != NULL)
 	{
 		split_free(cmd->cmd_args, 0);
@@ -55,6 +59,8 @@ int	split_free(char **str, int ret_val)
 	size_t	i;
 
 	i = 0;
+	if (str == NULL)
+		return (ret_val);
 	while (str[i] != NULL)
 	{
 		free(str[i]);
