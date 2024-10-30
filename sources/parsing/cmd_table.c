@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 17:27:19 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/30 17:31:09 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,10 @@ int	get_redir(t_cmd *cmd, char *content, bool *is_valid_redir)
 	new_node = ft_lstnew(redir);
 	if (!new_node || !redir->filename)
 		return (1);
-	ft_lstadd_back(&cmd->infiles, new_node);
+	if (redir->redir_type == out_append || redir->redir_type == out_trunc)
+		ft_lstadd_back(&cmd->outfiles, new_node);
+	else
+		ft_lstadd_back(&cmd->infiles, new_node);
 	return (0);
 }
 
@@ -216,11 +219,8 @@ void	*init_t_cmd(void *content)
 //	ft_lstiter(cmd->split_token, &print_list);
 	// now we are inside of a single t_cmd node; so loop through the tokens
 	parse_redirs(cmd);
-	//printf("after parse_redirs()\n");
-	//ft_lstiter(cmd->split_token, &print_list);
-	cmd->fd = malloc(sizeof(t_files));
-	cmd->fd->infile = 0;
-	cmd->fd->outfile = 1;
+	cmd->fd.infile = 0;
+	cmd->fd.outfile = 1;
 	return (cmd);
 }
 
@@ -247,7 +247,7 @@ int	build_cmd_args(t_cmd *cmd, t_env *env)
 			//TODO: if we end up here, it can either be malloc fail or 
 			// command not found, so we need to check path_error
 			// and cleanup in case of malloc fails
-			printf("init_cmd_table(): cmd not found\n");
+//			printf("build_cmd_args(): cmd not found\n");
 		}
 	}
 	else

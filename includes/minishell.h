@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 13:53:50 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:54:25 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct s_cmd
 	t_list	*infiles;
 	t_list	*outfiles;
 	int		path_error;
-	t_files	*fd;
+	t_files	fd;
 }	t_cmd;
 
 // cmd_table.c
@@ -87,15 +87,18 @@ int		process_heredocs(t_list *cmd_table, t_env *env);
 
 //builtin_cmds
 bool	test_builtin_cmd(char *cmd);
-int		check_builtin_cmd(char **cmd, int fd, t_env **envp);
+int		check_builtin_cmd(t_list **cmd_table, t_env **envp);
+int		check_builtin_cmd_child(t_cmd *cmd_table, t_env **envp);
 int		echo(char **str, int fd);
 int		env(char **cmd, int fd, t_env **envp);
 int		unset(char **cmd, t_env **envp);
+int		cd(char **cmd, t_env **envp);
+int		pwd(int fd);
 int		export(char **cmd, int fd, t_env **envp);
 int		print_builtin_error(char *cmd, char *arg, char *err, bool alloc);
 t_env	*print_export_error(char **variable);
 void	update_pwd(t_env **envp);
-int		builtin_exit(char **cmd, t_env **envp);
+int		builtin_exit(t_list **cmd_table, t_env **envp);
 
 //helper functions
 int		split_free(char **str, int ret_val);
@@ -149,5 +152,10 @@ int		execute_one_builtin(t_list *cmd_table, t_env **env);
 void	handle_signals(int signal);
 void	ignore_sigint(void);
 void	handle_sigint(void *func);
+void	signal_handling_child(void);
+void	exit_signal(t_list **cmd_table, t_env **env);
+
+//utils
+void	destroy_tlist_of_tcmd(void	*arg);
 
 #endif

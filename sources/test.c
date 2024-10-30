@@ -6,43 +6,13 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 09:56:05 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:55:49 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_last_ret_val = 0;
-
-void	handle_sigint(void *func)
-{
-	struct sigaction	sigint;
-	struct sigaction	sigquit;
-
-	sigint.sa_handler = func;
-	sigint.sa_flags = SA_SIGINFO;
-	sigemptyset(&sigint.sa_mask);
-	sigaction(SIGINT, &sigint, NULL);
-	sigquit.sa_handler = SIG_IGN;
-	sigquit.sa_flags = SA_SIGINFO;
-	sigemptyset(&sigquit.sa_mask);
-	sigaction(SIGQUIT, &sigquit, NULL);
-}
-
-void	ignore_sigint(void)
-{
-	struct sigaction	sigint;
-	struct sigaction	sigquit;
-
-	sigint.sa_handler = SIG_IGN;
-	sigint.sa_flags = SA_SIGINFO;
-	sigemptyset(&sigint.sa_mask);
-	sigaction(SIGINT, &sigint, NULL);
-	sigquit.sa_handler = SIG_IGN;
-	sigquit.sa_flags = SA_SIGINFO;
-	sigemptyset(&sigquit.sa_mask);
-	sigaction(SIGQUIT, &sigquit, NULL);
-}
+sig_atomic_t	g_last_ret_val = 0;
 
 void	handle_signals(int signal)
 {
@@ -50,40 +20,11 @@ void	handle_signals(int signal)
 	{
 		g_last_ret_val = 130;
 		ft_putchar_fd('\n', 1);
-		rl_replace_line("\0", 0);
+		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 		return ;
 	}
-	if (signal == SIGQUIT)
-	{
-		g_last_ret_val = 0;
-		return ;
-	}
-}
-
-void	exit_signal(t_list **cmd_table, t_env **env)
-{
-	(void)cmd_table;
-	ft_envclear(env, &free);
-	//need to free cmd_table
-	printf("exit\n");
-	exit(0);
-}
-
-int	split_free(char **str, int ret_val)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i] != NULL)
-	{
-		free(str[i]);
-		i++;
-	}
-	free(str[i]);
-	free(str);
-	return (ret_val);
 }
 
 t_env	*copy_env(char **envp)
@@ -150,12 +91,15 @@ int	main(int ac, char **av, char **envp)
 	env = copy_env(envp);
 	if (env == NULL)
 		exit(1);
+	cmd_table = NULL;
 	while (true)
 	{
 		line = readline("\e[1;32m[MINISHELL]$> \e[0m");
 		if (line)
 		{
 			cmd_table = init_cmd_table(line, env, g_last_ret_val);
+			add_history(line);
+			free(line);
 			process_heredocs(cmd_table, env); // returns 1 in case of malloc fail
 //			ft_lstiter(cmd_table, &process_heredocs);
 			if (cmd_table != NULL)
@@ -164,8 +108,7 @@ int	main(int ac, char **av, char **envp)
 				//ft_lstiter(cmd_table, &print_cmd_list);
 				g_last_ret_val = prepare_exec(cmd_table, &env);
 			}
-			add_history(line);
-			free(line);
+			ft_lstclear(&cmd_table, &destroy_tlist_of_tcmd);
 		}
 		else
 			exit_signal(&cmd_table, &env);

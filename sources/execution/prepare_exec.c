@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/28 14:09:58 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:20:19 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ static int	wait_pids(pid_t **pid, int index)
 	handle_sigint(&handle_signals);
 	if (WIFEXITED(ret_val))
 		return (WEXITSTATUS(ret_val));
+	if (WIFSIGNALED(ret_val))
+		return (128 + WTERMSIG(ret_val));
 	return (ret_val);
 }
 
@@ -42,12 +44,12 @@ static void	execute_cmd(t_cmd *cmd, char **env_copy, t_env **env)
 	int	ret_val;
 
 	ret_val = 1;
-	if (check_builtin_cmd(cmd->cmd_args, cmd->fd->outfile, env) < 0)
+	if (check_builtin_cmd_child(cmd, env) < 0)
 	{
-		if (cmd->fd->infile >= 0 && cmd->fd->outfile > 0)
+		if (cmd->fd.infile >= 0 && cmd->fd.outfile > 0)
 		{
-			dup2(cmd->fd->infile, STDIN_FILENO);
-			dup2(cmd->fd->outfile, STDOUT_FILENO);
+			dup2(cmd->fd.infile, STDIN_FILENO);
+			dup2(cmd->fd.outfile, STDOUT_FILENO);
 			close_cmd_fd(cmd);
 			if (cmd->cmd_args != NULL)
 				execve(cmd->cmd_args[0], cmd->cmd_args, env_copy);
@@ -57,7 +59,7 @@ static void	execute_cmd(t_cmd *cmd, char **env_copy, t_env **env)
 	close_cmd_fd(cmd);
 	split_free(env_copy, 0);
 	ft_envclear(env, &free);
-	//need to free t_cmd
+	destroy_tlist_of_tcmd(cmd);
 	exit(ret_val);
 }
 
@@ -76,7 +78,10 @@ static pid_t	prepare_child(t_list *cmd, t_env **env, char **env_copy)
 	if (pid < 0)
 		return (-1);
 	if (pid == 0)
+	{
+		signal_handling_child();
 		execute_cmd(((t_cmd *)cmd->content), env_copy, env);
+	}
 	else
 		ignore_sigint();
 	close_cmd_fd(((t_cmd *)cmd->content));

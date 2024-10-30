@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:20:32 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/22 11:37:48 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:27:16 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,12 @@ int	cd(char **cmd, t_env **envp)
 	return (0);
 }
 
-int	builtin_exit(char **cmd, t_env **envp)
+int	builtin_exit(t_list **cmd_table, t_env **envp)
 {
-	int	ret_val;
+	int		ret_val;
+	char	**cmd;
 
+	cmd = ((t_cmd *)(*cmd_table)->content)->cmd_args;
 	ft_putendl_fd(*cmd, 2);
 	ret_val = 0;
 	if (cmd[1] != NULL)
@@ -57,6 +59,8 @@ int	builtin_exit(char **cmd, t_env **envp)
 			ret_val = ft_atoi(cmd[1]);
 	}
 	ft_envclear(envp, &free);
+	ft_lstclear(cmd_table, &destroy_tlist_of_tcmd);
+	clear_history();
 	exit(ret_val);
 }
 
@@ -86,8 +90,13 @@ bool	test_builtin_cmd(char *cmd)
 	return (ret);
 }
 
-int	check_builtin_cmd(char **cmd, int fd, t_env **envp)
+int	check_builtin_cmd(t_list **cmd_table, t_env **envp)
 {
+	char	**cmd;
+	int		fd;
+
+	cmd = ((t_cmd *)(*cmd_table)->content)->cmd_args;
+	fd = ((t_cmd *)(*cmd_table)->content)->fd.outfile;
 	if (ft_strncmp(*cmd, "pwd", 4) == 0)
 		return (pwd(fd));
 	else if (ft_strncmp("cd", *cmd, 3) == 0)
@@ -95,7 +104,7 @@ int	check_builtin_cmd(char **cmd, int fd, t_env **envp)
 	else if (ft_strncmp(*cmd, "echo", 5) == 0)
 		return (echo(cmd + 1, fd));
 	else if (ft_strncmp(*cmd, "exit", 5) == 0)
-		return (builtin_exit(cmd, envp));
+		return (builtin_exit(cmd_table, envp));
 	else if (ft_strncmp(*cmd, "env", 4) == 0)
 		return (env(cmd, fd, envp));
 	else if (ft_strncmp(*cmd, "unset", 6) == 0)

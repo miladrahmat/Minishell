@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/10/28 15:46:07 by lemercie         ###   ########.fr        #
+#    Updated: 2024/10/30 13:52:19 by mrahmat-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,11 +36,14 @@ FILE_HANDLER_DIR := $(SRCDIR)file_handler/
 
 EXEC_DIR	:= $(SRCDIR)execution/
 
+UTILS_DIR	:= $(SRCDIR)utils/
+
 OBJDIR := ./objects/
 
 MAIN_FILES	:= test.c
 
 BUILTIN_FILES	:= builtin_cmds.c \
+				builtin_child.c \
 				echo.c \
 				env_cmd.c \
 				builtin_helpers.c \
@@ -66,12 +69,16 @@ FILE_HANDLER_FILES	:= file_handler.c \
 EXEC_FILES	:= prepare_exec.c \
 			exec_utils.c
 
+UTILS_FILES	:= cleanup.c \
+			signal_handler.c
+
 SRCS	:= $(addprefix $(SRCDIR), $(MAIN_FILES)) \
 		$(addprefix $(BUILTIN_DIR), $(BUILTIN_FILES)) \
 		$(addprefix $(PARSING_DIR), $(PARSING_FILES)) \
 		$(addprefix $(ENV_DIR), $(ENV_FILES)) \
 		$(addprefix $(FILE_HANDLER_DIR), $(FILE_HANDLER_FILES)) \
 		$(addprefix $(EXEC_DIR), $(EXEC_FILES)) \
+		$(addprefix $(UTILS_DIR), $(UTILS_FILES))
 
 OBJS	:= $(addprefix $(OBJDIR), $(MAIN_FILES:.c=.o)) \
 		$(addprefix $(OBJDIR), $(BUILTIN_FILES:.c=.o)) \
@@ -79,6 +86,7 @@ OBJS	:= $(addprefix $(OBJDIR), $(MAIN_FILES:.c=.o)) \
 		$(addprefix $(OBJDIR), $(ENV_FILES:.c=.o)) \
 		$(addprefix $(OBJDIR), $(FILE_HANDLER_FILES:.c=.o)) \
 		$(addprefix $(OBJDIR), $(EXEC_FILES:.c=.o)) \
+		$(addprefix $(OBJDIR), $(UTILS_FILES:.c=.o))
 
 all: $(OBJDIR) $(LIBFT) $(NAME)
 
@@ -107,6 +115,9 @@ $(OBJDIR)%.o: $(FILE_HANDLER_DIR)%.c
 	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS)
 
 $(OBJDIR)%.o: $(EXEC_DIR)%.c
+	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS)
+
+$(OBJDIR)%.o: $(UTILS_DIR)%.c
 	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS)
 
 $(NAME): $(OBJS) ./includes/minishell.h
