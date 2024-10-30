@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/29 16:06:57 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:07:21 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ char	*get_heredoc(char *delim, t_env *env, bool expand)
 	if (!filename)
 		return (NULL);
 	write_fd = open(filename, O_WRONLY | O_APPEND | O_CREAT, 0666);
+//	write_fd = open("./", O_TMPFILE | O_WRONLY, 0666);
 	read_into_file(write_fd, delim, env, expand);
 	close(write_fd);
 	return (filename);

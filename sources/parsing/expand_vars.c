@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 11:03:45 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/30 12:13:42 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ void	*expand_vars_fail(char *s1, char *s2)
 // $VAR in env
 // token is NOT freed here because it is contained in a list node in the caller
 // returns NULL in case of malloc fails
+// TODO: we are destroying single quotes here.....
 char	*expand_vars(char *token, t_env *env, int last_ret_val)
 {
 	char	*ret;
@@ -152,7 +153,7 @@ char	*expand_vars(char *token, t_env *env, int last_ret_val)
 		}
 		else if (*end == '\'')
 		{
-			end++;
+		//	end++;
 			start = end;
 			end = concatenate_until(&ret, start, "'");
 			if (!end)
@@ -162,6 +163,6 @@ char	*expand_vars(char *token, t_env *env, int last_ret_val)
 	}
 	if (ft_strlen(ret) <= 0)
 		printf("expand_vars() returning empty string\n");
-//	printf("expand_vars: %s\n", ret);
+	printf("expand_vars: %s\n", ret);
 	return (ret);
 }

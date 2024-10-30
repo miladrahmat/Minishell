@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 11:40:40 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:48:36 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,6 +277,7 @@ int	build_cmd_args(t_cmd *cmd, t_env *env)
 //
 // after parsing redirs AND exppanding variables, 
 // 		we can assume that the first token is the cmd (?)
+// TODO: remove some quotation marks after expanding vars
 t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 {
 	t_list	*pipe_tokens;
@@ -284,7 +285,6 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 	t_list	*cmd_table_iter;
 	t_cmd	*cmd;
 	t_list	*split_tokens_iter;
-//	int		i;
 	char	*expanded_token;
 
 	// split line at pipes into t_list of strings
@@ -296,12 +296,11 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 	while (cmd_table_iter)
 	{
 		cmd = (t_cmd *) cmd_table_iter->content;
-		ft_lstiter(cmd->split_token, &print_list);
 		split_tokens_iter = cmd->split_token;
+	//	ft_lstiter(cmd->split_token, &print_list);
 		while (split_tokens_iter)
 		{
 		//	printf("init_cmd_table: %s\n", (char *) split_tokens_iter->content);
-			// TODO: remove some quotation marks
 			expanded_token = expand_vars(
 				split_tokens_iter->content, env, last_ret_val);
 			if (!expanded_token)
@@ -311,6 +310,8 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 			}
 			// expanded_token can also be an empty string (in case of a 
 			// non-existant variable), but that is currently allowed
+			if (split_tokens_iter->content)
+				free(split_tokens_iter->content);
 			split_tokens_iter->content = expanded_token;
 			/*
 			if (ft_strlen(expanded_token) > 0)
@@ -320,6 +321,7 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 			*/
 			split_tokens_iter = split_tokens_iter->next;
 		}
+	//	ft_lstiter(cmd->split_token, &print_list);
 		build_cmd_args(cmd, env);
 		cmd_table_iter = cmd_table_iter->next;
 	}
