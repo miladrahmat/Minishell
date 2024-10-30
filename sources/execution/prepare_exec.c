@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/29 14:29:24 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:20:19 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@ static void	execute_cmd(t_cmd *cmd, char **env_copy, t_env **env)
 	int	ret_val;
 
 	ret_val = 1;
-	if (check_builtin_cmd(cmd->cmd_args, cmd->fd->outfile, env) < 0)
+	if (check_builtin_cmd_child(cmd, env) < 0)
 	{
-		if (cmd->fd->infile >= 0 && cmd->fd->outfile > 0)
+		if (cmd->fd.infile >= 0 && cmd->fd.outfile > 0)
 		{
-			dup2(cmd->fd->infile, STDIN_FILENO);
-			dup2(cmd->fd->outfile, STDOUT_FILENO);
+			dup2(cmd->fd.infile, STDIN_FILENO);
+			dup2(cmd->fd.outfile, STDOUT_FILENO);
 			close_cmd_fd(cmd);
 			if (cmd->cmd_args != NULL)
 				execve(cmd->cmd_args[0], cmd->cmd_args, env_copy);
@@ -59,7 +59,7 @@ static void	execute_cmd(t_cmd *cmd, char **env_copy, t_env **env)
 	close_cmd_fd(cmd);
 	split_free(env_copy, 0);
 	ft_envclear(env, &free);
-	//need to free t_cmd
+	destroy_tlist_of_tcmd(cmd);
 	exit(ret_val);
 }
 

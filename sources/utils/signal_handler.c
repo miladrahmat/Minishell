@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:16:52 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/29 14:17:43 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:07:09 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	exit_signal(t_list **cmd_table, t_env **env)
 	(void)cmd_table;
 	ft_envclear(env, &free);
 	ft_lstclear(cmd_table, &destroy_tlist_of_tcmd);
+	clear_history();
 	printf("exit\n");
 	exit(0);
 }

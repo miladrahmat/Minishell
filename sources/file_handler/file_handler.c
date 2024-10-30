@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:06:58 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/25 10:49:05 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:19:09 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	close_cmd_fd(t_cmd *curr_cmd)
 {
-	if (curr_cmd->fd->infile > 0)
-		close(curr_cmd->fd->infile);
-	if (curr_cmd->fd->outfile > 1)
-		close(curr_cmd->fd->outfile);
+	if (curr_cmd->fd.infile > 0)
+		close(curr_cmd->fd.infile);
+	if (curr_cmd->fd.outfile > 1)
+		close(curr_cmd->fd.outfile);
 }
 
 static int	set_infile(t_list **current, t_list **cmd)
@@ -32,14 +32,14 @@ static int	set_infile(t_list **current, t_list **cmd)
 	if (fd == -1)
 	{
 		print_builtin_error(file->filename, NULL, NULL, false);
-		if (((t_cmd *)(*cmd)->content)->fd->infile != 0)
-			close(((t_cmd *)(*cmd)->content)->fd->infile);
-		((t_cmd *)(*cmd)->content)->fd->infile = fd;
+		if (((t_cmd *)(*cmd)->content)->fd.infile != 0)
+			close(((t_cmd *)(*cmd)->content)->fd.infile);
+		((t_cmd *)(*cmd)->content)->fd.infile = fd;
 		return (-1);
 	}
-	if (((t_cmd *)(*cmd)->content)->fd->infile != 0)
-		close(((t_cmd *)(*cmd)->content)->fd->infile);
-	((t_cmd *)(*cmd)->content)->fd->infile = fd;
+	if (((t_cmd *)(*cmd)->content)->fd.infile != 0)
+		close(((t_cmd *)(*cmd)->content)->fd.infile);
+	((t_cmd *)(*cmd)->content)->fd.infile = fd;
 	return (1);
 }
 
@@ -77,14 +77,14 @@ static int	set_outfile(t_list **current, t_list **cmd)
 	if (fd == -1)
 	{
 		print_builtin_error(file->filename, NULL, NULL, false);
-		if (((t_cmd *)(*cmd)->content)->fd->outfile != 1)
-			close(((t_cmd *)(*cmd)->content)->fd->outfile);
-		((t_cmd *)(*cmd)->content)->fd->outfile = fd;
+		if (((t_cmd *)(*cmd)->content)->fd.outfile != 1)
+			close(((t_cmd *)(*cmd)->content)->fd.outfile);
+		((t_cmd *)(*cmd)->content)->fd.outfile = fd;
 		return (-1);
 	}
-	if (((t_cmd *)(*cmd)->content)->fd->outfile != 1)
-		close(((t_cmd *)(*cmd)->content)->fd->outfile);
-	((t_cmd *)(*cmd)->content)->fd->outfile = fd;
+	if (((t_cmd *)(*cmd)->content)->fd.outfile != 1)
+		close(((t_cmd *)(*cmd)->content)->fd.outfile);
+	((t_cmd *)(*cmd)->content)->fd.outfile = fd;
 	return (1);
 }
 

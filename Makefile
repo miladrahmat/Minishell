@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/10/29 14:43:19 by mrahmat-         ###   ########.fr        #
+#    Updated: 2024/10/30 13:52:19 by mrahmat-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,7 @@ OBJDIR := ./objects/
 MAIN_FILES	:= test.c
 
 BUILTIN_FILES	:= builtin_cmds.c \
+				builtin_child.c \
 				echo.c \
 				env_cmd.c \
 				builtin_helpers.c \
