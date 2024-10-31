@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/31 16:31:41 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/31 16:53:05 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	handle_heredoc(int signal)
 		rl_replace_line("", 0);
 		rl_redisplay();
 		rl_done = 1;
+		return ;
 	}
 }
 
