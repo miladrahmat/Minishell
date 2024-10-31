@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/31 16:50:53 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/31 16:59:47 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,11 +152,15 @@ int	process_heredocs(t_list *cmd_table, t_env *env)
 					redir->filename = filename;
 				else
 				{
-					redir->filename = NULL;
-					return (1);
+					ft_lstdel_and_connect(&cmd->infiles, &infiles_iter);
+		//			redir->filename = NULL;
+		//			return (1);
 				}
 			}
-			infiles_iter = infiles_iter->next;
+			if (infiles_iter)
+				infiles_iter = infiles_iter->next;
+			else
+				break ;
 		}
 		cmd_table_iter = cmd_table_iter->next;
 	}
