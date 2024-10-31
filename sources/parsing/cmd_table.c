@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 17:31:09 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/10/31 15:59:10 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,32 +18,27 @@
 // << input heredoc
 t_redir_type	get_redir_type(char *content)
 {
+//	printf("get_redir_type(): incoming content: %s\n", content);
 	if (!content || !*content)
 		return (error);
-	if (!content[1])
-			return (error);
-		if (content[0] == '>')
+	if (content[0] == '>')
+	{
+		if (content[1] == '>')
 		{
-			if (content[1] == '>')
-			{
-				if (!content[2])
-					return (error);
-				return (out_append);
-			}
-			else
-				return (out_trunc);
+			return (out_append);
 		}
-		else if (content[0] == '<')
+		else
+			return (out_trunc);
+	}
+	else if (content[0] == '<')
+	{
+		if (content[1] == '<')
 		{
-			if (content[1] == '<')
-			{
-				if (!content[2])
-					return (error);
-				return (heredoc);
-			}
-			else
-				return (input);
+			return (heredoc);
 		}
+		else
+			return (input);
+	}
 	return (error);
 }
 
@@ -77,40 +72,65 @@ void	check_quoted_heredoc_delim(t_redir *redir)
 	}
 }
 
-int	get_redir(t_cmd *cmd, char *content, bool *is_valid_redir)
+// return amount of tokens consumed?
+int	get_redir(t_cmd *cmd, char *token1, char *token2)
 {
 	t_redir	*redir;
 	t_list	*new_node;
+	int		tokens_consumed;
 
-	if (get_redir_type(content) == error)
+	if (get_redir_type(token1) == error)
+	{
+//		printf("get_redir(): error in get_redir_type()\n");
 		return (0);
+	}
 	redir = malloc(sizeof(t_redir));
 	if (!redir)
 		return (1);
 	redir->heredoc_quoted_delim = false;
-	redir->redir_type = get_redir_type(content);
+	redir->redir_type = get_redir_type(token1);
 	if (redir->redir_type == out_append)
 	{
-		redir->filename = get_word(content + 2);
-		*is_valid_redir = true;
+		if (ft_strlen(token1) > 2)
+		{
+			redir->filename = get_word(token1 + 2);
+			tokens_consumed = 1;
+		}
+		else
+		{
+			redir->filename = ft_strdup(token2);
+			tokens_consumed = 2;
+		}
 	}
-	else if (redir->redir_type == out_trunc)
+	else if (redir->redir_type == out_trunc || redir->redir_type == input)
 	{
-		redir->filename = get_word(content + 1);
-		*is_valid_redir = true;
-	}
-	else if (redir->redir_type == input)
-	{
-		redir->filename = get_word(content + 1);
-		*is_valid_redir = true;
+		if (ft_strlen(token1) > 1)
+		{
+			redir->filename = get_word(token1 + 1);
+			tokens_consumed = 1;
+		}
+		else
+		{
+			redir->filename = ft_strdup(token2);
+			tokens_consumed = 2;
+		}
 	}
 	else if (redir->redir_type == heredoc)
 	{
-		redir->filename = get_word(content + 2);
+		if (ft_strlen(token1) > 2)
+		{
+			redir->filename = get_word(token1 + 2);
+			tokens_consumed = 1;
+		}
+		else
+		{
+			redir->filename = ft_strdup(token2);
+			tokens_consumed = 2;
+		}
 		check_quoted_heredoc_delim(redir);
 //		printf("get_redir(): heredoc delim: %s\n", redir->filename);
-		*is_valid_redir = true;
 	}
+//	printf("get_redir(): %s\n", redir->filename);
 	new_node = ft_lstnew(redir);
 	if (!new_node || !redir->filename)
 		return (1);
@@ -118,29 +138,48 @@ int	get_redir(t_cmd *cmd, char *content, bool *is_valid_redir)
 		ft_lstadd_back(&cmd->outfiles, new_node);
 	else
 		ft_lstadd_back(&cmd->infiles, new_node);
-	return (0);
+	return (tokens_consumed);
 }
 
 void	parse_redirs(t_cmd *cmd)
 {
 	t_list	*tokens;
 	t_list	*tokens_iter;
-	bool	is_valid_redir;
+	int		tokens_consumed;
 
 	tokens = cmd->split_token;
 	tokens_iter = tokens;
 	while (tokens_iter)
 	{
-		is_valid_redir = false;
-		get_redir(cmd, tokens_iter->content, &is_valid_redir);
-		if (is_valid_redir)
+		tokens_consumed = 0;
+		if (tokens_iter->next)
+		{
+			tokens_consumed = get_redir(cmd, tokens_iter->content,
+				tokens_iter->next->content);
+		}
+		else
+			tokens_consumed = get_redir(cmd, tokens_iter->content, NULL);
+		if (tokens_consumed > 0)
+		{
 			ft_lstdel_and_connect(&cmd->split_token, &tokens_iter);
+		}
+		if (tokens_consumed == 2)
+		{
+			tokens_iter = tokens_iter->next;
+			if (tokens_iter)
+			{
+				ft_lstdel_and_connect(&cmd->split_token, &tokens_iter);
+			}
+		}
+		if (!tokens_iter)
+			return ;
 		tokens_iter = tokens_iter->next;
 	}
 }
 
-// split a string on whitespace and arrows, but not in quotes
-// also quotes are not removed yet
+// env vars can expand into commands, arguments or redir filenames,
+// 		but cannot contain < or > in themselves
+// 	==> split on spaces and redir symbols
 t_list	*split_token(char *cmd_token)
 {
 	char	*start;
@@ -219,6 +258,7 @@ void	*init_t_cmd(void *content)
 //	ft_lstiter(cmd->split_token, &print_list);
 	// now we are inside of a single t_cmd node; so loop through the tokens
 	parse_redirs(cmd);
+//	ft_lstiter(cmd->split_token, &print_list);
 	cmd->fd.infile = 0;
 	cmd->fd.outfile = 1;
 	return (cmd);
@@ -235,6 +275,11 @@ int	build_cmd_args(t_cmd *cmd, t_env *env)
 	if (!cmd->cmd_args)
 	{
 		//cleanup function in case of malloc fails
+		return (1);
+	}
+	if (!cmd->split_token->content || ft_strlen(cmd->split_token->content) <= 0)
+	{
+		ft_putstr_fd("Error: command \"\" not found\n", 2);
 		return (1);
 	}
 	if (!test_builtin_cmd(cmd->split_token->content))
@@ -270,10 +315,7 @@ void	strip_quotes(char *s)
 	if (is_quoted_str(s))
 		str_del_first_last(s);
 }
-// env vars can expand into commands, arguments or redir filenames,
-// 		but cannot contain < or > in themselves
-// 	==> split on spaces and redir symbols
-//
+
 // Can return NULL in case of a failed malloc() in functions called from here
 //
 // When an incorrect variable name is given, expand_vars() will return 
@@ -281,6 +323,8 @@ void	strip_quotes(char *s)
 //
 // After parsing redirs AND exppanding variables, we can assume that 
 // the first token is the cmd (?)
+// TODO: stop removing single quotes from inside of double quotes
+// TODO: stop removing singular $ signs inside of double quotes (expand_vars())
 t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 {
 	t_list	*pipe_tokens;
@@ -299,6 +343,11 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 	while (cmd_table_iter)
 	{
 		cmd = (t_cmd *) cmd_table_iter->content;
+		if (!cmd->split_token)
+		{
+			cmd_table_iter = cmd_table_iter->next;
+			continue ;
+		}
 		split_tokens_iter = cmd->split_token;
 	//	ft_lstiter(cmd->split_token, &print_list);
 		while (split_tokens_iter)
