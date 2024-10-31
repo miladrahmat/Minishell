@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 14:54:25 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/31 16:32:20 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,8 @@ void	ignore_sigint(void);
 void	handle_sigint(void *func);
 void	signal_handling_child(void);
 void	exit_signal(t_list **cmd_table, t_env **env);
+void	handle_heredoc(int signal);
+void	heredoc_signal(void *func);
 
 //utils
 void	destroy_tlist_of_tcmd(void	*arg);
