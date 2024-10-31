@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 14:55:49 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/31 12:21:57 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,18 @@ void	handle_signals(int signal)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
+		return ;
+	}
+}
+
+void	heredoc_signal(int signal)
+{
+	if (signal == SIGINT)
+	{
+		g_last_ret_val = 130;
+		rl_replace_line("", 0);
+		rl_redisplay();
+		rl_done = 1;
 		return ;
 	}
 }
