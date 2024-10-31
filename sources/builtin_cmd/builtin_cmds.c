@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:20:32 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/30 14:27:16 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/30 19:35:41 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	pwd(int fd)
 
 int	cd(char **cmd, t_env **envp)
 {
+	if (cmd[1] != NULL)
+		return (print_builtin_error("cd", NULL, "too many arguments", false));
 	chdir(*cmd);
 	if (errno != 0)
 		return (print_builtin_error("cd", *cmd, NULL, false));
@@ -47,9 +49,14 @@ int	builtin_exit(t_list **cmd_table, t_env **envp)
 	cmd = ((t_cmd *)(*cmd_table)->content)->cmd_args;
 	ft_putendl_fd(*cmd, 2);
 	ret_val = 0;
-	if (cmd[1] != NULL)
+	if (cmd[1] != NULL && cmd[2] != NULL)
 	{
-		if (validate_str(cmd[1], "0123456789") == -1)
+		print_builtin_error("exit", NULL, "too many arguments", false);
+		ret_val = 1;
+	}
+	else if (cmd[1] != NULL)
+	{
+		if (validate_str(cmd[1], "-+0123456789") == -1)
 		{
 			print_builtin_error("exit", cmd[1], "numeric argument required", \
 				false);

@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/30 14:20:19 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/31 11:38:33 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,28 +32,30 @@ static int	wait_pids(pid_t **pid, int index)
 	waitpid((*pid)[iter], &ret_val, 0);
 	free(*pid);
 	handle_sigint(&handle_signals);
-	if (WIFEXITED(ret_val))
-		return (WEXITSTATUS(ret_val));
 	if (WIFSIGNALED(ret_val))
 		return (128 + WTERMSIG(ret_val));
-	return (ret_val);
+	if (WEXITSTATUS(ret_val) == 255)
+		return (1);
+	return (WEXITSTATUS(ret_val));
 }
 
 static void	execute_cmd(t_cmd *cmd, char **env_copy, t_env **env)
 {
 	int	ret_val;
 
-	ret_val = 1;
-	if (check_builtin_cmd_child(cmd, env) < 0)
+	ret_val = 127;
+	if (cmd->cmd_args[0] != NULL)
+		ret_val = check_builtin_cmd_child(cmd, env);
+	if (ret_val < 0)
 	{
 		if (cmd->fd.infile >= 0 && cmd->fd.outfile > 0)
 		{
+			ft_envclear(env, &free);
 			dup2(cmd->fd.infile, STDIN_FILENO);
 			dup2(cmd->fd.outfile, STDOUT_FILENO);
 			close_cmd_fd(cmd);
-			if (cmd->cmd_args != NULL)
+			if (cmd->cmd_args[0] != NULL)
 				execve(cmd->cmd_args[0], cmd->cmd_args, env_copy);
-			ret_val = 127;
 		}
 	}
 	close_cmd_fd(cmd);
@@ -95,8 +97,6 @@ static int	prepare_parent(t_list *cmd_table, t_env **env, char **env_copy)
 	int		child_i;
 	int		cmd_count;
 
-	if (cmd_table == NULL)
-		return (127);
 	cmd_count = ft_lstsize(cmd_table);
 	child_i = 0;
 	child = malloc(cmd_count * (sizeof(pid_t)));
@@ -124,8 +124,9 @@ int	prepare_exec(t_list *cmd_table, t_env **env)
 	t_env	*env_iter;
 	int		ret_val;
 
-	if (execute_one_builtin(cmd_table, env) >= 0)
-		return (0);
+	ret_val = execute_one_builtin(cmd_table, env);
+	if (ret_val >= 0)
+		return (ret_val);
 	env_copy = malloc((ft_envsize(*env) + 1) * sizeof(char *));
 	if (env_copy == NULL)
 		return (1);

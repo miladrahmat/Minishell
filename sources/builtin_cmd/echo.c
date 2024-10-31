@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:02:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/22 16:44:05 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/30 18:57:08 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ int	echo(char **str, int fd)
 
 	n = 0;
 	if (*str == NULL)
-		return (0);
+		return (1);
+	if (fd == -1)
+		return (1);
 	if (ft_strncmp(*str, "-n", 2) == 0)
 	{
 		if (echo_n(*str) == 1)

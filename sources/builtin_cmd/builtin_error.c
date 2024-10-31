@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:46:02 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/16 14:12:58 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/10/30 18:55:41 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,19 @@ int	print_builtin_error(char *cmd, char *arg, char *err, bool alloc)
 	if (alloc == true)
 		free(arg);
 	errno = 0;
-	return (0);
+	return (1);
 }
 
 t_env	*print_export_error(char **variable)
 {
+	if (*variable == NULL)
+		return (NULL);
 	ft_putstr_fd("minishell: export: ", 2);
 	ft_putchar_fd('`', 2);
-	ft_putstr_fd(*variable, 2);
+	if (*variable[0] == '\0')
+		ft_putstr_fd("=", 2);
+	else
+		ft_putstr_fd(*variable, 2);
 	ft_putstr_fd("\'", 2);
 	ft_putstr_fd(": not a valid identifier\n", 2);
 	free(*variable);
