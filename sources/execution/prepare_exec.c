@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/01 13:23:06 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/01 13:57:08 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ static int	wait_pids(pid_t **pid, int index)
 	handle_sigint(&handle_signals);
 	if (WIFSIGNALED(ret_val))
 		return (128 + WTERMSIG(ret_val));
-	if (WEXITSTATUS(ret_val) == 255)
-		return (1);
-	return (WEXITSTATUS(ret_val));
+	if (WIFEXITED(ret_val))
+		return (WEXITSTATUS(ret_val));
+	return (-1);
 }
 
 static void	execute_cmd(t_cmd *cmd, char **env_copy, \
@@ -45,7 +45,6 @@ static void	execute_cmd(t_cmd *cmd, char **env_copy, \
 	int	ret_val;
 
 	ret_val = 127;
-	printf("execute cmd: %d\n", last_ret_val);
 	if (cmd->cmd_args[0] != NULL)
 		ret_val = check_builtin_cmd_child(cmd, env, last_ret_val);
 	if (ret_val < 0)

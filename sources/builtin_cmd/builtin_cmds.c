@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:20:32 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/01 12:56:05 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/01 15:09:56 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,15 @@ int	pwd(int fd)
 
 int	cd(char **cmd, t_env **envp)
 {
-	if (cmd[1] != NULL)
-		return (print_builtin_error("cd", NULL, "too many arguments", false));
-	chdir(*cmd);
-	if (errno != 0)
-		return (print_builtin_error("cd", *cmd, NULL, false));
-	update_pwd(envp);
+	if(cmd[0] != NULL)
+	{
+		if (cmd[1] != NULL)
+			return (print_builtin_error("cd", NULL, "too many arguments", false));
+		chdir(*cmd);
+		if (errno != 0)
+			return (print_builtin_error("cd", *cmd, NULL, false));
+		update_pwd(envp);
+	}
 	return (0);
 }
 

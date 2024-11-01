@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:06:58 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/30 14:19:09 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/01 13:54:36 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	open_infiles(t_list **cmd_table)
 		while (fd_iter != NULL)
 		{
 			if (set_infile(&fd_iter, &cmd_iter) == -1)
-				return (-1);
+				return (1);
 			fd_iter = fd_iter->next;
 		}
 		cmd_iter = cmd_iter->next;
@@ -100,7 +100,7 @@ int	open_outfiles(t_list **cmd_table)
 		while (fd_iter != NULL)
 		{
 			if (set_outfile(&fd_iter, &cmd_iter) == -1)
-				return (-1);
+				return (1);
 			fd_iter = fd_iter->next;
 		}
 		cmd_iter = cmd_iter->next;
