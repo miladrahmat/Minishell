@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:16:52 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/31 17:24:11 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/01 12:51:09 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,12 @@ void	heredoc_signal(void *func)
 	sigaction(SIGQUIT, &sigquit, NULL);
 }
 
-void	exit_signal(t_list **cmd_table, t_env **env)
+void	exit_signal(t_list **cmd_table, t_env **env, int ret_val)
 {
 	(void)cmd_table;
 	ft_envclear(env, &free);
 	ft_lstclear(cmd_table, &destroy_tlist_of_tcmd);
 	clear_history();
 	printf("exit\n");
-	exit(0);
+	exit(ret_val);
 }

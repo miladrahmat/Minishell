@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:02:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/30 18:57:08 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/01 12:34:26 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,18 @@ static int	echo_n(char *str)
 	size_t	i;
 
 	i = 0;
-	if (str[i] == '-')
-		i++;
-	while (str[i] == 'n')
-		i++;
-	if (str[i] != '\0')
-		return (0);
-	else
-		return (1);
+	if (ft_strncmp(str, "-n", 2) == 0)
+	{
+		if (str[i] == '-')
+			i++;
+		while (str[i] == 'n')
+			i++;
+		if (str[i] != '\0')
+			return (0);
+		else
+			return (1);
+	}
+	return (0);
 }
 
 int	echo(char **str, int fd)
@@ -32,17 +36,17 @@ int	echo(char **str, int fd)
 	int		n;
 
 	n = 0;
-	if (*str == NULL)
-		return (1);
 	if (fd == -1)
 		return (1);
-	if (ft_strncmp(*str, "-n", 2) == 0)
+	if (*str == NULL)
 	{
-		if (echo_n(*str) == 1)
-		{
-			str++;
-			n = 1;
-		}
+		ft_putchar_fd('\n', fd);
+		return (0);
+	}
+	if (echo_n(*str) == 1)
+	{
+		str++;
+		n = 1;
 	}
 	while (*str != NULL)
 	{

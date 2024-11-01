@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:20:32 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/30 19:35:41 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/01 12:56:05 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,14 @@ int	cd(char **cmd, t_env **envp)
 	return (0);
 }
 
-int	builtin_exit(t_list **cmd_table, t_env **envp)
+int	builtin_exit(t_list **cmd_table, t_env **envp, int last_ret_val)
 {
 	int		ret_val;
 	char	**cmd;
 
 	cmd = ((t_cmd *)(*cmd_table)->content)->cmd_args;
 	ft_putendl_fd(*cmd, 2);
-	ret_val = 0;
+	ret_val = INT_MIN;
 	if (cmd[1] != NULL && cmd[2] != NULL)
 	{
 		print_builtin_error("exit", NULL, "too many arguments", false);
@@ -68,6 +68,8 @@ int	builtin_exit(t_list **cmd_table, t_env **envp)
 	ft_envclear(envp, &free);
 	ft_lstclear(cmd_table, &destroy_tlist_of_tcmd);
 	clear_history();
+	if (ret_val == INT_MIN)
+		exit(last_ret_val);
 	exit(ret_val);
 }
 
@@ -97,7 +99,7 @@ bool	test_builtin_cmd(char *cmd)
 	return (ret);
 }
 
-int	check_builtin_cmd(t_list **cmd_table, t_env **envp)
+int	check_builtin_cmd(t_list **cmd_table, t_env **envp, int ret_val)
 {
 	char	**cmd;
 	int		fd;
@@ -111,7 +113,7 @@ int	check_builtin_cmd(t_list **cmd_table, t_env **envp)
 	else if (ft_strncmp(*cmd, "echo", 5) == 0)
 		return (echo(cmd + 1, fd));
 	else if (ft_strncmp(*cmd, "exit", 5) == 0)
-		return (builtin_exit(cmd_table, envp));
+		return (builtin_exit(cmd_table, envp, ret_val));
 	else if (ft_strncmp(*cmd, "env", 4) == 0)
 		return (env(cmd, fd, envp));
 	else if (ft_strncmp(*cmd, "unset", 6) == 0)

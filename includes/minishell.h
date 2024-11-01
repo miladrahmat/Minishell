@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/31 16:32:20 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/01 13:02:20 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ int		process_heredocs(t_list *cmd_table, t_env *env);
 
 //builtin_cmds
 bool	test_builtin_cmd(char *cmd);
-int		check_builtin_cmd(t_list **cmd_table, t_env **envp);
-int		check_builtin_cmd_child(t_cmd *cmd_table, t_env **envp);
+int		check_builtin_cmd(t_list **cmd_table, t_env **envp, int ret_val);
+int		check_builtin_cmd_child(t_cmd *cmd_table, t_env **envp, int ret_val);
 int		echo(char **str, int fd);
 int		env(char **cmd, int fd, t_env **envp);
 int		unset(char **cmd, t_env **envp);
@@ -98,7 +98,7 @@ int		export(char **cmd, int fd, t_env **envp);
 int		print_builtin_error(char *cmd, char *arg, char *err, bool alloc);
 t_env	*print_export_error(char **variable);
 void	update_pwd(t_env **envp);
-int		builtin_exit(t_list **cmd_table, t_env **envp);
+int		builtin_exit(t_list **cmd_table, t_env **envp, int last_ret_val);
 
 //helper functions
 int		split_free(char **str, int ret_val);
@@ -144,16 +144,16 @@ void	close_cmd_fd(t_cmd *curr_cmd);
 char	*get_token(char *start, char *end);
 
 //execute
-int		prepare_exec(t_list *cmd_table, t_env **env);
+int		prepare_exec(t_list *cmd_table, t_env **env, int last_ret_val);
 char	*copy_env_node(t_env *env);
-int		execute_one_builtin(t_list *cmd_table, t_env **env);
+int		execute_one_builtin(t_list *cmd_table, t_env **env, int ret_val);
 
 //signals
 void	handle_signals(int signal);
 void	ignore_sigint(void);
 void	handle_sigint(void *func);
 void	signal_handling_child(void);
-void	exit_signal(t_list **cmd_table, t_env **env);
+void	exit_signal(t_list **cmd_table, t_env **env, int ret_val);
 void	handle_heredoc(int signal);
 void	heredoc_signal(void *func);
 

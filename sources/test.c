@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/31 16:53:05 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/01 13:32:18 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	handle_heredoc(int signal)
 	{
 		g_last_ret_val = 130;
 		rl_replace_line("", 0);
-		rl_redisplay();
 		rl_done = 1;
 		return ;
 	}
@@ -96,6 +95,7 @@ int	main(int ac, char **av, char **envp)
 	char				*line;
 	t_list				*cmd_table;
 	t_env				*env;
+	int					last_ret_val;
 
 	(void)av;
 	(void)ac;
@@ -110,19 +110,20 @@ int	main(int ac, char **av, char **envp)
 		if (line)
 		{
 			cmd_table = init_cmd_table(line, env, g_last_ret_val);
+			last_ret_val = g_last_ret_val;
+			g_last_ret_val = 0;
 			add_history(line);
 			free(line);
 			process_heredocs(cmd_table, env); // returns 1 in case of malloc fail
-//			ft_lstiter(cmd_table, &process_heredocs);
-			if (cmd_table != NULL)
+			if (cmd_table != NULL && g_last_ret_val == 0)
 			{
 				open_infiles(&cmd_table);
 				//ft_lstiter(cmd_table, &print_cmd_list);
-				g_last_ret_val = prepare_exec(cmd_table, &env);
+				g_last_ret_val = prepare_exec(cmd_table, &env, last_ret_val);
 			}
 			ft_lstclear(&cmd_table, &destroy_tlist_of_tcmd);
 		}
 		else
-			exit_signal(&cmd_table, &env);
+			exit_signal(&cmd_table, &env, g_last_ret_val);
 	}
 }
