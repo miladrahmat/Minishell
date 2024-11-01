@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/01 13:57:08 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/01 16:55:19 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ static void	execute_cmd(t_cmd *cmd, char **env_copy, \
 	int	ret_val;
 
 	ret_val = 127;
+	if (cmd->fd.infile == -1 || cmd->fd.outfile == -1)
+		exit(1);
 	if (cmd->cmd_args[0] != NULL)
 		ret_val = check_builtin_cmd_child(cmd, env, last_ret_val);
 	if (ret_val < 0)
