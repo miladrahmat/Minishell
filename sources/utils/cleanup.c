@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 12:01:27 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 17:59:06 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/01 12:22:09 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	split_free(char **str, int ret_val)
 		free(str[i]);
 		i++;
 	}
-	free(str[i]);
+//	free(str[i]);
 	free(str);
 	return (ret_val);
 }

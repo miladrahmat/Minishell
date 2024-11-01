@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/31 15:59:10 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/01 14:37:16 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,21 @@ t_redir_type	get_redir_type(char *content)
 
 bool	is_quoted_str(char *s)
 {
-	return ((s[0] == '\"' && s[ft_strlen(s) - 1] == '\"') ||
-		(s[0] == '\'' && s[ft_strlen(s) - 1] == '\'')); 
+	if (s)
+	{
+		return ((s[0] == '\"' && s[ft_strlen(s) - 1] == '\"') ||
+			(s[0] == '\'' && s[ft_strlen(s) - 1] == '\'')); 
+	}
+	return (false);
+}
+
+bool	is_double_quoted_str(char *s)
+{
+	if (s)
+	{
+		return ((s[0] == '\"' && s[ft_strlen(s) - 1] == '\"'));
+	}
+	return (false);
 }
 
 void	str_del_first_last(char *s)
@@ -65,7 +78,7 @@ void	str_del_first_last(char *s)
 
 void	check_quoted_heredoc_delim(t_redir *redir)
 {
-	if (is_quoted_str(redir->filename))
+	if (is_double_quoted_str(redir->filename))
 	{
 		str_del_first_last(redir->filename);
 		redir->heredoc_quoted_delim = true;
@@ -73,6 +86,7 @@ void	check_quoted_heredoc_delim(t_redir *redir)
 }
 
 // return amount of tokens consumed?
+// TODO: "cat <<" should be syntax error
 int	get_redir(t_cmd *cmd, char *token1, char *token2)
 {
 	t_redir	*redir;
@@ -98,8 +112,11 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 		}
 		else
 		{
-			redir->filename = ft_strdup(token2);
-			tokens_consumed = 2;
+			if (token2)
+			{
+				redir->filename = ft_strdup(token2);
+				tokens_consumed = 2;
+			}
 		}
 	}
 	else if (redir->redir_type == out_trunc || redir->redir_type == input)
@@ -111,8 +128,11 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 		}
 		else
 		{
-			redir->filename = ft_strdup(token2);
-			tokens_consumed = 2;
+			if (token2)
+			{
+				redir->filename = ft_strdup(token2);
+				tokens_consumed = 2;
+			}
 		}
 	}
 	else if (redir->redir_type == heredoc)
@@ -124,12 +144,18 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 		}
 		else
 		{
-			redir->filename = ft_strdup(token2);
-			tokens_consumed = 2;
+			if (token2)
+			{
+				redir->filename = ft_strdup(token2);
+				tokens_consumed = 2;
+			}
 		}
 		check_quoted_heredoc_delim(redir);
 //		printf("get_redir(): heredoc delim: %s\n", redir->filename);
 	}
+//	printf("get_redir(): %s\n", redir->filename);
+	if (is_quoted_str(redir->filename))
+		str_del_first_last(redir->filename);
 //	printf("get_redir(): %s\n", redir->filename);
 	new_node = ft_lstnew(redir);
 	if (!new_node || !redir->filename)
@@ -250,6 +276,7 @@ void	*init_t_cmd(void *content)
 //	i++;
 	
 	cmd = malloc(sizeof(t_cmd));
+	cmd->cmd_args = NULL;
 	cmd->infiles = NULL;
 	cmd->outfiles = NULL;
 	cmd->path_error = 0;
@@ -270,6 +297,10 @@ int	build_cmd_args(t_cmd *cmd, t_env *env)
 	int		i;
 	t_list	*split_tokens_iter;
 
+	if (!cmd->split_token->content)
+		return (1);
+	if (ft_strlen(cmd->split_token->content) == 0)
+		return (1);
 	cmd->cmd_args =
 		malloc(sizeof(char *) * (ft_lstsize(cmd->split_token) + 1));
 	if (!cmd->cmd_args)
