@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/01 10:54:46 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/01 14:37:16 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,11 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 		}
 		else
 		{
-			redir->filename = ft_strdup(token2);
-			tokens_consumed = 2;
+			if (token2)
+			{
+				redir->filename = ft_strdup(token2);
+				tokens_consumed = 2;
+			}
 		}
 	}
 	else if (redir->redir_type == out_trunc || redir->redir_type == input)
@@ -125,8 +128,11 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 		}
 		else
 		{
-			redir->filename = ft_strdup(token2);
-			tokens_consumed = 2;
+			if (token2)
+			{
+				redir->filename = ft_strdup(token2);
+				tokens_consumed = 2;
+			}
 		}
 	}
 	else if (redir->redir_type == heredoc)
@@ -147,10 +153,10 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 		check_quoted_heredoc_delim(redir);
 //		printf("get_redir(): heredoc delim: %s\n", redir->filename);
 	}
-	printf("get_redir(): %s\n", redir->filename);
+//	printf("get_redir(): %s\n", redir->filename);
 	if (is_quoted_str(redir->filename))
 		str_del_first_last(redir->filename);
-	printf("get_redir(): %s\n", redir->filename);
+//	printf("get_redir(): %s\n", redir->filename);
 	new_node = ft_lstnew(redir);
 	if (!new_node || !redir->filename)
 		return (1);
@@ -270,12 +276,13 @@ void	*init_t_cmd(void *content)
 //	i++;
 	
 	cmd = malloc(sizeof(t_cmd));
+	cmd->cmd_args = NULL;
 	cmd->infiles = NULL;
 	cmd->outfiles = NULL;
 	cmd->path_error = 0;
 //	printf("init_t_cmd input: %s\n", (char*)content);
 	cmd->split_token = split_token(content);
-	ft_lstiter(cmd->split_token, &print_list);
+//	ft_lstiter(cmd->split_token, &print_list);
 	// now we are inside of a single t_cmd node; so loop through the tokens
 	parse_redirs(cmd);
 //	ft_lstiter(cmd->split_token, &print_list);
@@ -290,6 +297,10 @@ int	build_cmd_args(t_cmd *cmd, t_env *env)
 	int		i;
 	t_list	*split_tokens_iter;
 
+	if (!cmd->split_token->content)
+		return (1);
+	if (ft_strlen(cmd->split_token->content) == 0)
+		return (1);
 	cmd->cmd_args =
 		malloc(sizeof(char *) * (ft_lstsize(cmd->split_token) + 1));
 	if (!cmd->cmd_args)

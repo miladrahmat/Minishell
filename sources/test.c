@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/31 17:33:52 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/01 13:30:50 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ int	main(int ac, char **av, char **envp)
 			add_history(line);
 			free(line);
 			process_heredocs(cmd_table, env); // returns 1 in case of malloc fail
-//			ft_lstiter(cmd_table, &process_heredocs);
 			if (cmd_table != NULL)
 			{
 				open_infiles(&cmd_table);
