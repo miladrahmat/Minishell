@@ -6,14 +6,11 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 12:01:27 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/01 12:22:09 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/01 17:33:06 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// maybe make it so this is a fuction that can be passed to ft_lstclear()
-// TODO: if there is a heredoc, delete the file
 
 static void	clean_files(void *arg)
 {
