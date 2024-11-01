@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/31 15:59:10 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/01 10:54:46 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,21 @@ t_redir_type	get_redir_type(char *content)
 
 bool	is_quoted_str(char *s)
 {
-	return ((s[0] == '\"' && s[ft_strlen(s) - 1] == '\"') ||
-		(s[0] == '\'' && s[ft_strlen(s) - 1] == '\'')); 
+	if (s)
+	{
+		return ((s[0] == '\"' && s[ft_strlen(s) - 1] == '\"') ||
+			(s[0] == '\'' && s[ft_strlen(s) - 1] == '\'')); 
+	}
+	return (false);
+}
+
+bool	is_double_quoted_str(char *s)
+{
+	if (s)
+	{
+		return ((s[0] == '\"' && s[ft_strlen(s) - 1] == '\"'));
+	}
+	return (false);
 }
 
 void	str_del_first_last(char *s)
@@ -65,7 +78,7 @@ void	str_del_first_last(char *s)
 
 void	check_quoted_heredoc_delim(t_redir *redir)
 {
-	if (is_quoted_str(redir->filename))
+	if (is_double_quoted_str(redir->filename))
 	{
 		str_del_first_last(redir->filename);
 		redir->heredoc_quoted_delim = true;
@@ -73,6 +86,7 @@ void	check_quoted_heredoc_delim(t_redir *redir)
 }
 
 // return amount of tokens consumed?
+// TODO: "cat <<" should be syntax error
 int	get_redir(t_cmd *cmd, char *token1, char *token2)
 {
 	t_redir	*redir;
@@ -124,13 +138,19 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 		}
 		else
 		{
-			redir->filename = ft_strdup(token2);
-			tokens_consumed = 2;
+			if (token2)
+			{
+				redir->filename = ft_strdup(token2);
+				tokens_consumed = 2;
+			}
 		}
 		check_quoted_heredoc_delim(redir);
 //		printf("get_redir(): heredoc delim: %s\n", redir->filename);
 	}
-//	printf("get_redir(): %s\n", redir->filename);
+	printf("get_redir(): %s\n", redir->filename);
+	if (is_quoted_str(redir->filename))
+		str_del_first_last(redir->filename);
+	printf("get_redir(): %s\n", redir->filename);
 	new_node = ft_lstnew(redir);
 	if (!new_node || !redir->filename)
 		return (1);
@@ -255,7 +275,7 @@ void	*init_t_cmd(void *content)
 	cmd->path_error = 0;
 //	printf("init_t_cmd input: %s\n", (char*)content);
 	cmd->split_token = split_token(content);
-//	ft_lstiter(cmd->split_token, &print_list);
+	ft_lstiter(cmd->split_token, &print_list);
 	// now we are inside of a single t_cmd node; so loop through the tokens
 	parse_redirs(cmd);
 //	ft_lstiter(cmd->split_token, &print_list);
