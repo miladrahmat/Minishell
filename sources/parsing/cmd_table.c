@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/03 17:23:08 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/03 18:23:12 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -439,16 +439,18 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 			// non-existant variable), but that is currently allowed
 	//		printf("expanded_token: %s\n", expanded_token);
 			strip_quotes(expanded_token);
-			if (split_tokens_iter->content)
-				free(split_tokens_iter->content);
 		//	printf("after stripping quotes: %sX\n", expanded_token);
-			split_tokens_iter->content = expanded_token;
-			/*
+			//split_tokens_iter->content = expanded_token;
+			
 			if (ft_strlen(expanded_token) > 0)
+			{
+				if (split_tokens_iter->content)
+					free(split_tokens_iter->content);
 				split_tokens_iter->content = expanded_token;
+			}
 			else
 				ft_lstdel_and_connect(&cmd->split_token, &split_tokens_iter);
-			*/
+			
 			split_tokens_iter = split_tokens_iter->next;
 		}
 	//	ft_lstiter(cmd->split_token, &print_list);
