@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/01 15:08:28 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/03 17:23:08 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,24 @@ void	parse_redirs(t_cmd *cmd)
 	}
 }
 
+
+char	*skip_until_last(char *s, char delim)
+{
+	char	*last;
+
+	if (!s)
+		return (NULL);
+	while (*s)
+	{
+		if (*s == delim)
+			last = s;
+		if (last[1] == ' ')
+			return (last);
+		s++;
+	}
+	return (last);
+}
+
 // env vars can expand into commands, arguments or redir filenames,
 // 		but cannot contain < or > in themselves
 // 	==> split on spaces and redir symbols
@@ -232,22 +250,49 @@ t_list	*split_token(char *cmd_token)
 			if (*end == '<' || *end == '>')
 				end++;
 		}
-		while (*end)
+		if (quotes == 1)
 		{
-			if (quotes == 0)
-			{
-				if (*end == '\'')
-					quotes = 1;
-				else if (*end == '\"')
-					quotes = 2;
-				else if (*end == '<' || *end == '>' || is_whitespace(*end))
-					break ;
-			}
-			else if (quotes == 1 && *end == '\'')
-				quotes = 0;
-			else if (quotes == 2 && *end == '\"')
-				quotes = 0;
+			end = skip_until_last(end + 1, '\'');
 			end++;
+			quotes = 0;
+		}
+		else if (quotes == 2)
+		{
+			end = skip_until_last(end + 1, '\"');
+			end++;
+			quotes = 0;
+		}
+		else
+		{
+			while (*end)
+			{
+				if (quotes == 0)
+				{
+					if (*end == '\'')
+					{
+						quotes = 1;
+						break ;
+					}
+					else if (*end == '\"')
+					{
+						quotes = 2;
+						break ;
+					}
+					else if (*end == '<' || *end == '>' || is_whitespace(*end))
+						break ;
+				}
+				else if (quotes == 1 && *end == '\'')
+				{
+					quotes = 0;
+					break ;
+				}
+				else if (quotes == 2 && *end == '\"')
+				{
+					quotes = 0;
+					break ;
+				}
+				end++;
+			}
 		}
 		new_str = get_token(start, end);
 		if (new_str)
@@ -256,7 +301,7 @@ t_list	*split_token(char *cmd_token)
 			new_token = ft_lstnew(new_str);
 			ft_lstadd_back(&tokens, new_token);
 		}
-			start = end;
+		start = end;
 	}
 	return (tokens);
 }
@@ -354,10 +399,7 @@ void	strip_quotes(char *s)
 //
 // After parsing redirs AND exppanding variables, we can assume that 
 // the first token is the cmd (?)
-// TODO: singular $ should be command not found
-// TODO: echo $ should print $
 // TODO: stop removing single quotes from inside of double quotes
-// TODO: stop removing singular $ signs inside of double quotes (expand_vars())
 t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 {
 	t_list	*pipe_tokens;
@@ -395,9 +437,11 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 			}
 			// expanded_token can also be an empty string (in case of a 
 			// non-existant variable), but that is currently allowed
+	//		printf("expanded_token: %s\n", expanded_token);
 			strip_quotes(expanded_token);
 			if (split_tokens_iter->content)
 				free(split_tokens_iter->content);
+		//	printf("after stripping quotes: %sX\n", expanded_token);
 			split_tokens_iter->content = expanded_token;
 			/*
 			if (ft_strlen(expanded_token) > 0)

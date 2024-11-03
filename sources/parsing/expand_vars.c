@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/03 14:57:12 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/03 17:26:42 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,13 +116,15 @@ char	*expand_vars(char *token, t_env *env, int last_ret_val)
 //	printf("incoming token %s\n", token);
 	if (!token)
 		return (NULL);
+	if (*token == '\'')
+		return (ft_strdup(token));
 	start = token;
 	end = token;
 	ret = NULL;
 	varname = NULL;
 	while (*start)
 	{
-		end = concatenate_until(&ret, start, "$'");
+		end = concatenate_until(&ret, start, "$$");
 		if (!end)
 			return (expand_vars_fail(ret, varname));
 		if (!ret)
@@ -162,6 +164,7 @@ char	*expand_vars(char *token, t_env *env, int last_ret_val)
 			}
 			free(varname);
 		}
+		/*
 		else if (*end == '\'')
 		{
 			end++;
@@ -170,9 +173,11 @@ char	*expand_vars(char *token, t_env *env, int last_ret_val)
 			if (!end)
 				return (expand_vars_fail(ret, varname));
 		}
+		*/
 		start = end;
 	}
 	// if (ft_strlen(ret) <= 0)
 	// 	printf("expand_vars() returning empty string\n");
+	//printf("expand_token(): returning: %s\n", ret);
 	return (ret);
 }
