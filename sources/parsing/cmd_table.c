@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/01 14:37:16 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/01 15:08:28 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -354,6 +354,8 @@ void	strip_quotes(char *s)
 //
 // After parsing redirs AND exppanding variables, we can assume that 
 // the first token is the cmd (?)
+// TODO: singular $ should be command not found
+// TODO: echo $ should print $
 // TODO: stop removing single quotes from inside of double quotes
 // TODO: stop removing singular $ signs inside of double quotes (expand_vars())
 t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
