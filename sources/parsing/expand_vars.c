@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/30 17:29:48 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/03 14:46:03 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,11 @@ void	*expand_vars_fail(char *s1, char *s2)
 	return (NULL);
 }
 
+bool	is_varname(char c)
+{
+	return (ft_isalnum(c) || c == '_');
+}
+
 // join until $ or single quote (that is not inside of doubles)
 // if $, get word and expand
 // if single quote join until next single quote
@@ -100,7 +105,6 @@ void	*expand_vars_fail(char *s1, char *s2)
 // $VAR in env
 // token is NOT freed here because it is contained in a list node in the caller
 // returns NULL in case of malloc fails
-// TODO: we are destroying single quotes here.....
 char	*expand_vars(char *token, t_env *env, int last_ret_val)
 {
 	char	*ret;
@@ -128,6 +132,13 @@ char	*expand_vars(char *token, t_env *env, int last_ret_val)
 		}
 		if (*end == '$')
 		{
+			if (!is_varname(*(end + 1)))
+			{
+				ret = ft_strjoin(ret, "$");
+				end++;
+				start = end;
+				continue;
+			}
 			varname = get_varname(end + 1);
 			if (!varname)
 				return (expand_vars_fail(ret, varname));

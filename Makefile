@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/10/30 13:52:19 by mrahmat-         ###   ########.fr        #
+#    Updated: 2024/11/03 14:44:55 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -94,10 +94,10 @@ $(OBJDIR):
 	@mkdir -p objects
 
 $(LIBFT):
-	@echo "\e[1;93m Compiling Libft ⏳ \e[0;37m"
+	@echo -e "\e[1;93m Compiling Libft ⏳ \e[0;37m"
 	@make -s bonus -C $(LIBFTDIR) \
-		|| echo "\e[1;31m Failed to compile Libft 😔 \e[0;37m"; exit
-	@echo "\e[1;93m Libft compiled! 💪 \e[0;37m"
+		|| echo -e "\e[1;31m Failed to compile Libft 😔 \e[0;37m"; exit
+	@echo -e "\e[1;93m Libft compiled! 💪 \e[0;37m"
 
 $(OBJDIR)%.o: $(SRCDIR)%.c
 	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) 
@@ -122,18 +122,18 @@ $(OBJDIR)%.o: $(UTILS_DIR)%.c
 
 $(NAME): $(OBJS) ./includes/minishell.h
 	@$(CC) $(LDFLAGS) $(OBJS) $(LIBFT) $(HEADERS) -o $(NAME) \
-	&& echo "\e[1;92m Minishell compiled successfully! \e[0;37m" \
-	|| echo "\e[1;31m Failed to compile minishell 😔 \e[0;37m"
+	&& echo -e "\e[1;92m Minishell compiled successfully! \e[0;37m" \
+	|| echo -e "\e[1;31m Failed to compile minishell 😔 \e[0;37m"
 
 clean:
 	@rm -rf $(OBJDIR)
 	@make -s clean -C $(LIBFTDIR) \
-		&& echo "\e[1;96m Removed all object files 🧹 \e[0;37m"
+		&& echo -e "\e[1;96m Removed all object files 🧹 \e[0;37m"
 
 fclean: clean
 	@rm -rf $(NAME)
 	@make -s fclean -C $(LIBFTDIR) \
-		&& echo "\e[1;96m Removed all executables 🧹 \e[0;37m"
+		&& echo -e "\e[1;96m Removed all executables 🧹 \e[0;37m"
 
 re: fclean all
 
