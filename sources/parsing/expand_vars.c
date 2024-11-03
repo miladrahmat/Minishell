@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/03 14:46:03 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/03 14:48:54 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,13 +154,13 @@ char	*expand_vars(char *token, t_env *env, int last_ret_val)
 				value = ft_env_get_value_by_key(varname, env);
 				end = skip_varname(end);
 			}
-			free(varname);
 			if (value)
 			{
 				ret = ft_strjoin(ret, value);
 				if (!ret)
 					return (expand_vars_fail(ret, varname));
 			}
+			free(varname);
 		}
 		else if (*end == '\'')
 		{
