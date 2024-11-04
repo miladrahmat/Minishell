@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:06:58 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/01 13:54:36 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/04 14:33:15 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,14 @@ static int	set_infile(t_list **current, t_list **cmd)
 
 int	open_infiles(t_list **cmd_table)
 {
-	t_list	*cmd_iter;
 	t_list	*fd_iter;
 
-	cmd_iter = *cmd_table;
-	while (cmd_iter != NULL)
+	fd_iter = ((t_cmd *)(*cmd_table)->content)->infiles;
+	while (fd_iter != NULL)
 	{
-		fd_iter = ((t_cmd *)cmd_iter->content)->infiles;
-		while (fd_iter != NULL)
-		{
-			if (set_infile(&fd_iter, &cmd_iter) == -1)
-				return (1);
-			fd_iter = fd_iter->next;
-		}
-		cmd_iter = cmd_iter->next;
+		if (set_infile(&fd_iter, cmd_table) == -1)
+			return (-1);
+		fd_iter = fd_iter->next;
 	}
 	return (open_outfiles(cmd_table));
 }
@@ -90,20 +84,14 @@ static int	set_outfile(t_list **current, t_list **cmd)
 
 int	open_outfiles(t_list **cmd_table)
 {
-	t_list	*cmd_iter;
 	t_list	*fd_iter;
 
-	cmd_iter = *cmd_table;
-	while (cmd_iter != NULL)
+	fd_iter = ((t_cmd *)(*cmd_table)->content)->outfiles;
+	while (fd_iter != NULL)
 	{
-		fd_iter = ((t_cmd *)cmd_iter->content)->outfiles;
-		while (fd_iter != NULL)
-		{
-			if (set_outfile(&fd_iter, &cmd_iter) == -1)
-				return (1);
-			fd_iter = fd_iter->next;
-		}
-		cmd_iter = cmd_iter->next;
+		if (set_outfile(&fd_iter, cmd_table) == -1)
+			return (-1);
+		fd_iter = fd_iter->next;
 	}
-	return (0);
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/01 16:55:19 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/04 14:33:43 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,15 @@ static int	wait_pids(pid_t **pid, int index)
 		free(*pid);
 		return (0);
 	}
-	iter = 0;
+	iter = -1;
 	ret_val = 0;
-	while (iter < index)
+	while (++iter < index)
 	{
-		waitpid((*pid)[iter], NULL, 0);
-		iter++;
+		if ((*pid)[iter] != 0)
+			waitpid((*pid)[iter], NULL, 0);
 	}
+	if ((*pid)[iter] == 0)
+		return (1);
 	waitpid((*pid)[iter], &ret_val, 0);
 	free(*pid);
 	handle_sigint(&handle_signals);
@@ -74,6 +76,8 @@ static pid_t	prepare_child(t_list *cmd, t_env **env, \
 	pid_t	pid;
 
 	pid = 0;
+	if (open_infiles(&cmd) < 0)
+		return (0);
 	if (cmd->next != NULL)
 	{
 		if (check_pipe_fd(((t_cmd **)&cmd->content), \
@@ -108,7 +112,7 @@ static int	prepare_parent(t_list *cmd_table, t_env **env, \
 	if (child == NULL)
 		return (1);
 	cmd_iter = cmd_table;
-	while (child_i < cmd_count)
+	while (child_i < cmd_count && cmd_iter != NULL)
 	{
 		child[child_i] = prepare_child(cmd_iter, env, env_copy, ret_val);
 		if (child[child_i] < 0)

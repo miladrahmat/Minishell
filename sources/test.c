@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/01 16:47:02 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/04 15:08:51 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,10 +116,7 @@ int	main(int ac, char **av, char **envp)
 			free(line);
 			process_heredocs(cmd_table, env); // returns 1 in case of malloc fail
 			if (cmd_table != NULL && g_last_ret_val == 0)
-			{
-				open_infiles(&cmd_table);
 				g_last_ret_val = prepare_exec(cmd_table, &env, last_ret_val);
-			}
 			ft_lstclear(&cmd_table, &destroy_tlist_of_tcmd);
 		}
 		else
