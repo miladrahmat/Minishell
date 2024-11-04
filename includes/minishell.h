@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/01 13:02:20 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/04 13:57:16 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ char	**get_paths(t_env *env);
 // paths.c
 char	*get_exec_path(char *command, t_env *env, int *path_error);
 // split_on_pipes.c
+char	*skip_until(char *s, char delim);
 t_list	*split_on_pipes(char *line);
 // parsing/heredoc.c
 int		process_heredocs(t_list *cmd_table, t_env *env);
