@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/05 15:44:47 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/05 17:09:58 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,7 @@ void	*init_t_cmd(void *content)
 	
 	cmd = malloc(sizeof(t_cmd));
 	cmd->cmd_args = NULL;
-	cmd->infiles = NULL;
-	cmd->outfiles = NULL;
+	cmd->files = NULL;
 	cmd->path_error = 0;
 //	printf("init_t_cmd input: %s\n", (char*)content);
 	cmd->split_token = split_token(content);
