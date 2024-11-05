@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/05 19:25:43 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/05 20:04:27 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ static pid_t	prepare_child(t_list *cmd, t_env **env, \
 			close(((t_cmd *)cmd->next->content)->fd.infile);
 		execute_cmd(((t_cmd *)cmd->content), env_copy, env, ret_val);
 	}
+	ignore_sigint();
 	close_cmd_fd(((t_cmd *)cmd->content));
 	return (pid);
 }

@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:06:58 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/05 17:10:41 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/05 20:05:26 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ int	open_infiles(t_list **cmd_table)
 		return (1);
 	while (fd_iter != NULL)
 	{
-		if (((t_redir *)fd_iter->content)->redir_type == input)
+		if (((t_redir *)fd_iter->content)->redir_type == input \
+			|| ((t_redir *)fd_iter->content)->redir_type == heredoc)
 		{
 			if (set_infile(&fd_iter, cmd_table) == -1)
 				return (-1);
