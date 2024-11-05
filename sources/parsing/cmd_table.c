@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/05 11:37:35 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/05 13:55:03 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	t_list	*new_node;
 	int		tokens_consumed;
 
+//	printf("get_redir(): token1: %s, token2: %s\n", token1, token2);
 	if (get_redir_type(token1) == error)
 	{
 //		printf("get_redir(): error in get_redir_type()\n");
@@ -107,7 +108,7 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	{
 		if (ft_strlen(token1) > 2)
 		{
-			redir->filename = get_word(token1 + 2);
+			redir->filename = get_word_quote(token1 + 2);
 			tokens_consumed = 1;
 		}
 		else
@@ -123,7 +124,7 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	{
 		if (ft_strlen(token1) > 1)
 		{
-			redir->filename = get_word(token1 + 1);
+			redir->filename = get_word_quote(token1 + 1);
 			tokens_consumed = 1;
 		}
 		else
@@ -139,7 +140,7 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	{
 		if (ft_strlen(token1) > 2)
 		{
-			redir->filename = get_word(token1 + 2);
+			redir->filename = get_word_quote(token1 + 2);
 			tokens_consumed = 1;
 		}
 		else
@@ -202,7 +203,6 @@ void	parse_redirs(t_cmd *cmd)
 		tokens_iter = tokens_iter->next;
 	}
 }
-
 
 char	*skip_until_last(char *s, char delim)
 {
