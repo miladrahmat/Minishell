@@ -6,203 +6,11 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/03 18:23:12 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/05 15:44:47 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// > output
-// >> output append
-// < input
-// << input heredoc
-t_redir_type	get_redir_type(char *content)
-{
-//	printf("get_redir_type(): incoming content: %s\n", content);
-	if (!content || !*content)
-		return (error);
-	if (content[0] == '>')
-	{
-		if (content[1] == '>')
-		{
-			return (out_append);
-		}
-		else
-			return (out_trunc);
-	}
-	else if (content[0] == '<')
-	{
-		if (content[1] == '<')
-		{
-			return (heredoc);
-		}
-		else
-			return (input);
-	}
-	return (error);
-}
-
-bool	is_quoted_str(char *s)
-{
-	if (s)
-	{
-		return ((s[0] == '\"' && s[ft_strlen(s) - 1] == '\"') ||
-			(s[0] == '\'' && s[ft_strlen(s) - 1] == '\'')); 
-	}
-	return (false);
-}
-
-bool	is_double_quoted_str(char *s)
-{
-	if (s)
-	{
-		return ((s[0] == '\"' && s[ft_strlen(s) - 1] == '\"'));
-	}
-	return (false);
-}
-
-void	str_del_first_last(char *s)
-{
-	int	i;
-	int	len;
-
-	len = ft_strlen(s);
-	i = 0;
-	while (s[i] && s[i + 1])
-	{
-		s[i] = s[i + 1];
-		i++;
-	}
-	s[len - 2] = 0;
-}
-
-void	check_quoted_heredoc_delim(t_redir *redir)
-{
-	if (is_double_quoted_str(redir->filename))
-	{
-		str_del_first_last(redir->filename);
-		redir->heredoc_quoted_delim = true;
-	}
-}
-
-// return amount of tokens consumed?
-// TODO: "cat <<" should be syntax error
-int	get_redir(t_cmd *cmd, char *token1, char *token2)
-{
-	t_redir	*redir;
-	t_list	*new_node;
-	int		tokens_consumed;
-
-	if (get_redir_type(token1) == error)
-	{
-//		printf("get_redir(): error in get_redir_type()\n");
-		return (0);
-	}
-	redir = malloc(sizeof(t_redir));
-	if (!redir)
-		return (1);
-	redir->heredoc_quoted_delim = false;
-	redir->redir_type = get_redir_type(token1);
-	if (redir->redir_type == out_append)
-	{
-		if (ft_strlen(token1) > 2)
-		{
-			redir->filename = get_word(token1 + 2);
-			tokens_consumed = 1;
-		}
-		else
-		{
-			if (token2)
-			{
-				redir->filename = ft_strdup(token2);
-				tokens_consumed = 2;
-			}
-		}
-	}
-	else if (redir->redir_type == out_trunc || redir->redir_type == input)
-	{
-		if (ft_strlen(token1) > 1)
-		{
-			redir->filename = get_word(token1 + 1);
-			tokens_consumed = 1;
-		}
-		else
-		{
-			if (token2)
-			{
-				redir->filename = ft_strdup(token2);
-				tokens_consumed = 2;
-			}
-		}
-	}
-	else if (redir->redir_type == heredoc)
-	{
-		if (ft_strlen(token1) > 2)
-		{
-			redir->filename = get_word(token1 + 2);
-			tokens_consumed = 1;
-		}
-		else
-		{
-			if (token2)
-			{
-				redir->filename = ft_strdup(token2);
-				tokens_consumed = 2;
-			}
-		}
-		check_quoted_heredoc_delim(redir);
-//		printf("get_redir(): heredoc delim: %s\n", redir->filename);
-	}
-//	printf("get_redir(): %s\n", redir->filename);
-	if (is_quoted_str(redir->filename))
-		str_del_first_last(redir->filename);
-//	printf("get_redir(): %s\n", redir->filename);
-	new_node = ft_lstnew(redir);
-	if (!new_node || !redir->filename)
-		return (1);
-	if (redir->redir_type == out_append || redir->redir_type == out_trunc)
-		ft_lstadd_back(&cmd->outfiles, new_node);
-	else
-		ft_lstadd_back(&cmd->infiles, new_node);
-	return (tokens_consumed);
-}
-
-void	parse_redirs(t_cmd *cmd)
-{
-	t_list	*tokens;
-	t_list	*tokens_iter;
-	int		tokens_consumed;
-
-	tokens = cmd->split_token;
-	tokens_iter = tokens;
-	while (tokens_iter)
-	{
-		tokens_consumed = 0;
-		if (tokens_iter->next)
-		{
-			tokens_consumed = get_redir(cmd, tokens_iter->content,
-				tokens_iter->next->content);
-		}
-		else
-			tokens_consumed = get_redir(cmd, tokens_iter->content, NULL);
-		if (tokens_consumed > 0)
-		{
-			ft_lstdel_and_connect(&cmd->split_token, &tokens_iter);
-		}
-		if (tokens_consumed == 2)
-		{
-			tokens_iter = tokens_iter->next;
-			if (tokens_iter)
-			{
-				ft_lstdel_and_connect(&cmd->split_token, &tokens_iter);
-			}
-		}
-		if (!tokens_iter)
-			return ;
-		tokens_iter = tokens_iter->next;
-	}
-}
-
 
 char	*skip_until_last(char *s, char delim)
 {
@@ -250,54 +58,35 @@ t_list	*split_token(char *cmd_token)
 			if (*end == '<' || *end == '>')
 				end++;
 		}
-		if (quotes == 1)
+		while (*end)
 		{
-			end = skip_until_last(end + 1, '\'');
-			end++;
-			quotes = 0;
-		}
-		else if (quotes == 2)
-		{
-			end = skip_until_last(end + 1, '\"');
-			end++;
-			quotes = 0;
-		}
-		else
-		{
-			while (*end)
+			if (quotes == 0)
 			{
-				if (quotes == 0)
+				if (*end == '\'')
 				{
-					if (*end == '\'')
-					{
-						quotes = 1;
-						break ;
-					}
-					else if (*end == '\"')
-					{
-						quotes = 2;
-						break ;
-					}
-					else if (*end == '<' || *end == '>' || is_whitespace(*end))
-						break ;
+					quotes = 1;
 				}
-				else if (quotes == 1 && *end == '\'')
+				else if (*end == '\"')
 				{
-					quotes = 0;
+					quotes = 2;
+				}
+				else if (*end == '<' || *end == '>' || is_whitespace(*end))
 					break ;
-				}
-				else if (quotes == 2 && *end == '\"')
-				{
-					quotes = 0;
-					break ;
-				}
-				end++;
 			}
+			else if (quotes == 1 && *end == '\'')
+			{
+				quotes = 0;
+			}
+			else if (quotes == 2 && *end == '\"')
+			{
+				quotes = 0;
+			}
+			end++;
 		}
 		new_str = get_token(start, end);
 		if (new_str)
 		{
-//			printf("split_token(): %s\n", new_str);
+	//		printf("split_token(): %s\n", new_str);
 			new_token = ft_lstnew(new_str);
 			ft_lstadd_back(&tokens, new_token);
 		}
@@ -329,63 +118,19 @@ void	*init_t_cmd(void *content)
 	cmd->split_token = split_token(content);
 //	ft_lstiter(cmd->split_token, &print_list);
 	// now we are inside of a single t_cmd node; so loop through the tokens
-	parse_redirs(cmd);
+	//parse_redirs(cmd);
 //	ft_lstiter(cmd->split_token, &print_list);
 	cmd->fd.infile = 0;
 	cmd->fd.outfile = 1;
 	return (cmd);
 }
 
-// checks first token for a cmd, then just appends the rest of the tokens
-int	build_cmd_args(t_cmd *cmd, t_env *env)
-{	
-	int		i;
-	t_list	*split_tokens_iter;
-
-	if (!cmd->split_token->content)
-		return (1);
-	if (ft_strlen(cmd->split_token->content) == 0)
-		return (1);
-	cmd->cmd_args =
-		malloc(sizeof(char *) * (ft_lstsize(cmd->split_token) + 1));
-	if (!cmd->cmd_args)
-	{
-		//cleanup function in case of malloc fails
-		return (1);
-	}
-	if (!cmd->split_token->content || ft_strlen(cmd->split_token->content) <= 0)
-	{
-		ft_putstr_fd("Error: command \"\" not found\n", 2);
-		return (1);
-	}
-	if (!test_builtin_cmd(cmd->split_token->content))
-	{
-//		printf("not builtin cmd, %s\n", (char *) cmd->split_token->content);
-		cmd->cmd_args[0] =
-			get_exec_path(cmd->split_token->content, env, &cmd->path_error);
-		if (!cmd->cmd_args[0])
-		{
-			//TODO: if we end up here, it can either be malloc fail or 
-			// command not found, so we need to check path_error
-			// and cleanup in case of malloc fails
-//			printf("build_cmd_args(): cmd not found\n");
-		}
-	}
-	else
-		cmd->cmd_args[0] = cmd->split_token->content;
-	i = 1;
-	split_tokens_iter = cmd->split_token;
-	split_tokens_iter = split_tokens_iter->next;
-	while (split_tokens_iter)
-	{
-		cmd->cmd_args[i] = ft_strdup(split_tokens_iter->content);
-		split_tokens_iter = split_tokens_iter->next;
-		i++;
-	}
-	cmd->cmd_args[i] = NULL;
-	return (0);
+void	parse_redir_loop(void *arg)
+{
+	parse_redirs((t_cmd *) arg);
 }
 
+// TODO: strip all quotes that are not inside of other quotes
 void	strip_quotes(char *s)
 {
 	if (is_quoted_str(s))
@@ -399,7 +144,6 @@ void	strip_quotes(char *s)
 //
 // After parsing redirs AND exppanding variables, we can assume that 
 // the first token is the cmd (?)
-// TODO: stop removing single quotes from inside of double quotes
 t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 {
 	t_list	*pipe_tokens;
@@ -409,10 +153,8 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 	t_list	*split_tokens_iter;
 	char	*expanded_token;
 
-	// split line at pipes into t_list of strings
 	pipe_tokens = split_on_pipes(line);
 //	printf("init_cmd_table(): %i tokens\n", ft_lstsize(tokens));
-	// convert t_list of strings into t_list of t_cmd
 	cmd_table = ft_lstmap(pipe_tokens, &init_t_cmd, &free);
 	cmd_table_iter = cmd_table;
 	while (cmd_table_iter)
@@ -435,13 +177,9 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 				//cleanup function in case of malloc fails
 				return (NULL);
 			}
-			// expanded_token can also be an empty string (in case of a 
-			// non-existant variable), but that is currently allowed
-	//		printf("expanded_token: %s\n", expanded_token);
+		//	printf("expanded_token: %s\n", expanded_token);
 			strip_quotes(expanded_token);
 		//	printf("after stripping quotes: %sX\n", expanded_token);
-			//split_tokens_iter->content = expanded_token;
-			
 			if (ft_strlen(expanded_token) > 0)
 			{
 				if (split_tokens_iter->content)
@@ -452,6 +190,19 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 				ft_lstdel_and_connect(&cmd->split_token, &split_tokens_iter);
 			
 			split_tokens_iter = split_tokens_iter->next;
+		}
+	//	ft_lstiter(cmd->split_token, &print_list);
+		cmd_table_iter = cmd_table_iter->next;
+	}
+	ft_lstiter(cmd_table, parse_redir_loop);
+	cmd_table_iter = cmd_table;
+	while (cmd_table_iter)
+	{
+		cmd = (t_cmd *) cmd_table_iter->content;
+		if (!cmd->split_token)
+		{
+			cmd_table_iter = cmd_table_iter->next;
+			continue ;
 		}
 	//	ft_lstiter(cmd->split_token, &print_list);
 		build_cmd_args(cmd, env);
