@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/05 11:37:28 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/05 13:28:34 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ char	*concatenate_until(char **dst, char *src, char *delim)
 	char	*temp_joined;
 
 //	printf("concat delims %c - %c\n", delim[0], delim[1]);
+//	src_end = src + 1;
+//	printf("concatenate_until(): %s\n", src);
 	src_end = src;
 	while (*src_end && !ft_strchr(delim, *src_end))
 	{
@@ -113,7 +115,8 @@ char	*expand_vars(char *token, t_env *env, int last_ret_val)
 	char	*varname;
 	char	*value;
 
-	//printf("incoming token %s\n", token);
+	int	tmp_i = 0;
+//	printf("expand_vars(): incoming token %s\n", token);
 	if (!token)
 		return (NULL);
 	if (*token == '\'')
@@ -127,7 +130,13 @@ char	*expand_vars(char *token, t_env *env, int last_ret_val)
 	varname = NULL;
 	while (*start)
 	{
+		if (tmp_i > 100)
+		{
+			printf("inf loop\n");
+			exit(1);
+		}
 		end = concatenate_until(&ret, start, "$'");
+	//	printf("after first concat: %s\n", end);
 		if (!end)
 			return (expand_vars_fail(ret, varname));
 		if (!ret)
@@ -169,16 +178,18 @@ char	*expand_vars(char *token, t_env *env, int last_ret_val)
 		}
 		else if (*end == '\'')
 		{
-			end++;
-			start = end;
-			end = concatenate_until(&ret, start, "'");
+			ret = ft_strjoin(ret, "'");
+			if (!ret)
+				return (expand_vars_fail(ret, varname));
+			end = concatenate_until(&ret, end + 1, "'");
 			if (!end)
 				return (expand_vars_fail(ret, varname));
 		}
 		start = end;
+		tmp_i++;
 	}
 	 //if (ft_strlen(ret) <= 0)
 	 	//printf("expand_vars() returning empty string\n");
-	//printf("expand_token(): returning: %s\n", ret);
+//	printf("expand_token(): returning: %s\n", ret);
 	return (ret);
 }
