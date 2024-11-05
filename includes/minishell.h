@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/05 13:53:41 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/05 14:29:13 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ typedef struct s_cmd
 	t_files	fd;
 }	t_cmd;
 
+// build_cmd_args.c
+int	build_cmd_args(t_cmd *cmd, t_env *env);
 // cmd_table.c
 t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val);
 // path_utils.c
