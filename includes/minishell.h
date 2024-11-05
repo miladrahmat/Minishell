@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/05 15:29:16 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/05 15:49:05 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_cmd
 {
 	t_list	*split_token;
 	char	**cmd_args;
+	t_list	*files;
 	t_list	*infiles;
 	t_list	*outfiles;
 	int		path_error;

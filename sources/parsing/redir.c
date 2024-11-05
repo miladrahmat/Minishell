@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:23:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/05 15:32:22 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/05 15:51:05 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,10 +127,7 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	new_node = ft_lstnew(redir);
 	if (!new_node || !redir->filename)
 		return (1);
-	if (redir->redir_type == out_append || redir->redir_type == out_trunc)
-		ft_lstadd_back(&cmd->outfiles, new_node);
-	else
-		ft_lstadd_back(&cmd->infiles, new_node);
+	ft_lstadd_back(&cmd->files, new_node);
 	return (tokens_consumed);
 }
 

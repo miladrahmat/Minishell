@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/01 13:30:50 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/05 15:54:25 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,20 +82,17 @@ void	print_cmd_list(void *arg)
 		i++;
 	}
 	printf("\n");
-	printf("infiles: ");
-	ft_lstiter(node->infiles, &print_tlist_string);
-	printf("\n");
-	printf("outfiles: ");
-	ft_lstiter(node->outfiles, &print_tlist_string);
+	printf("files: ");
+	ft_lstiter(node->files, &print_tlist_string);
 	printf("\n");
 }
 
 // TODO: variable names cannot start with number
 int	main(int ac, char **av, char **envp)
 {
-	char				*line;
-	t_list				*cmd_table;
-	t_env				*env;
+	char	*line;
+	t_list	*cmd_table;
+	t_env	*env;
 
 	(void)av;
 	(void)ac;
