@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/05 15:30:10 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/05 15:44:47 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,6 @@ void	strip_quotes(char *s)
 //
 // After parsing redirs AND exppanding variables, we can assume that 
 // the first token is the cmd (?)
-// TODO: stop removing single quotes from inside of double quotes
 t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 {
 	t_list	*pipe_tokens;
@@ -154,10 +153,8 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 	t_list	*split_tokens_iter;
 	char	*expanded_token;
 
-	// split line at pipes into t_list of strings
 	pipe_tokens = split_on_pipes(line);
 //	printf("init_cmd_table(): %i tokens\n", ft_lstsize(tokens));
-	// convert t_list of strings into t_list of t_cmd
 	cmd_table = ft_lstmap(pipe_tokens, &init_t_cmd, &free);
 	cmd_table_iter = cmd_table;
 	while (cmd_table_iter)
@@ -180,13 +177,9 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 				//cleanup function in case of malloc fails
 				return (NULL);
 			}
-			// expanded_token can also be an empty string (in case of a 
-			// non-existant variable), but that is currently allowed
-	//		printf("expanded_token: %s\n", expanded_token);
+		//	printf("expanded_token: %s\n", expanded_token);
 			strip_quotes(expanded_token);
 		//	printf("after stripping quotes: %sX\n", expanded_token);
-			//split_tokens_iter->content = expanded_token;
-			
 			if (ft_strlen(expanded_token) > 0)
 			{
 				if (split_tokens_iter->content)
