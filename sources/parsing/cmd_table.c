@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/03 18:23:12 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/05 10:36:13 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,54 +250,35 @@ t_list	*split_token(char *cmd_token)
 			if (*end == '<' || *end == '>')
 				end++;
 		}
-		if (quotes == 1)
+		while (*end)
 		{
-			end = skip_until_last(end + 1, '\'');
-			end++;
-			quotes = 0;
-		}
-		else if (quotes == 2)
-		{
-			end = skip_until_last(end + 1, '\"');
-			end++;
-			quotes = 0;
-		}
-		else
-		{
-			while (*end)
+			if (quotes == 0)
 			{
-				if (quotes == 0)
+				if (*end == '\'')
 				{
-					if (*end == '\'')
-					{
-						quotes = 1;
-						break ;
-					}
-					else if (*end == '\"')
-					{
-						quotes = 2;
-						break ;
-					}
-					else if (*end == '<' || *end == '>' || is_whitespace(*end))
-						break ;
+					quotes = 1;
 				}
-				else if (quotes == 1 && *end == '\'')
+				else if (*end == '\"')
 				{
-					quotes = 0;
+					quotes = 2;
+				}
+				else if (*end == '<' || *end == '>' || is_whitespace(*end))
 					break ;
-				}
-				else if (quotes == 2 && *end == '\"')
-				{
-					quotes = 0;
-					break ;
-				}
-				end++;
 			}
+			else if (quotes == 1 && *end == '\'')
+			{
+				quotes = 0;
+			}
+			else if (quotes == 2 && *end == '\"')
+			{
+				quotes = 0;
+			}
+			end++;
 		}
 		new_str = get_token(start, end);
 		if (new_str)
 		{
-//			printf("split_token(): %s\n", new_str);
+	//		printf("split_token(): %s\n", new_str);
 			new_token = ft_lstnew(new_str);
 			ft_lstadd_back(&tokens, new_token);
 		}
