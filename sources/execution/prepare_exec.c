@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/04 14:33:43 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/05 19:25:43 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static void	execute_cmd(t_cmd *cmd, char **env_copy, \
 {
 	int	ret_val;
 
+	signal_handling_child();
 	ret_val = 127;
 	if (cmd->fd.infile == -1 || cmd->fd.outfile == -1)
 		exit(1);
@@ -75,25 +76,26 @@ static pid_t	prepare_child(t_list *cmd, t_env **env, \
 {
 	pid_t	pid;
 
-	pid = 0;
-	if (open_infiles(&cmd) < 0)
-		return (0);
 	if (cmd->next != NULL)
 	{
 		if (check_pipe_fd(((t_cmd **)&cmd->content), \
 			((t_cmd **)&cmd->next->content)) < 0)
 			return (-1);
 	}
+	if (open_infiles(&cmd) < 0)
+	{
+		close_cmd_fd(cmd->content);
+		return (0);
+	}
 	pid = fork();
 	if (pid < 0)
 		return (-1);
 	if (pid == 0)
 	{
-		signal_handling_child();
+		if (cmd->next != NULL)
+			close(((t_cmd *)cmd->next->content)->fd.infile);
 		execute_cmd(((t_cmd *)cmd->content), env_copy, env, ret_val);
 	}
-	else
-		ignore_sigint();
 	close_cmd_fd(((t_cmd *)cmd->content));
 	return (pid);
 }

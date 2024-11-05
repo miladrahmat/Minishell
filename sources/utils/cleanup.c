@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 12:01:27 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/01 17:33:06 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/05 17:13:40 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,9 @@ void	destroy_tlist_of_tcmd(void	*arg)
 		split_free(cmd->cmd_args, 0);
 		cmd->cmd_args = NULL;
 	}
-	ft_lstclear(&cmd->infiles, &clean_files);
-	ft_lstclear(&cmd->outfiles, &clean_files);
+	ft_lstclear(&cmd->files, &clean_files);
+	// ft_lstclear(&cmd->infiles, &clean_files);
+	// ft_lstclear(&cmd->outfiles, &clean_files);
 	//ft_lstclear(&cmd->split_token, &free);
 	free(cmd);
 	cmd = NULL;
