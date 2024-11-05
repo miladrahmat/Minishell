@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/05 14:29:13 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/05 15:29:16 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,26 +67,36 @@ typedef struct s_cmd
 	t_files	fd;
 }	t_cmd;
 
-// build_cmd_args.c
+// parsing/build_cmd_args.c
 int	build_cmd_args(t_cmd *cmd, t_env *env);
-// cmd_table.c
+// parsing/cmd_table.c
 t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val);
-// path_utils.c
+// parsing/path_utils.c
 void	open_files(t_files *files, char *infile_name, char *outfile_name);
 void	close_all(t_files files, int pipefd[2]);
 void	print_error(char *message, char *filename);
 void	free_strv(char **strv);
-// path_helpers.c
+// parsing/path_helpers.c
 bool	is_abs_or_pwd_path(char *cmd);
 int		check_exec_access(char *cmd);
 char	**get_paths(t_env *env);
-// paths.c
+// parsing/paths.c
 char	*get_exec_path(char *command, t_env *env, int *path_error);
-// split_on_pipes.c
+// parsing/quote/tools.c
+bool	is_quoted_str(char *s);
+bool	is_double_quoted_str(char *s);
+void	str_del_first_last(char *s);
+// parsing/redir.c
+void	parse_redirs(t_cmd *cmd);
+// parsing/split_on_pipes.c
 char	*skip_until(char *s, char delim);
 t_list	*split_on_pipes(char *line);
 // parsing/heredoc.c
 int		process_heredocs(t_list *cmd_table, t_env *env);
+// parsing/expand_vars.c
+char	*expand_vars(char *token, t_env *env, int last_ret_val);
+// parsing/tokenizing_utils.c
+char	*get_token(char *start, char *end);
 
 //builtin_cmds
 bool	test_builtin_cmd(char *cmd);
@@ -131,8 +141,6 @@ char	*get_word(char *start);
 char	*get_word_quote(char *start);
 char	*skip_word(char *s);
 
-// expand_vars.c
-char	*expand_vars(char *token, t_env *env, int last_ret_val);
 
 // file_handler.c
 int		open_infiles(t_list **cmd_table);
@@ -144,8 +152,6 @@ int		open_outfiles(t_list **cmd_table);
 int		check_pipe_fd(t_cmd **curr_cmd, t_cmd **next_cmd);
 void	close_cmd_fd(t_cmd *curr_cmd);
 
-// tokenizing_utils.c
-char	*get_token(char *start, char *end);
 
 //execute
 int		prepare_exec(t_list *cmd_table, t_env **env);

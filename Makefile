@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/11/05 14:29:39 by lemercie         ###   ########.fr        #
+#    Updated: 2024/11/05 15:31:19 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,6 +53,8 @@ BUILTIN_FILES	:= builtin_cmds.c \
 PARSING_FILES	:= paths.c \
 				path_utils.c \
 				path_helpers.c \
+				quotes.c \
+				redir.c \
 				split_on_pipes.c \
 				build_cmd_args.c \
 				cmd_table.c \
