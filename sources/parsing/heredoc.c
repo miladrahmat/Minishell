@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/31 17:33:33 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/05 16:58:54 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ char	*get_heredoc(char *delim, t_env *env, bool expand)
 int	process_heredocs(t_list *cmd_table, t_env *env)
 {
 	t_cmd	*cmd;
-	t_list	*infiles_iter;
+	t_list	*files_iter;
 	t_list	*cmd_table_iter;
 	char	*filename;
 	t_redir	*redir;
@@ -138,10 +138,10 @@ int	process_heredocs(t_list *cmd_table, t_env *env)
 	while (cmd_table_iter)
 	{
 		cmd = (t_cmd *) cmd_table_iter->content;
-		infiles_iter = cmd->infiles;
-		while (infiles_iter)
+		files_iter = cmd->files;
+		while (files_iter)
 		{
-			redir = (t_redir *) infiles_iter->content;
+			redir = (t_redir *) files_iter->content;
 			if (redir->redir_type == heredoc)
 			{
 				if (redir->heredoc_quoted_delim)
@@ -152,13 +152,13 @@ int	process_heredocs(t_list *cmd_table, t_env *env)
 					redir->filename = filename;
 				else
 				{
-					ft_lstdel_and_connect(&cmd->infiles, &infiles_iter);
+					ft_lstdel_and_connect(&cmd->files, &files_iter);
 		//			redir->filename = NULL;
 		//			return (1);
 				}
 			}
-			if (infiles_iter)
-				infiles_iter = infiles_iter->next;
+			if (files_iter)
+				files_iter = files_iter->next;
 			else
 				break ;
 		}
