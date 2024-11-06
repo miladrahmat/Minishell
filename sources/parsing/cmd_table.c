@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/05 17:09:58 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/06 15:53:53 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,11 +129,48 @@ void	parse_redir_loop(void *arg)
 	parse_redirs((t_cmd *) arg);
 }
 
-// TODO: strip all quotes that are not inside of other quotes
-void	strip_quotes(char *s)
+void	*free_strs(char **str1, char **str2)
 {
-	if (is_quoted_str(s))
-		str_del_first_last(s);
+	if (*str1 != NULL)
+		free(*str1);
+	if (*str2 != NULL)
+		free(*str2);
+	return (NULL);
+}
+
+// TODO: strip all quotes that are not inside of other quotes
+char	*strip_quotes(char **s, int *ret_val)
+{
+	char	*ret;
+	size_t	ret_i;
+	ssize_t	s_i;
+	ssize_t	add;
+
+	ret_i = 0;
+	s_i = -1;
+	ret = malloc((ft_strlen(*s) + 1) * sizeof(char));
+	if (ret == NULL)
+		return (free_strs(s, NULL));
+	while ((*s)[++s_i] != '\0')
+	{
+		if ((*s)[s_i] == '\'' || (*s)[s_i] == '\"')
+		{
+			s_i++;
+			add = handle_quotes(ret + ret_i, *s + s_i, (*s)[s_i - 1]);
+			if (add == -1)
+			{
+				*ret_val = 2;
+				return (free_strs(s, &ret));
+			}
+			ret_i += add;
+			s_i += add;
+		}
+		else
+			ret[ret_i++] = (*s)[s_i];
+	}
+	free(*s);
+	ret[ret_i] = '\0';
+	return (ret);
 }
 
 // Can return NULL in case of a failed malloc() in functions called from here
@@ -177,7 +214,7 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 				return (NULL);
 			}
 		//	printf("expanded_token: %s\n", expanded_token);
-			strip_quotes(expanded_token);
+			expanded_token = strip_quotes(&expanded_token, &last_ret_val);
 		//	printf("after stripping quotes: %sX\n", expanded_token);
 			if (ft_strlen(expanded_token) > 0)
 			{
