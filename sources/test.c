@@ -6,13 +6,27 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/05 16:53:47 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:30:21 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 sig_atomic_t	g_last_ret_val = 0;
+
+void	check_child_signal(int ret_val)
+{
+	if (ret_val == 130)
+	{
+		ft_putchar('\n');
+		return ;
+	}
+	if (ret_val == 131)
+	{
+		ft_putendl_fd("Quit (core dumped)", 2);
+		return ;
+	}
+}
 
 void	handle_signals(int signal)
 {
@@ -36,26 +50,6 @@ void	handle_heredoc(int signal)
 		rl_done = 1;
 		return ;
 	}
-}
-
-t_env	*copy_env(char **envp)
-{
-	t_env	*env;
-	t_env	*new_node;
-
-	env = NULL;
-	while (*envp != NULL)
-	{
-		new_node = set_key_value(*envp);
-		if (new_node == NULL)
-		{
-			ft_envclear(&env, &free);
-			return (NULL);
-		}
-		ft_envadd_back(&env, new_node);
-		envp++;
-	}
-	return (env);
 }
 
 void	print_tlist_string(void *arg)
@@ -114,6 +108,7 @@ int	main(int ac, char **av, char **envp)
 			process_heredocs(cmd_table, env); // returns 1 in case of malloc fail
 			if (cmd_table != NULL && g_last_ret_val == 0)
 				g_last_ret_val = prepare_exec(cmd_table, &env, last_ret_val);
+			check_child_signal(g_last_ret_val);
 			ft_lstclear(&cmd_table, &destroy_tlist_of_tcmd);
 		}
 		else

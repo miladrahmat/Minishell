@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/11/05 16:54:13 by mrahmat-         ###   ########.fr        #
+#    Updated: 2024/11/06 11:02:36 by mrahmat-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,7 +64,8 @@ PARSING_FILES	:= paths.c \
 				heredoc.c
 
 ENV_FILES	:= environment.c \
-			environment1.c
+			environment1.c \
+			environment2.c
 
 FILE_HANDLER_FILES	:= file_handler.c \
 					pipe_file_handler.c

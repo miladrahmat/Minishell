@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:46:02 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/30 18:55:41 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:37:33 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,28 @@ int	validate_str(char *str, char *acc_values)
 		s_i++;
 	}
 	return (1);
+}
+
+int	exit_error_check(char **cmd)
+{
+	int	ret_val;
+
+	ret_val = INT_MIN;
+	if (cmd[1] != NULL && cmd[2] != NULL)
+	{
+		print_builtin_error("exit", NULL, "too many arguments", false);
+		ret_val = 1;
+	}
+	else if (cmd[1] != NULL)
+	{
+		if (validate_str(cmd[1], "-+0123456789") == -1)
+		{
+			print_builtin_error("exit", cmd[1], "numeric argument required", \
+				false);
+			ret_val = 2;
+		}
+		else
+			ret_val = ft_atoi(cmd[1]);
+	}
+	return (ret_val);
 }

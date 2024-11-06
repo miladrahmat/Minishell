@@ -6,13 +6,12 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/05 16:52:58 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:38:31 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# define _GNU_SOURCE
 # include <stdio.h> // printf
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -21,8 +20,6 @@
 # include <fcntl.h> // open()
 # include <errno.h>
 # include <unistd.h>
-//# include <sys/stat.h>
-//# include <sys/types.h>
 # include <sys/wait.h>
 # include <signal.h>
 # include "libft.h"
@@ -62,18 +59,15 @@ typedef struct s_cmd
 	t_list	*split_token;
 	char	**cmd_args;
 	t_list	*files;
-	t_list	*infiles;
-	t_list	*outfiles;
 	int		path_error;
 	t_files	fd;
 }	t_cmd;
 
 // parsing/build_cmd_args.c
-int	build_cmd_args(t_cmd *cmd, t_env *env);
+int		build_cmd_args(t_cmd *cmd, t_env *env);
 // parsing/cmd_table.c
 t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val);
 // parsing/path_utils.c
-void	open_files(t_files *files, char *infile_name, char *outfile_name);
 void	close_all(t_files files, int pipefd[2]);
 void	print_error(char *message, char *filename);
 void	free_strv(char **strv);
@@ -121,6 +115,7 @@ bool	check_key(char *cmd, t_env *node);
 size_t	get_cmd_amount(char **cmd);
 size_t	ft_strlen_eq(char *str);
 int		validate_str(char *str, char *acc_values);
+int		exit_error_check(char **cmd);
 
 //env struct functions
 t_env	*ft_envnew(char *key, char *value);
@@ -133,6 +128,8 @@ t_env	*set_key_value(char *str);
 t_env	*ft_envcpy(t_env *envp);
 int		ft_envsize(t_env *env);
 char	*ft_env_get_value_by_key(char *key, t_env *env);
+void	**update_shlvl(t_env **node);
+t_env	*copy_env(char **envp);
 
 // string_utils.c
 bool	is_whitespace(char c);
@@ -144,14 +141,13 @@ char	*skip_word(char *s);
 
 
 // file_handler.c
-int		open_infiles(t_list **cmd_table);
-int		open_outfiles(t_list **cmd_table);
+int		open_files(t_list **cmd_table);
+void	close_cmd_fd(t_cmd *curr_cmd);
 // int		close_in_out(t_list **cmd_table);
 
 // pipe_file_handler.c
 // int		check_pipe_fd(t_list **cmd_table);
 int		check_pipe_fd(t_cmd **curr_cmd, t_cmd **next_cmd);
-void	close_cmd_fd(t_cmd *curr_cmd);
 
 
 //execute

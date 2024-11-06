@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:20:32 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/05 19:31:30 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:38:50 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,23 +52,7 @@ int	builtin_exit(t_list **cmd_table, t_env **envp, int last_ret_val)
 
 	cmd = ((t_cmd *)(*cmd_table)->content)->cmd_args;
 	ft_putendl_fd(*cmd, 2);
-	ret_val = INT_MIN;
-	if (cmd[1] != NULL && cmd[2] != NULL)
-	{
-		print_builtin_error("exit", NULL, "too many arguments", false);
-		ret_val = 1;
-	}
-	else if (cmd[1] != NULL)
-	{
-		if (validate_str(cmd[1], "-+0123456789") == -1)
-		{
-			print_builtin_error("exit", cmd[1], "numeric argument required", \
-				false);
-			ret_val = 2;
-		}
-		else
-			ret_val = ft_atoi(cmd[1]);
-	}
+	ret_val = exit_error_check(cmd);
 	ft_envclear(envp, &free);
 	ft_lstclear(cmd_table, &destroy_tlist_of_tcmd);
 	clear_history();
