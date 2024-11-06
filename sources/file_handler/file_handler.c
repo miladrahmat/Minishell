@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:06:58 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/30 14:19:09 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/05 20:05:26 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,26 +43,6 @@ static int	set_infile(t_list **current, t_list **cmd)
 	return (1);
 }
 
-int	open_infiles(t_list **cmd_table)
-{
-	t_list	*cmd_iter;
-	t_list	*fd_iter;
-
-	cmd_iter = *cmd_table;
-	while (cmd_iter != NULL)
-	{
-		fd_iter = ((t_cmd *)cmd_iter->content)->infiles;
-		while (fd_iter != NULL)
-		{
-			if (set_infile(&fd_iter, &cmd_iter) == -1)
-				return (-1);
-			fd_iter = fd_iter->next;
-		}
-		cmd_iter = cmd_iter->next;
-	}
-	return (open_outfiles(cmd_table));
-}
-
 static int	set_outfile(t_list **current, t_list **cmd)
 {
 	t_redir	*file;
@@ -88,22 +68,41 @@ static int	set_outfile(t_list **current, t_list **cmd)
 	return (1);
 }
 
-int	open_outfiles(t_list **cmd_table)
+int	open_infiles(t_list **cmd_table)
 {
-	t_list	*cmd_iter;
 	t_list	*fd_iter;
 
-	cmd_iter = *cmd_table;
-	while (cmd_iter != NULL)
+	fd_iter = ((t_cmd *)(*cmd_table)->content)->files;
+	if (fd_iter == NULL || fd_iter->content == NULL)
+		return (1);
+	while (fd_iter != NULL)
 	{
-		fd_iter = ((t_cmd *)cmd_iter->content)->outfiles;
-		while (fd_iter != NULL)
+		if (((t_redir *)fd_iter->content)->redir_type == input \
+			|| ((t_redir *)fd_iter->content)->redir_type == heredoc)
 		{
-			if (set_outfile(&fd_iter, &cmd_iter) == -1)
+			if (set_infile(&fd_iter, cmd_table) == -1)
 				return (-1);
-			fd_iter = fd_iter->next;
 		}
-		cmd_iter = cmd_iter->next;
+		else
+		{
+			if (set_outfile(&fd_iter, cmd_table) == -1)
+				return (-1);
+		}
+		fd_iter = fd_iter->next;
 	}
-	return (0);
+	return (1);
+}
+
+int	open_outfiles(t_list **cmd_table)
+{
+	t_list	*fd_iter;
+
+	fd_iter = ((t_cmd *)(*cmd_table)->content)->outfiles;
+	while (fd_iter != NULL)
+	{
+		if (set_outfile(&fd_iter, cmd_table) == -1)
+			return (-1);
+		fd_iter = fd_iter->next;
+	}
+	return (1);
 }

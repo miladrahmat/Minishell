@@ -6,14 +6,11 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 12:01:27 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/01 12:22:09 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/05 17:13:40 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// maybe make it so this is a fuction that can be passed to ft_lstclear()
-// TODO: if there is a heredoc, delete the file
 
 static void	clean_files(void *arg)
 {
@@ -47,8 +44,9 @@ void	destroy_tlist_of_tcmd(void	*arg)
 		split_free(cmd->cmd_args, 0);
 		cmd->cmd_args = NULL;
 	}
-	ft_lstclear(&cmd->infiles, &clean_files);
-	ft_lstclear(&cmd->outfiles, &clean_files);
+	ft_lstclear(&cmd->files, &clean_files);
+	// ft_lstclear(&cmd->infiles, &clean_files);
+	// ft_lstclear(&cmd->outfiles, &clean_files);
 	//ft_lstclear(&cmd->split_token, &free);
 	free(cmd);
 	cmd = NULL;
