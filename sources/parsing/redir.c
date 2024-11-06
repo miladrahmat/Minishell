@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:23:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/06 13:31:58 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/06 15:27:36 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ void	check_quoted_heredoc_delim(t_redir *redir)
 t_redir_type	get_redir_type(char *content)
 {
 //	printf("get_redir_type(): incoming content: %s\n", content);
-	if (!content || !*content)
+	if (!content || !(*content))
+		return (error);
+	if (ft_strlen(content) <= 0)
 		return (error);
 	if (content[0] == '>')
 	{
@@ -75,6 +77,7 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	{
 		if (ft_strlen(token1) > 2)
 		{
+			// TODO: handle filenames with spaces
 			redir->filename = get_word_quote(token1 + 2);
 			tokens_consumed = 1;
 		}

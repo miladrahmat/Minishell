@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/06 13:32:18 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/06 13:46:26 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ t_list	*split_on_pipes(char *line);
 // parsing/heredoc.c
 int		process_heredocs(t_list *cmd_table, t_env *env);
 // parsing/expand_vars.c
-char	*expand_vars(char *token, t_env *env, int last_ret_val);
+char	*expand_vars(char *token, t_env *env, int *last_ret_val);
 // parsing/tokenizing_utils.c
 char	*get_token(char *start, char *end);
 
