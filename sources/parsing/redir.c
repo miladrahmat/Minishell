@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:23:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/06 10:00:20 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/06 13:31:58 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,4 +167,9 @@ void	parse_redirs(t_cmd *cmd)
 			return ;
 		tokens_iter = tokens_iter->next;
 	}
+}
+
+void	parse_redir_loop(void *arg)
+{
+	parse_redirs((t_cmd *) arg);
 }

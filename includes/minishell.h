@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/06 13:14:42 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/06 13:32:18 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ typedef struct s_cmd
 	t_files	fd;
 }	t_cmd;
 
+// debug.c
+void	print_list(void *arg);
 // parsing/build_cmd_args.c
 int		build_cmd_args(t_cmd *cmd, t_env *env);
 // parsing/cmd_table.c
@@ -83,7 +85,9 @@ bool	is_double_quoted_str(char *s);
 void	str_del_first_last(char *s);
 void	strip_quotes(char *s);
 // parsing/redir.c
-void	parse_redirs(t_cmd *cmd);
+void	parse_redir_loop(void *arg);
+// parsing/split_token.c
+t_list	*split_token(char *cmd_token);
 // parsing/split_on_pipes.c
 char	*skip_until(char *s, char delim);
 t_list	*split_on_pipes(char *line);

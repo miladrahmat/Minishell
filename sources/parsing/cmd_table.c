@@ -6,99 +6,11 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/06 12:04:52 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/06 13:32:27 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*skip_until_last(char *s, char delim)
-{
-	char	*last;
-
-	if (!s)
-		return (NULL);
-	while (*s)
-	{
-		if (*s == delim)
-			last = s;
-		if (last[1] == ' ')
-			return (last);
-		s++;
-	}
-	return (last);
-}
-
-// env vars can expand into commands, arguments or redir filenames,
-// 		but cannot contain < or > in themselves
-// 	==> split on spaces and redir symbols
-t_list	*split_token(char *cmd_token)
-{
-	char	*start;
-	char	*end;
-	t_list	*new_token;
-	t_list	*tokens;
-	int		quotes;
-	char	*new_str;
-
-	if (!cmd_token)
-		return NULL;
-	start = cmd_token;
-	tokens = NULL;
-	end = start;
-	quotes = 0;
-//	printf("split_token incoming token: %s\n", end);
-	while (*start && *end)
-	{
-		start = skip_whitespace(start);
-		end = start;
-		if (*end == '<' || *end == '>')
-		{
-			end++;
-			if (*end == '<' || *end == '>')
-				end++;
-		}
-		while (*end)
-		{
-			if (quotes == 0)
-			{
-				if (*end == '\'')
-				{
-					quotes = 1;
-				}
-				else if (*end == '\"')
-				{
-					quotes = 2;
-				}
-				else if (*end == '<' || *end == '>' || is_whitespace(*end))
-					break ;
-			}
-			else if (quotes == 1 && *end == '\'')
-			{
-				quotes = 0;
-			}
-			else if (quotes == 2 && *end == '\"')
-			{
-				quotes = 0;
-			}
-			end++;
-		}
-		new_str = get_token(start, end);
-		if (new_str)
-		{
-	//		printf("split_token(): %s\n", new_str);
-			new_token = ft_lstnew(new_str);
-			ft_lstadd_back(&tokens, new_token);
-		}
-		start = end;
-	}
-	return (tokens);
-}
-
-void	print_list(void *arg)
-{
-	printf("pl: %s\n", (char *) arg);
-}
 
 // init each t_cmd of the list (but not cmd->cmd_args yet)
 // for each node in t_list tokens, creates a node in t_list of t_cmd
@@ -122,11 +34,6 @@ void	*init_t_cmd(void *content)
 	cmd->fd.infile = 0;
 	cmd->fd.outfile = 1;
 	return (cmd);
-}
-
-void	parse_redir_loop(void *arg)
-{
-	parse_redirs((t_cmd *) arg);
 }
 
 // Can return NULL in case of a failed malloc() in functions called from here

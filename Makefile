@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/11/06 11:02:36 by mrahmat-         ###   ########.fr        #
+#    Updated: 2024/11/06 13:25:16 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ UTILS_DIR	:= $(SRCDIR)utils/
 
 OBJDIR := ./objects/
 
-MAIN_FILES	:= test.c
+MAIN_FILES	:= test.c debug.c
 
 BUILTIN_FILES	:= builtin_cmds.c \
 				builtin_child.c \
@@ -55,6 +55,7 @@ PARSING_FILES	:= paths.c \
 				path_helpers.c \
 				quotes.c \
 				redir.c \
+				split_token.c \
 				split_on_pipes.c \
 				build_cmd_args.c \
 				cmd_table.c \
