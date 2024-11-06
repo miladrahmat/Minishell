@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/05 15:49:05 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/05 16:54:02 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,12 @@ int		check_exec_access(char *cmd);
 char	**get_paths(t_env *env);
 // parsing/paths.c
 char	*get_exec_path(char *command, t_env *env, int *path_error);
-// parsing/quote/tools.c
+// parsing/quotes.c
 bool	is_quoted_str(char *s);
 bool	is_double_quoted_str(char *s);
 void	str_del_first_last(char *s);
+void	strip_quotes(char *s);
+void	strip_quotes2(char *s);
 // parsing/redir.c
 void	parse_redirs(t_cmd *cmd);
 // parsing/split_on_pipes.c

@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:28:18 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/05 15:28:43 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/05 16:56:30 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,63 @@ void	str_del_first_last(char *s)
 		i++;
 	}
 	s[len - 2] = 0;
+}
+
+// TODO: strip all quotes that are not inside of other quotes
+void	strip_quotes(char *s)
+{
+	if (is_quoted_str(s))
+		str_del_first_last(s);
+}
+
+void	strip_quotes2(char *s)
+{
+	char	*start;
+	char	*end;
+	char	*ret;
+	int		quotes;
+	char	*new_str;
+
+	start = s;
+	end = s;
+	quotes = 0;
+	ret = NULL;
+	while (*start && *end)
+	{
+		while (*end)
+		{
+			if (quotes == 0)
+			{
+				if (*end == '\'')
+				{
+					quotes = 1;
+					end++;
+					break ;
+				}
+				else if (*end == '\"')
+				{
+					quotes = 2;
+					end++;
+					break ;
+				}
+			}
+			else if (quotes == 1 && *end == '\'')
+			{
+				quotes = 0;
+				end++;
+				break ;
+			}
+			else if (quotes == 2 && *end == '\"')
+			{
+				quotes = 0;
+				end++;
+				break ;
+			}
+			end++;
+		}
+		new_str = get_token(start, end);
+		ret = ft_strjoin(ret, new_str);
+		start = end;
+	}
+	printf("strip_quotes2: %s\n", ret);
 }

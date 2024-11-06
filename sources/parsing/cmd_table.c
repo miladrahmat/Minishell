@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/05 15:44:47 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/05 17:03:16 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,7 @@ void	*init_t_cmd(void *content)
 	
 	cmd = malloc(sizeof(t_cmd));
 	cmd->cmd_args = NULL;
-	cmd->infiles = NULL;
-	cmd->outfiles = NULL;
+	cmd->files = NULL;
 	cmd->path_error = 0;
 //	printf("init_t_cmd input: %s\n", (char*)content);
 	cmd->split_token = split_token(content);
@@ -128,13 +127,6 @@ void	*init_t_cmd(void *content)
 void	parse_redir_loop(void *arg)
 {
 	parse_redirs((t_cmd *) arg);
-}
-
-// TODO: strip all quotes that are not inside of other quotes
-void	strip_quotes(char *s)
-{
-	if (is_quoted_str(s))
-		str_del_first_last(s);
 }
 
 // Can return NULL in case of a failed malloc() in functions called from here
@@ -178,7 +170,7 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 				return (NULL);
 			}
 		//	printf("expanded_token: %s\n", expanded_token);
-			strip_quotes(expanded_token);
+			strip_quotes2(expanded_token);
 		//	printf("after stripping quotes: %sX\n", expanded_token);
 			if (ft_strlen(expanded_token) > 0)
 			{
