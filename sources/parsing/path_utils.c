@@ -3,24 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   path_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 13:57:01 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/24 18:10:52 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/06 10:43:46 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
-
-void	open_files(t_files *files, char *infile_name, char *outfile_name)
-{
-	files->infile = open(infile_name, O_RDONLY);
-	if (files->infile < 0)
-		print_error(strerror(errno), infile_name);
-	files->outfile = open(outfile_name, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-	if (files->outfile < 0)
-		print_error(strerror(errno), outfile_name);
-}
 
 void	close_all(t_files files, int pipefd[2])
 {

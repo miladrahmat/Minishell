@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:58:31 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/14 11:38:22 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/06 10:49:47 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ t_env	*ft_envnew(char *key, char *value)
 {
 	t_env	*node;
 
+	if (key == NULL || value == NULL)
+		return (NULL);
 	node = (t_env *)malloc(sizeof(t_env));
 	if (node == NULL)
 		return (NULL);

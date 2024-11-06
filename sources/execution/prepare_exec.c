@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/05 20:04:27 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:29:36 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static pid_t	prepare_child(t_list *cmd, t_env **env, \
 			((t_cmd **)&cmd->next->content)) < 0)
 			return (-1);
 	}
-	if (open_infiles(&cmd) < 0)
+	if (open_files(&cmd) < 0)
 	{
 		close_cmd_fd(cmd->content);
 		return (0);

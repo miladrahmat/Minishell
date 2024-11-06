@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/06 11:17:34 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:46:33 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,7 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 			}
 		//	printf("expanded_token: %s\n", expanded_token);
 //			unquoted_token = strip_quotes2(expanded_token);
+			strip_quotes(expanded_token);
 			unquoted_token = expanded_token;
 		//	printf("after stripping quotes: %sX\n", expanded_token);
 			if (ft_strlen(unquoted_token) > 0)
