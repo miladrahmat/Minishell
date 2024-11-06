@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:23:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/05 17:08:34 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/06 10:00:20 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 //	printf("get_redir(): token1: %s, token2: %s\n", token1, token2);
 	if (get_redir_type(token1) == error)
 	{
-		printf("get_redir(): error in get_redir_type()\n");
+//		printf("get_redir(): error in get_redir_type()\n");
 		return (0);
 	}
 	redir = malloc(sizeof(t_redir));

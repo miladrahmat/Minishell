@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/06 09:57:14 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:17:34 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,7 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 	t_cmd	*cmd;
 	t_list	*split_tokens_iter;
 	char	*expanded_token;
+	char	*unquoted_token;
 
 	pipe_tokens = split_on_pipes(line);
 //	printf("init_cmd_table(): %i tokens\n", ft_lstsize(tokens));
@@ -170,13 +171,14 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 				return (NULL);
 			}
 		//	printf("expanded_token: %s\n", expanded_token);
-			strip_quotes2(expanded_token);
+//			unquoted_token = strip_quotes2(expanded_token);
+			unquoted_token = expanded_token;
 		//	printf("after stripping quotes: %sX\n", expanded_token);
-			if (ft_strlen(expanded_token) > 0)
+			if (ft_strlen(unquoted_token) > 0)
 			{
 				if (split_tokens_iter->content)
 					free(split_tokens_iter->content);
-				split_tokens_iter->content = expanded_token;
+				split_tokens_iter->content = unquoted_token;
 			}
 			else
 				ft_lstdel_and_connect(&cmd->split_token, &split_tokens_iter);
