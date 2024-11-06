@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/06 16:31:17 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/06 16:36:10 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,51 @@ void	*init_t_cmd(void *content)
 	cmd->fd.infile = 0;
 	cmd->fd.outfile = 1;
 	return (cmd);
+}
+
+
+void	*free_strs(char **str1, char **str2)
+{
+	if (*str1 != NULL)
+		free(*str1);
+	if (*str2 != NULL)
+		free(*str2);
+	return (NULL);
+}
+
+// TODO: strip all quotes that are not inside of other quotes
+char	*strip_quotes(char **s, int *ret_val)
+{
+	char	*ret;
+	size_t	ret_i;
+	ssize_t	s_i;
+	ssize_t	add;
+
+	ret_i = 0;
+	s_i = -1;
+	ret = malloc((ft_strlen(*s) + 1) * sizeof(char));
+	if (ret == NULL)
+		return (free_strs(s, NULL));
+	while ((*s)[++s_i] != '\0')
+	{
+		if ((*s)[s_i] == '\'' || (*s)[s_i] == '\"')
+		{
+			s_i++;
+			add = handle_quotes(ret + ret_i, *s + s_i, (*s)[s_i - 1]);
+			if (add == -1)
+			{
+				*ret_val = 2;
+				return (free_strs(s, &ret));
+			}
+			ret_i += add;
+			s_i += add;
+		}
+		else
+			ret[ret_i++] = (*s)[s_i];
+	}
+	free(*s);
+	ret[ret_i] = '\0';
+	return (ret);
 }
 
 // return 1 on malloc fails
@@ -50,8 +95,7 @@ int	transform_tokens(t_list **head, t_env *env, int *last_ret_val)
 				split_tokens_iter = split_tokens_iter->next;
 			continue ;
 		}
-		strip_quotes(expanded_token);
-		unquoted_token = expanded_token;
+		unquoted_token = strip_quotes(&expanded_token, last_ret_val);
 		if (ft_strlen(expanded_token) == 0)
 			ft_lstdel_and_connect(head, &split_tokens_iter);
 		else

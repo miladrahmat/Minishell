@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/06 13:46:26 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/06 16:33:39 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	*get_exec_path(char *command, t_env *env, int *path_error);
 bool	is_quoted_str(char *s);
 bool	is_double_quoted_str(char *s);
 void	str_del_first_last(char *s);
-void	strip_quotes(char *s);
+ssize_t	handle_quotes(char *new, char *org, char quote);
 // parsing/redir.c
 void	parse_redir_loop(void *arg);
 // parsing/split_token.c
