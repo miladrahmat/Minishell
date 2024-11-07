@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 12:02:55 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/07 12:05:24 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	transform_tokens(t_list **head, t_env *env, int *last_ret_val)
 		if (ft_strlen(expanded_token) == 0)
 		{
 			ft_lstdel_and_connect(head, &split_tokens_iter);
-			if (split_tokens_iter->next)
+			if (split_tokens_iter && split_tokens_iter->next)
 				split_tokens_iter = split_tokens_iter->next;
 			continue ;
 		}

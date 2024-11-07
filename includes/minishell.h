@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 11:59:18 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/07 12:45:33 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ void	**update_shlvl(t_env **node);
 t_env	*copy_env(char **envp);
 
 // string_utils.c
+char	*ft_strndup(const char *s1, size_t len);
 bool	is_whitespace(char c);
 char	*skip_whitespace(char *s);
 int		substr_len(char *start, char *end);
