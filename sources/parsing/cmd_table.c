@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 15:06:05 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/07 15:50:22 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,10 @@ void	*init_t_cmd(void *content)
 }
 
 // return 1 on malloc fails
-int	transform_tokens(t_list **head, t_env *env, int *last_ret_val)
+int	transform_tokens1(t_list **head, t_env *env, int *last_ret_val)
 {
 	t_list	*split_tokens_iter;
 	char	*expanded_token;
-	char	*unquoted_token;
 
 	split_tokens_iter = *head;
 	while (split_tokens_iter)
@@ -46,20 +45,15 @@ int	transform_tokens(t_list **head, t_env *env, int *last_ret_val)
 		if (ft_strlen(expanded_token) == 0)
 		{
 			ft_lstdel_and_connect(head, &split_tokens_iter);
-			if (split_tokens_iter && split_tokens_iter->next)
-				split_tokens_iter = split_tokens_iter->next;
-			continue ;
+			free(expanded_token);
 		}
-		unquoted_token = strip_quotes(&expanded_token, last_ret_val);
-		if (ft_strlen(expanded_token) == 0)
-			ft_lstdel_and_connect(head, &split_tokens_iter);
 		else
 		{
 			if (split_tokens_iter->content)
 				free(split_tokens_iter->content);
-			split_tokens_iter->content = unquoted_token;
+			split_tokens_iter->content = expanded_token;
 		}
-		if (split_tokens_iter && split_tokens_iter->next)
+		if (split_tokens_iter)
 			split_tokens_iter = split_tokens_iter->next;
 		else
 			break ;
@@ -67,6 +61,35 @@ int	transform_tokens(t_list **head, t_env *env, int *last_ret_val)
 	return (0);
 }
 
+// return 1 on malloc fails
+int	transform_tokens2(t_list **head, int *last_ret_val)
+{
+	t_list	*split_tokens_iter;
+	char	*unquoted_token;
+
+	split_tokens_iter = *head;
+	while (split_tokens_iter)
+	{
+		unquoted_token =
+			strip_quotes((char *) split_tokens_iter->content, last_ret_val);
+		if (ft_strlen(unquoted_token) == 0)
+		{
+			ft_lstdel_and_connect(head, &split_tokens_iter);
+			free(unquoted_token);
+		}
+		else
+		{
+			if (split_tokens_iter->content)
+				free(split_tokens_iter->content);
+			split_tokens_iter->content = unquoted_token;
+		}
+		if (split_tokens_iter)
+			split_tokens_iter = split_tokens_iter->next;
+		else
+			break ;
+	}
+	return (0);
+}
 // Can return NULL in case of a failed malloc() in functions called from here
 //
 // When an incorrect variable name is given, expand_vars() will return 
@@ -92,7 +115,7 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 			cmd_table_iter = cmd_table_iter->next;
 			continue ;
 		}
-		transform_tokens(&cmd->split_token, env, &last_ret_val);
+		transform_tokens1(&cmd->split_token, env, &last_ret_val);
 		cmd_table_iter = cmd_table_iter->next;
 	}
 	ft_lstiter(cmd_table, parse_redir_loop);
@@ -105,6 +128,7 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 			cmd_table_iter = cmd_table_iter->next;
 			continue ;
 		}
+		transform_tokens2(&cmd->split_token, &last_ret_val);
 		build_cmd_args(cmd, env);
 		cmd_table_iter = cmd_table_iter->next;
 	}

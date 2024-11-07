@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:23:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/06 15:27:36 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/07 15:38:18 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ t_redir_type	get_redir_type(char *content)
 		return (error);
 	if (ft_strlen(content) <= 0)
 		return (error);
+//	if (is_quoted_str(content))
+//		str_del_first_last(content);
 	if (content[0] == '>')
 	{
 		if (content[1] == '>')
@@ -61,6 +63,7 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	t_list	*new_node;
 	int		tokens_consumed;
 
+	tokens_consumed = 0;
 //	printf("get_redir(): token1: %s, token2: %s\n", token1, token2);
 	if (get_redir_type(token1) == error)
 	{
@@ -70,7 +73,7 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	redir = malloc(sizeof(t_redir));
 	
 	if (!redir)
-		return (1);
+		return (1); //TODO: return and handle malloc error
 	redir->heredoc_quoted_delim = false;
 	redir->redir_type = get_redir_type(token1);
 	if (redir->redir_type == out_append)
