@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 17:12:09 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/07 17:58:52 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,14 @@ void	*init_t_cmd(void *content)
 	t_cmd	*cmd;
 
 	cmd = malloc(sizeof(t_cmd));
+	if (!cmd)
+		return (NULL);
 	cmd->split_token = split_token(content);
+	if (!cmd->split_token)
+	{
+		free(cmd);
+		return (NULL);
+	}
 	cmd->cmd_args = NULL;
 	cmd->files = NULL;
 	cmd->path_error = 0;

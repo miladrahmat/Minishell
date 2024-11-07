@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:22:20 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/06 13:22:43 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:00:23 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 // env vars can expand into commands, arguments or redir filenames,
 // 		but cannot contain < or > in themselves
 // 	==> split on spaces and redir symbols
+// 	The start == end check is so that we dont get a NULL from get_token()
+// 		unless it's a malloc() fail. 
 t_list	*split_token(char *cmd_token)
 {
 	char	*start;
@@ -66,13 +68,18 @@ t_list	*split_token(char *cmd_token)
 			}
 			end++;
 		}
+		if (start == end)
+			continue ;
 		new_str = get_token(start, end);
-		if (new_str)
+		if (!new_str)
+			return (NULL);
+		new_token = ft_lstnew(new_str);
+		if (!new_token)
 		{
-	//		printf("split_token(): %s\n", new_str);
-			new_token = ft_lstnew(new_str);
-			ft_lstadd_back(&tokens, new_token);
+			free(new_str);
+			return (NULL);
 		}
+		ft_lstadd_back(&tokens, new_token);
 		start = end;
 	}
 	return (tokens);

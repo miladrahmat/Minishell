@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 10:26:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 17:10:35 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:00:57 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ size_t	get_token_len(char *start, char *end)
 	return (len);
 }
 
+// WARNING: returns NULLs on two different conditions
 char	*get_token(char *start, char *end)
 {
 	char	*token;
