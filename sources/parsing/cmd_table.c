@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 10:48:35 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/07 11:47:02 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,8 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 			}
 			else
 				ft_lstdel_and_connect(&cmd->split_token, &split_tokens_iter);
-			
+			if (split_tokens_iter == NULL)
+				break ;
 			split_tokens_iter = split_tokens_iter->next;
 		}
 	//	ft_lstiter(cmd->split_token, &print_list);
