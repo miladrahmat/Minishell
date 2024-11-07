@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:28:18 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/06 16:38:29 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/07 12:02:22 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,31 +16,27 @@ bool	is_quoted_str(char *s)
 {
 	if (s)
 	{
-		return ((s[0] == '\"' && s[ft_strlen(s) - 1] == '\"') ||
-			(s[0] == '\'' && s[ft_strlen(s) - 1] == '\'')); 
+		return ((s[0] == '\"' && s[ft_strlen(s) - 1] == '\"') || \
+			(s[0] == '\'' && s[ft_strlen(s) - 1] == '\''));
 	}
 	return (false);
 }
 
-ssize_t	handle_quotes(char *new, char *org, char quote)
+int	handle_quotes(char *new, char *org, size_t *new_i, ssize_t *org_i)
 {
-	size_t	new_i;
-	size_t	org_i;
-	size_t	ret_val;
+	char	quote;
 
-	new_i = 0;
-	org_i = 0;
-	ret_val = 0;
-	while (org[org_i] != quote && org[org_i] != '\0')
+	quote = org[(*org_i)];
+	(*org_i)++;
+	while (org[(*org_i)] != quote && org[(*org_i)] != '\0')
 	{
-		new[new_i] = org[org_i];
-		new_i++;
-		org_i++;
-		ret_val++;
+		new[(*new_i)] = org[(*org_i)];
+		(*new_i)++;
+		(*org_i)++;
 	}
-	if (org[org_i] != quote)
+	if (org[(*org_i)] != quote)
 		return (-1);
-	return (ret_val);
+	return (1);
 }
 
 bool	is_double_quoted_str(char *s)
@@ -67,11 +63,31 @@ void	str_del_first_last(char *s)
 	s[len - 2] = 0;
 }
 
-/*
-// TODO: strip all quotes that are not inside of other quotes
-void	strip_quotes(char *s)
+char	*strip_quotes(char **s, int *ret_val)
 {
-	if (is_quoted_str(s))
-		str_del_first_last(s);
+	char	*ret;
+	size_t	ret_i;
+	ssize_t	s_i;
+
+	ret_i = 0;
+	s_i = -1;
+	ret = malloc((ft_strlen(*s) + 1) * sizeof(char));
+	if (ret == NULL)
+		return (free_strs(s, NULL));
+	while ((*s)[++s_i] != '\0')
+	{
+		if ((*s)[s_i] == '\'' || (*s)[s_i] == '\"')
+		{
+			if (handle_quotes(ret, *s, &ret_i, &s_i) < 0)
+			{
+				*ret_val = 2;
+				return (free_strs(s, &ret));
+			}
+		}
+		else
+			ret[ret_i++] = (*s)[s_i];
+	}
+	free(*s);
+	ret[ret_i] = '\0';
+	return (ret);
 }
-*/
