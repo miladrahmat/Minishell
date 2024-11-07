@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/11/06 13:25:16 by lemercie         ###   ########.fr        #
+#    Updated: 2024/11/07 19:53:39 by mrahmat-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,7 +62,8 @@ PARSING_FILES	:= paths.c \
 				string_utils.c \
 				expand_vars.c \
 				tokenizing_utils.c \
-				heredoc.c
+				heredoc.c \
+				syntax.c
 
 ENV_FILES	:= environment.c \
 			environment1.c \
