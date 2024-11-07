@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 12:01:27 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/06 11:32:33 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:47:45 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,13 @@ int	split_free(char **str, int ret_val)
 //	free(str[i]);
 	free(str);
 	return (ret_val);
+}
+
+void	*free_strs(char **str1, char **str2)
+{
+	if (*str1 != NULL)
+		free(*str1);
+	if (*str2 != NULL)
+		free(*str2);
+	return (NULL);
 }

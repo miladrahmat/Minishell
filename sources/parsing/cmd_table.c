@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/06 15:53:53 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:48:35 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,50 +127,6 @@ void	*init_t_cmd(void *content)
 void	parse_redir_loop(void *arg)
 {
 	parse_redirs((t_cmd *) arg);
-}
-
-void	*free_strs(char **str1, char **str2)
-{
-	if (*str1 != NULL)
-		free(*str1);
-	if (*str2 != NULL)
-		free(*str2);
-	return (NULL);
-}
-
-// TODO: strip all quotes that are not inside of other quotes
-char	*strip_quotes(char **s, int *ret_val)
-{
-	char	*ret;
-	size_t	ret_i;
-	ssize_t	s_i;
-	ssize_t	add;
-
-	ret_i = 0;
-	s_i = -1;
-	ret = malloc((ft_strlen(*s) + 1) * sizeof(char));
-	if (ret == NULL)
-		return (free_strs(s, NULL));
-	while ((*s)[++s_i] != '\0')
-	{
-		if ((*s)[s_i] == '\'' || (*s)[s_i] == '\"')
-		{
-			s_i++;
-			add = handle_quotes(ret + ret_i, *s + s_i, (*s)[s_i - 1]);
-			if (add == -1)
-			{
-				*ret_val = 2;
-				return (free_strs(s, &ret));
-			}
-			ret_i += add;
-			s_i += add;
-		}
-		else
-			ret[ret_i++] = (*s)[s_i];
-	}
-	free(*s);
-	ret[ret_i] = '\0';
-	return (ret);
 }
 
 // Can return NULL in case of a failed malloc() in functions called from here

@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/06 15:46:11 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:49:15 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ char	*get_exec_path(char *command, t_env *env, int *path_error);
 bool	is_quoted_str(char *s);
 bool	is_double_quoted_str(char *s);
 void	str_del_first_last(char *s);
-ssize_t	handle_quotes(char *new, char *org, char quote);
+char	*strip_quotes(char **s, int *ret_val);
+int		handle_quotes(char *new, char *org, size_t *new_i, ssize_t *org_i);
 // parsing/redir.c
 void	parse_redirs(t_cmd *cmd);
 // parsing/split_on_pipes.c
@@ -167,5 +168,6 @@ void	heredoc_signal(void *func);
 
 //utils
 void	destroy_tlist_of_tcmd(void	*arg);
+void	*free_strs(char **str1, char **str2);
 
 #endif
