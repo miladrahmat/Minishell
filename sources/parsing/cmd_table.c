@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 16:52:33 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/07 17:12:09 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 	t_cmd	*cmd;
 
 	pipe_tokens = split_on_pipes(line);
+	if (!pipe_tokens)
+		return (NULL);
 	cmd_table = ft_lstmap(pipe_tokens, &init_t_cmd, &free);
 	cmd_table_iter = cmd_table;
 	while (cmd_table_iter)
