@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:28:18 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 12:02:22 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/07 15:45:26 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	str_del_first_last(char *s)
 	s[len - 2] = 0;
 }
 
-char	*strip_quotes(char **s, int *ret_val)
+char	*strip_quotes(char *s, int *ret_val)
 {
 	char	*ret;
 	size_t	ret_i;
@@ -71,23 +71,25 @@ char	*strip_quotes(char **s, int *ret_val)
 
 	ret_i = 0;
 	s_i = -1;
-	ret = malloc((ft_strlen(*s) + 1) * sizeof(char));
+	ret = malloc((ft_strlen(s) + 1) * sizeof(char));
 	if (ret == NULL)
-		return (free_strs(s, NULL));
-	while ((*s)[++s_i] != '\0')
+		return (NULL);
+//		return (free_strs(s, NULL));
+	while ((s)[++s_i] != '\0')
 	{
-		if ((*s)[s_i] == '\'' || (*s)[s_i] == '\"')
+		if ((s)[s_i] == '\'' || (s)[s_i] == '\"')
 		{
-			if (handle_quotes(ret, *s, &ret_i, &s_i) < 0)
+			if (handle_quotes(ret, s, &ret_i, &s_i) < 0)
 			{
 				*ret_val = 2;
-				return (free_strs(s, &ret));
+				return (NULL);
+//				return (free_strs(s, &ret));
 			}
 		}
 		else
-			ret[ret_i++] = (*s)[s_i];
+			ret[ret_i++] = (s)[s_i];
 	}
-	free(*s);
+//	free(*s);
 	ret[ret_i] = '\0';
 	return (ret);
 }
