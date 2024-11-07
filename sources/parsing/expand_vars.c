@@ -6,30 +6,11 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/05 13:28:34 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/07 12:45:49 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*ft_strndup(const char *s1, size_t len)
-{
-	char			*s2;
-	unsigned int	i;
-
-	i = 0;
-	s2 = (char *)malloc(len * sizeof(char) + 1);
-	if (s2 == NULL)
-		return (NULL);
-	i = 0;
-	while (i < len && s1[i] != '\0')
-	{
-		s2[i] = s1[i];
-		i++;
-	}
-	s2[i] = '\0';
-	return (s2);
-}
 
 // return pointer to the last char copied from src
 // replace dst
@@ -81,7 +62,7 @@ char	*get_varname(char *start)
 		return (ft_strdup("?"));
 	}
 	end = skip_varname(start);
-	return (strndup(start, substr_len(start, end)));
+	return (ft_strndup(start, substr_len(start, end)));
 }
 
 // returns NULL so that it can be used inside of a return statement
@@ -107,7 +88,7 @@ bool	is_varname(char c)
 // $VAR in env
 // token is NOT freed here because it is contained in a list node in the caller
 // returns NULL in case of malloc fails
-char	*expand_vars(char *token, t_env *env, int last_ret_val)
+char	*expand_vars(char *token, t_env *env, int *last_ret_val)
 {
 	char	*ret;
 	char	*start;
@@ -158,7 +139,7 @@ char	*expand_vars(char *token, t_env *env, int last_ret_val)
 				return (expand_vars_fail(ret, varname));
 			if (ft_strcmp(varname, "?") == 0)
 			{
-				value = ft_itoa(last_ret_val);
+				value = ft_itoa(*last_ret_val);
 				if (!value)
 					return (expand_vars_fail(ret, varname));
 				end = end + 2;

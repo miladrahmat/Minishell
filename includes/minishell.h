@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 10:49:15 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/07 12:45:33 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ typedef struct s_cmd
 	t_files	fd;
 }	t_cmd;
 
+// debug.c
+void	print_list(void *arg);
 // parsing/build_cmd_args.c
 int		build_cmd_args(t_cmd *cmd, t_env *env);
 // parsing/cmd_table.c
@@ -77,21 +79,23 @@ int		check_exec_access(char *cmd);
 char	**get_paths(t_env *env);
 // parsing/paths.c
 char	*get_exec_path(char *command, t_env *env, int *path_error);
-// parsing/quote/tools.c
+// parsing/quotes.c
 bool	is_quoted_str(char *s);
 bool	is_double_quoted_str(char *s);
 void	str_del_first_last(char *s);
 char	*strip_quotes(char **s, int *ret_val);
 int		handle_quotes(char *new, char *org, size_t *new_i, ssize_t *org_i);
 // parsing/redir.c
-void	parse_redirs(t_cmd *cmd);
+void	parse_redir_loop(void *arg);
+// parsing/split_token.c
+t_list	*split_token(char *cmd_token);
 // parsing/split_on_pipes.c
 char	*skip_until(char *s, char delim);
 t_list	*split_on_pipes(char *line);
 // parsing/heredoc.c
 int		process_heredocs(t_list *cmd_table, t_env *env);
 // parsing/expand_vars.c
-char	*expand_vars(char *token, t_env *env, int last_ret_val);
+char	*expand_vars(char *token, t_env *env, int *last_ret_val);
 // parsing/tokenizing_utils.c
 char	*get_token(char *start, char *end);
 
@@ -134,6 +138,7 @@ void	**update_shlvl(t_env **node);
 t_env	*copy_env(char **envp);
 
 // string_utils.c
+char	*ft_strndup(const char *s1, size_t len);
 bool	is_whitespace(char c);
 char	*skip_whitespace(char *s);
 int		substr_len(char *start, char *end);

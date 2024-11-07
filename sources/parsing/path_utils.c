@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 13:57:01 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/06 10:43:46 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/07 12:25:18 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	print_error(char *message, char *filename)
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(filename, 2);
 	ft_putstr_fd("\n", 2);
+	errno = 0;
 }
 
 //TODO: does this free the null terminator

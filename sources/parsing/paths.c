@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:38:19 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/22 16:58:42 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/07 12:31:28 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,15 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 		*path_error = check_exec_access(exec_args[0]);
 		if (*path_error == 0)
 			return (exec_args);
-		if (*path_error == 126)
+		if (*path_error == 126 || *path_error == 127)
 		{
+//			printf("here\n");
 			print_error(strerror(errno), exec_args[0]);
 			free_strv(exec_args);
 			return (NULL);
 		}
 	}
+//			printf("here2\n");
 	return (search_paths(exec_args, env, path_error));
 }
 
