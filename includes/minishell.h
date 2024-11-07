@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 15:45:36 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/07 16:51:30 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	str_del_first_last(char *s);
 char	*strip_quotes(char *s, int *ret_val);
 int		handle_quotes(char *new, char *org, size_t *new_i, ssize_t *org_i);
 // parsing/redir.c
-void	parse_redir_loop(void *arg);
+int		parse_redir_loop(t_list *cmd_table);
 // parsing/split_token.c
 t_list	*split_token(char *cmd_token);
 // parsing/split_on_pipes.c

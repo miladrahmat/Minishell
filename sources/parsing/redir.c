@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:23:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 15:38:18 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/07 16:54:01 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	return (tokens_consumed);
 }
 
-void	parse_redirs(t_cmd *cmd)
+int	parse_redirs(t_cmd *cmd)
 {
 	t_list	*tokens;
 	t_list	*tokens_iter;
@@ -170,12 +170,25 @@ void	parse_redirs(t_cmd *cmd)
 			}
 		}
 		if (!tokens_iter)
-			return ;
+			return (0); //??
 		tokens_iter = tokens_iter->next;
 	}
+	return (0);
 }
 
-void	parse_redir_loop(void *arg)
+int	parse_redir_loop(t_list *cmd_table)
 {
-	parse_redirs((t_cmd *) arg);
+	t_list *cmd_table_iter;
+	int		err;
+
+	err = 0;
+	cmd_table_iter = cmd_table;
+	while (cmd_table_iter)
+	{
+		err = parse_redirs((t_cmd *) cmd_table_iter->content);
+		if (err)
+			return (err);
+		cmd_table_iter = cmd_table_iter->next;
+	}
+	return (0);
 }
