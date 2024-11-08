@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/08 10:50:46 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/08 13:48:07 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <fcntl.h> // open()
 # include <errno.h>
 # include <unistd.h>
+# include <sys/stat.h> //stat()
 # include <sys/wait.h>
 # include <signal.h>
 # include "libft.h"
@@ -77,6 +78,7 @@ void	free_strv(char **strv);
 bool	is_abs_or_pwd_path(char *cmd);
 int		check_exec_access(char *cmd);
 char	**get_paths(t_env *env);
+bool	is_directory(char *path);
 // parsing/paths.c
 char	*get_exec_path(char *command, t_env *env, int *path_error);
 // parsing/quotes.c

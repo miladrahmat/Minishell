@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:38:19 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 12:31:28 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/08 14:29:35 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ static int	find_in_paths(char **paths, char **exec_args, int *path_error)
 		if (!exec_path)
 			return (1);
 		*path_error = check_exec_access(exec_path);
+		if (*path_error == 126)
+			return (1);
+		if (is_directory(exec_path))
+		{
+			*path_error = 126;
+			return (1);
+		}
 		if (*path_error == 0)
 		{
 			free(exec_args[0]);
@@ -101,18 +108,23 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 	}
 	if (is_abs_or_pwd_path(exec_args[0]))
 	{
+		if (is_directory(exec_args[0]))
+		{
+			print_builtin_error(exec_args[0], NULL, "is a directory", true);
+			*path_error = 126;
+			return (NULL);
+		}
 		*path_error = check_exec_access(exec_args[0]);
 		if (*path_error == 0)
 			return (exec_args);
 		if (*path_error == 126 || *path_error == 127)
 		{
-//			printf("here\n");
 			print_error(strerror(errno), exec_args[0]);
 			free_strv(exec_args);
 			return (NULL);
 		}
 	}
-//			printf("here2\n");
+	//TODO: also check for directory in here
 	return (search_paths(exec_args, env, path_error));
 }
 
