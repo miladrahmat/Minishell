@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/08 09:53:37 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/08 17:58:56 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,36 @@ void	handle_heredoc(int signal)
 	}
 }
 
+void	inner_loop(t_list *cmd_table, t_env **env)
+{
+	t_list	*cmd_table_iter;
+	int		last_ret_val;
+
+	cmd_table_iter = cmd_table;
+	while (cmd_table_iter->next != NULL)
+		cmd_table_iter = cmd_table_iter->next;
+	last_ret_val = g_last_ret_val;
+	g_last_ret_val = 0;
+	process_heredocs(cmd_table, *env); // returns 1 in case of malloc fail
+	if (cmd_table != NULL && g_last_ret_val == 0)
+	{
+		if (((t_cmd *)cmd_table_iter->content)->path_error == 0)
+			g_last_ret_val = prepare_exec(cmd_table, env, last_ret_val);
+		else
+		{
+			prepare_exec(cmd_table, env, last_ret_val);
+			g_last_ret_val = ((t_cmd *)cmd_table_iter->content)->path_error;
+		}
+	}
+	check_child_signal(g_last_ret_val);
+}
+
 // TODO: variable names cannot start with number
 int	main(int ac, char **av, char **envp)
 {
 	char				*line;
 	t_list				*cmd_table;
 	t_env				*env;
-	int					last_ret_val;
 
 	(void)av;
 	(void)ac;
@@ -76,19 +99,7 @@ int	main(int ac, char **av, char **envp)
 			{
 				cmd_table = init_cmd_table(line, env, g_last_ret_val);
 				if (cmd_table)
-				{
-					if (((t_cmd *)cmd_table->content)->path_error == 0)
-					{
-						last_ret_val = g_last_ret_val;
-						g_last_ret_val = 0;
-						process_heredocs(cmd_table, env); // returns 1 in case of malloc fail
-						if (cmd_table != NULL && g_last_ret_val == 0)
-							g_last_ret_val = prepare_exec(cmd_table, &env, last_ret_val);
-						check_child_signal(g_last_ret_val);
-					}
-					else
-						g_last_ret_val = ((t_cmd *)cmd_table->content)->path_error;
-				}
+					inner_loop(cmd_table, &env);
 			}
 			else
 				g_last_ret_val = 2;

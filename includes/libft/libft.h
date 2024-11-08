@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:12:19 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/21 12:06:24 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/08 15:43:39 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
  * @returns An allocated string containing the line or NULL when reached
  * the end of file or in case of an error.
  */
-char	*get_next_line(int fd);
+char		*get_next_line(int fd);
 
 /**
  * Locates the first occurance of a newline character.
@@ -52,7 +52,7 @@ char	*get_next_line(int fd);
  * or the number of characters that precede the NULL-terminating character
  * if a newline character does not occur in the string.
  */
-size_t	ft_strlen_nl(const char *str);
+size_t		ft_strlen_nl(const char *str);
 
 /******************************************************************************/
 /*                                                                            */
@@ -67,7 +67,7 @@ size_t	ft_strlen_nl(const char *str);
  * 
  * @returns the number of characters written or -1 in case of an error
  */
-int		ft_printf(const char *str, ...);
+int			ft_printf(const char *str, ...);
 
 /**
  * Writes a character to the standard output.
@@ -76,7 +76,7 @@ int		ft_printf(const char *str, ...);
  * 
  * @returns 1 on success and -1 on an error.
  */
-int		ft_putchar(char c);
+int			ft_putchar(char c);
 
 /**
  * Converts an integer into characters and writes it on the standard output.
@@ -85,7 +85,7 @@ int		ft_putchar(char c);
  * 
  * @returns the number of characters written or -1 in case of an error.
  */
-int		ft_putdecimal(int n);
+int			ft_putdecimal(int n);
 
 /**
  * Writes a string on the standard output.
@@ -94,7 +94,7 @@ int		ft_putdecimal(int n);
  * 
  * @returns the number of characters written or -1 in case of an error.
  */
-int		ft_putstr(char *s);
+int			ft_putstr(char *s);
 
 /**
  * Converts an unsigned integer into characters and writes it to 
@@ -104,7 +104,7 @@ int		ft_putstr(char *s);
  * 
  * @returns the number of characters written or -1 in case of an error.
  */
-int		ft_putunsign(unsigned int n);
+int			ft_putunsign(unsigned int n);
 
 /**
  * Converts an unsigned integer into hexadecimal representation 
@@ -115,7 +115,7 @@ int		ft_putunsign(unsigned int n);
  * 
  * @returns the number of characters written or -1 in case of an error.
  */
-int		ft_printhex(unsigned int n, char format);
+int			ft_printhex(unsigned int n, char format);
 
 /**
  * Writes the address of the given pointer to the standard output.
@@ -124,7 +124,7 @@ int		ft_printhex(unsigned int n, char format);
  * 
  * @returns the number of characters written or -1 in case of an error.
  */
-int		ft_putaddress(void *ptr);
+int			ft_putaddress(void *ptr);
 
 /******************************************************************************/
 /*                                                                            */
@@ -138,7 +138,7 @@ int		ft_putaddress(void *ptr);
  * @param[out] str The string to write to.
  * @param[in] n The number of bytes to write.
  */
-void	ft_bzero(void *str, size_t n);
+void		ft_bzero(void *str, size_t n);
 
 /**
  * Tests if the given character is a alphabetical character or 
@@ -149,7 +149,7 @@ void	ft_bzero(void *str, size_t n);
  * @returns 0 if the character tests false and non-zero if
  * the character tests true.
  */
-int		ft_isalnum(int c);
+int			ft_isalnum(int c);
 
 /**
  * Tests for any alphabetical characters.
@@ -159,7 +159,7 @@ int		ft_isalnum(int c);
  * @returns 0 if the character tests false and non-zero if
  * the character tests true.
  */
-int		ft_isalpha(int c);
+int			ft_isalpha(int c);
 
 /**
  * Tests for an ASCII character.
@@ -169,7 +169,7 @@ int		ft_isalpha(int c);
  * @returns 0 if the character tests false and non-zero if
  * the character tests true.
  */
-int		ft_isascii(int c);
+int			ft_isascii(int c);
 
 /**
  * Tests for a decimal character.
@@ -179,7 +179,7 @@ int		ft_isascii(int c);
  * @returns 0 if the character tests false and non-zero if
  * the character tests true.
  */
-int		ft_isdigit(int c);
+int			ft_isdigit(int c);
 
 /**
  * Tests for any printable character in the ASCII table.
@@ -189,7 +189,7 @@ int		ft_isdigit(int c);
  * @returns 0 if the character tests false and non-zero if
  * the character tests true.
  */
-int		ft_isprint(int c);
+int			ft_isprint(int c);
 
 /**
  * Locates the first occurance of `c` in the string `s`.
@@ -202,7 +202,7 @@ int		ft_isprint(int c);
  * the character does not
  * appear within n bytes.
  */
-void	*ft_memchr(const void *s, int c, size_t n);
+void		*ft_memchr(const void *s, int c, size_t n);
 
 /**
  * Compares byte string `s1` against byte string `s2`.
@@ -214,7 +214,7 @@ void	*ft_memchr(const void *s, int c, size_t n);
  * @returns 0 if the stings are identical, otherwise returns the difference
  * between the first two differing bytes.
  */
-int		ft_memcmp(const void *s1, const void *s2, size_t n);
+int			ft_memcmp(const void *s1, const void *s2, size_t n);
 
 /**
  * Copies `n` bytes from memory area `src` to `dst`.
@@ -225,7 +225,7 @@ int		ft_memcmp(const void *s1, const void *s2, size_t n);
  * 
  * @returns the original value of `dst`.
  */
-void	*ft_memcpy(void *dst, const void *src, size_t n);
+void		*ft_memcpy(void *dst, const void *src, size_t n);
 
 /**
  * Copies `len` bytes from memory area `src` to `dst`.
@@ -236,7 +236,7 @@ void	*ft_memcpy(void *dst, const void *src, size_t n);
  * 
  * @returns the original value of `dst`.
  */
-void	*ft_memmove(void *dst, const void *src, size_t len);
+void		*ft_memmove(void *dst, const void *src, size_t len);
 
 /**
  * Writes `len` bytes of value `c` to the memory area `str`.
@@ -247,7 +247,7 @@ void	*ft_memmove(void *dst, const void *src, size_t len);
  * 
  * @returns the memory area `str`.
  */
-void	*ft_memset(void *str, int c, size_t len);
+void		*ft_memset(void *str, int c, size_t len);
 
 /**
  * Locates the first occurance of `c` in the string `s`.
@@ -258,7 +258,7 @@ void	*ft_memset(void *str, int c, size_t len);
  * @returns a pointer to the located occurance or NULL if the character
  * does not appear in the string.
  */
-char	*ft_strchr(const char *s, int c);
+char		*ft_strchr(const char *s, int c);
 
 /**
  * Appends the string `src` to the end of the string `dst`
@@ -270,7 +270,7 @@ char	*ft_strchr(const char *s, int c);
  * 
  * @returns the total length of the string it tried to create.
  */
-size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
+size_t		ft_strlcat(char *dst, const char *src, size_t dstsize);
 
 /**
  * Copies up to `dstsize -1` characters from the string `src`
@@ -282,7 +282,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
  * 
  * @returns the total length of the string it tried to create.
  */
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize);
 
 /**
  * Computes the length of the given string.
@@ -292,7 +292,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
  * @returns the number of characters that precede the
  * terminating NULL character.
  */
-size_t	ft_strlen(const char *str);
+size_t		ft_strlen(const char *str);
 
 /**
  * Compares the string s1 against the string s2.
@@ -304,7 +304,7 @@ size_t	ft_strlen(const char *str);
  * @returns 0 if the two strings are identical, otherwise returns the difference
  * between the first two differing bytes.
  */
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int			ft_strncmp(const char *s1, const char *s2, size_t n);
 
 /**
  * Compares the string s1 against the string s2.
@@ -315,7 +315,7 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
  * @returns 0 if the two strings are identical, otherwise returns the difference
  * between the first two differing bytes.
  */
-int		ft_strcmp(const char *s1, const char *s2);
+int			ft_strcmp(const char *s1, const char *s2);
 
 /**
  * Locates the last occurance of `c` in the string `s`.
@@ -326,7 +326,7 @@ int		ft_strcmp(const char *s1, const char *s2);
  * @returns a pointer to the located character or NULL if the character does not
  * appear within `n` bytes.
  */
-char	*ft_strrchr(const char *s, int c);
+char		*ft_strrchr(const char *s, int c);
 
 /**
  * Converts an uppercase letter to the corresponding lowercase letter.
@@ -337,7 +337,7 @@ char	*ft_strrchr(const char *s, int c);
  * corresponding lowercase letter if there is one.
  * Otherwise it returns the argument unchanged.
  */
-int		ft_tolower(int c);
+int			ft_tolower(int c);
 
 /**
  * Converts a lowercase letter to the corresponding uppercase letter.
@@ -348,7 +348,7 @@ int		ft_tolower(int c);
  * corresponding uppercase letter if there is one.
  * Otherwise it returns the argument unchanged.
  */
-int		ft_toupper(int c);
+int			ft_toupper(int c);
 
 /**
  * Locates the first occurance of the string `needle` in the string `haystack`.
@@ -361,7 +361,7 @@ int		ft_toupper(int c);
  * occurs nowhere in `haystack`, NULL is returned. Otherwise a pointer
  * to the first character of the first occurance of `needle` is returned.
  */
-char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
+char		*ft_strnstr(const char *haystack, const char *needle, size_t len);
 
 /**
  * Converts the initial portion of the string `str` into integer representation.
@@ -370,7 +370,7 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
  * 
  * @returns The integer representation of `str`.
  */
-int		ft_atoi(const char *str);
+int			ft_atoi(const char *str);
 
 /**
  * Converts the initial portion of the string `str` into long representation.
@@ -379,7 +379,17 @@ int		ft_atoi(const char *str);
  * 
  * @returns The long representation of `str`.
  */
-long	ft_atol(const char *str);
+long		ft_atol(const char *str);
+
+/**
+ * Converts the initial portion of the string `str` 
+ * into long long representation.
+ * 
+ * @param[in] str The string to convert.
+ * 
+ * @returns The long long representation of `str`.
+ */
+long long	ft_atoll(const char *str);
 
 /**
  * Converts the initial portion of the string `str` (which base can be in any
@@ -390,7 +400,7 @@ long	ft_atol(const char *str);
  * 
  * @returns The integer representation of `str`.
  */
-int		ft_atoi_base(const char *str, int base);
+int			ft_atoi_base(const char *str, int base);
 
 /**
  * Contiguously allocates enough space for `count` objects
@@ -401,7 +411,7 @@ int		ft_atoi_base(const char *str, int base);
  * 
  * @returns A pointer to the allocated memory.
  */
-void	*ft_calloc(size_t count, size_t size);
+void		*ft_calloc(size_t count, size_t size);
 
 /**
  * Allocates sufficient memory for a copy of the string `s1` and does the copy.
@@ -410,7 +420,7 @@ void	*ft_calloc(size_t count, size_t size);
  * 
  * @returns A pointer to the new string.
  */
-char	*ft_strdup(const char *s1);
+char		*ft_strdup(const char *s1);
 
 /**
  * Allocates and creates a substring from the string `s`.
@@ -421,7 +431,7 @@ char	*ft_strdup(const char *s1);
  * 
  * @returns The substring or NULL if the allocation fails.
  */
-char	*ft_substr(char const *s, unsigned int start, size_t len);
+char		*ft_substr(char const *s, unsigned int start, size_t len);
 
 /**
  * Allocates and creates a new string, which is the result of 
@@ -432,7 +442,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
  * 
  * @returns The new string or NULL if the allocation fails.
  */
-char	*ft_strjoin(char const *s1, char const *s2);
+char		*ft_strjoin(char const *s1, char const *s2);
 
 /**
  * Allocates and creates a copy of `s1` with the characters specified in `set`
@@ -443,7 +453,7 @@ char	*ft_strjoin(char const *s1, char const *s2);
  * 
  * @returns The trimmed string or NULL if the allocation fails.
  */
-char	*ft_strtrim(char const *s1, char const *set);
+char		*ft_strtrim(char const *s1, char const *set);
 
 /**
  * Allocates and creates an array of strings obtained by splitting
@@ -456,7 +466,7 @@ char	*ft_strtrim(char const *s1, char const *set);
  * @returns The array of new strings resulting from the split
  * or NULL if the allocation fails.
  */
-char	**ft_split(char const *s, char c);
+char		**ft_split(char const *s, char c);
 
 /**
  * Allocates and creates a string representing the integer `n`.
@@ -465,7 +475,7 @@ char	**ft_split(char const *s, char c);
  * 
  * @returns The string representing the integer or NULL if the allocation fails.
  */
-char	*ft_itoa(int n);
+char		*ft_itoa(int n);
 
 /**
  * Applies the function `f` to each character of the string `s`, and passing its
@@ -478,7 +488,7 @@ char	*ft_itoa(int n);
  * @returns The string created from the successive applications of `f`
  * or NULL if the allocation fails.
  */
-char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
+char		*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 /**
  * Applies the function `f` to each character of the string `s`, passing its
  * index as first argument.
@@ -486,7 +496,7 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
  * @param[out] s The string to apply the function `f` to.
  * @param[in] f The function to apply to each character of string `s`.
  */
-void	ft_striteri(char *s, void (*f)(unsigned int, char*));
+void		ft_striteri(char *s, void (*f)(unsigned int, char*));
 
 /**
  * Outputs the character `c` to the given file descriptor.
@@ -494,7 +504,7 @@ void	ft_striteri(char *s, void (*f)(unsigned int, char*));
  * @param[in] c The character to output.
  * @param[in] fd The file descriptor to output to.
  */
-void	ft_putchar_fd(char c, int fd);
+void		ft_putchar_fd(char c, int fd);
 
 /**
  * Outputs the string `s` to the given file descriptor.
@@ -502,7 +512,7 @@ void	ft_putchar_fd(char c, int fd);
  * @param[in] s The string to output.
  * @param[in] fd The file descriptor to output to.
  */
-void	ft_putstr_fd(char *s, int fd);
+void		ft_putstr_fd(char *s, int fd);
 
 /**
  * Outputs the string `s` to the given file descriptor followed by a newline.
@@ -510,7 +520,7 @@ void	ft_putstr_fd(char *s, int fd);
  * @param[in] s The string to output.
  * @param[in] fd The file descriptor to output to.
  */
-void	ft_putendl_fd(char *s, int fd);
+void		ft_putendl_fd(char *s, int fd);
 
 /**
  * Outputs the integer `n` to the given file descriptor.
@@ -518,7 +528,7 @@ void	ft_putendl_fd(char *s, int fd);
  * @param[in] n The integer to output.
  * @param[in] fd The file descriptor to output to.
  */
-void	ft_putnbr_fd(int n, int fd);
+void		ft_putnbr_fd(int n, int fd);
 
 /******************************************************************************/
 /*                                                                            */
@@ -547,7 +557,7 @@ typedef struct s_list
  * 
  * @returns The new node or NULL if the allocation fails.
  */
-t_list	*ft_lstnew(void *content);
+t_list		*ft_lstnew(void *content);
 
 /**
  * Adds the node `new` at the beginning of the list.
@@ -555,7 +565,7 @@ t_list	*ft_lstnew(void *content);
  * @param[out] lst The list to add the node to.
  * @param[in] new The new node to add to the list.
  */
-void	ft_lstadd_front(t_list **lst, t_list *new);
+void		ft_lstadd_front(t_list **lst, t_list *new);
 
 /**
  * Counts the number of nodes in a list.
@@ -564,7 +574,7 @@ void	ft_lstadd_front(t_list **lst, t_list *new);
  * 
  * @returns The length of the list.
  */
-int		ft_lstsize(t_list *lst);
+int			ft_lstsize(t_list *lst);
 
 /**
  * Locates the last node of the list.
@@ -573,7 +583,7 @@ int		ft_lstsize(t_list *lst);
  * 
  * @returns The last node of the list.
  */
-t_list	*ft_lstlast(t_list *lst);
+t_list		*ft_lstlast(t_list *lst);
 
 /**
  * Adds the node `new` to the end of the list.
@@ -581,7 +591,7 @@ t_list	*ft_lstlast(t_list *lst);
  * @param[out] lst The list to add the node to.
  * @param[in] new The node to add to the list.
  */
-void	ft_lstadd_back(t_list **lst, t_list *new);
+void		ft_lstadd_back(t_list **lst, t_list *new);
 
 /**
  * Frees the memory of the nodes content using
@@ -590,7 +600,7 @@ void	ft_lstadd_back(t_list **lst, t_list *new);
  * @param[out] lst The list pointing to a specific node.
  * @param[in] del The function to apply.
  */
-void	ft_lstdelone(t_list *lst, void (*del)(void *));
+void		ft_lstdelone(t_list *lst, void (*del)(void *));
 
 /**
  * Deletes and frees the given node and ecery successor of that node,
@@ -599,7 +609,7 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
  * @param[out] lst The list pointing to a specific node.
  * @param[in] del The function to apply.
  */
-void	ft_lstclear(t_list **lst, void (*del)(void *));
+void		ft_lstclear(t_list **lst, void (*del)(void *));
 
 /**
  * Iterates the list and applies the function `f` on the content of each node.
@@ -607,7 +617,7 @@ void	ft_lstclear(t_list **lst, void (*del)(void *));
  * @param[out] lst The list pointing to a specific node.
  * @param[in] f The function to apply.
  */
-void	ft_lstiter(t_list *lst, void (*f)(void *));
+void		ft_lstiter(t_list *lst, void (*f)(void *));
 
 /**
  * Iterates the list and applies the function `f` on the content of each node.
@@ -620,7 +630,7 @@ void	ft_lstiter(t_list *lst, void (*f)(void *));
  * 
  * @returns The new list or NULL if the allocation fails.
  */
-t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
-void	ft_lstdel_and_connect(t_list **head, t_list **node);
+void		ft_lstdel_and_connect(t_list **head, t_list **node);
 #endif

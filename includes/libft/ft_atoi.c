@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrahmat- < mrahmat-@student.hive.fi >      +#+  +:+       +#+        */
+/*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:00:16 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/07/16 15:35:06 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/08 15:25:20 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,35 @@ long	ft_atol(const char *str)
 		i++;
 	}
 	return (nbr * sign);
+}
+
+long long	ft_atoll(const char *str)
+{
+	long long	res;
+	long long	check;
+	int			sign;
+	int			i;
+
+	res = 0;
+	sign = 1;
+	i = 0;
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i++] == '-')
+			sign *= -1;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		check = res * 10 + str[i++] - '0';
+		if (res != check / 10 && sign == 1)
+			return (-1);
+		if (res != check / 10 && sign == -1)
+			return (0);
+		res = check;
+	}
+	return (res * sign);
 }
 
 int	ft_atoi_base(const char *str, int base)

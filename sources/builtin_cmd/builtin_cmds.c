@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:20:32 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/06 11:38:50 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/08 15:37:28 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ int	cd(char **cmd, t_env **envp)
 
 int	builtin_exit(t_list **cmd_table, t_env **envp, int last_ret_val)
 {
-	int		ret_val;
-	char	**cmd;
+	long long		ret_val;
+	char			**cmd;
 
 	cmd = ((t_cmd *)(*cmd_table)->content)->cmd_args;
 	ft_putendl_fd(*cmd, 2);
@@ -56,7 +56,7 @@ int	builtin_exit(t_list **cmd_table, t_env **envp, int last_ret_val)
 	ft_envclear(envp, &free);
 	ft_lstclear(cmd_table, &destroy_tlist_of_tcmd);
 	clear_history();
-	if (ret_val == INT_MIN)
+	if (!cmd[1])
 		exit(last_ret_val);
 	exit(ret_val);
 }
