@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 16:51:30 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/08 10:15:22 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ int		parse_redir_loop(t_list *cmd_table);
 // parsing/split_token.c
 t_list	*split_token(char *cmd_token);
 // parsing/split_on_pipes.c
-char	*skip_until(char *s, char delim);
 t_list	*split_on_pipes(char *line);
 // parsing/heredoc.c
 int		process_heredocs(t_list *cmd_table, t_env *env);
@@ -139,6 +138,7 @@ t_env	*copy_env(char **envp);
 
 // string_utils.c
 char	*ft_strndup(const char *s1, size_t len);
+char	*skip_until(char *s, char delim);
 bool	is_whitespace(char c);
 char	*skip_whitespace(char *s);
 int		substr_len(char *start, char *end);

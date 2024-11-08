@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 10:11:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 17:11:48 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/08 10:30:18 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,6 @@
 // 	3. transform into command table
 // 	4. expand variables (also inside of double quotes)
 // 	5. remove quotes
-char	*skip_until(char *s, char delim)
-{
-	while (s && *s && *s != delim)
-	{
-		s++;
-	}
-	return (s);
-}
-
 // basically splits the argument on pipes, taking quotes into account
 // TODO: handle malloc fail in get_token() and ft_lstnew()
 t_list	*split_on_pipes(char *line)

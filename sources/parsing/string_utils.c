@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 10:49:45 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 16:59:00 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/08 10:15:50 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,15 @@ char	*ft_strndup(const char *s1, size_t len)
 	}
 	s2[i] = '\0';
 	return (s2);
+}
+
+char	*skip_until(char *s, char delim)
+{
+	while (s && *s && *s != delim)
+	{
+		s++;
+	}
+	return (s);
 }
 
 bool	is_whitespace(char c)
@@ -73,7 +82,7 @@ char	*get_word(char *start)
 	return (ft_strndup(start, substr_len(start, end)));
 }
 
-// malloc fails returned direcly
+// malloc fails returned directly
 char	*get_word_quote(char *start)
 {
 	char	*end;
