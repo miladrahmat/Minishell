@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 19:26:09 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/08 09:53:37 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,34 +50,6 @@ void	handle_heredoc(int signal)
 		rl_done = 1;
 		return ;
 	}
-}
-
-void	print_tlist_string(void *arg)
-{
-	t_redir	*redir;
-
-	redir = (t_redir *) arg;
-	printf("%s;", redir->filename);
-}
-
-// to be passed to ft_lstiter()
-void	print_cmd_list(void *arg)
-{
-	t_cmd	*node;
-	int		i;
-
-	node = (t_cmd *) arg;
-	printf("cmd_args: ");
-	i = 0;
-	while (node->cmd_args[i])
-	{
-		printf("%s;", node->cmd_args[i]);
-		i++;
-	}
-	printf("\n");
-	printf("files: ");
-	ft_lstiter(node->files, &print_tlist_string);
-	printf("\n");
 }
 
 // TODO: variable names cannot start with number

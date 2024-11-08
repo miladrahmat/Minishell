@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 19:24:05 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/08 10:03:23 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,5 +177,6 @@ void	*free_strs(char **str1, char **str2);
 
 //syntax.c
 int		check_syntax(char *line);
+size_t	skip_quotes(char *str);
 
 #endif
