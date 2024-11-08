@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/08 10:31:28 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/08 10:50:46 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,7 @@ bool	is_whitespace(char c);
 char	*skip_whitespace(char *s);
 int		substr_len(char *start, char *end);
 char	*get_word(char *start);
+char	*get_filename(char *start);
 char	*get_word_quote(char *start);
 char	*skip_word(char *s);
 

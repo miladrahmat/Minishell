@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:23:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/08 10:11:20 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/08 12:27:16 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	int		tokens_consumed;
 
 	tokens_consumed = 0;
-	printf("get_redir(): token1: %s, token2: %s\n", token1, token2);
+//	printf("get_redir(): token1: %s, token2: %s\n", token1, token2);
 	if (get_redir_type(token1) == error)
 		return (0);
 	redir = malloc(sizeof(t_redir));
@@ -70,7 +70,7 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	{
 		if (ft_strlen(token1) > 2)
 		{
-			redir->filename = get_word_quote(token1 + 2);
+			redir->filename = get_filename(token1 + 2);
 			tokens_consumed = 1;
 		}
 		else if (token2)
@@ -83,7 +83,7 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	{
 		if (ft_strlen(token1) > 1)
 		{
-			redir->filename = get_word_quote(token1 + 1);
+			redir->filename = get_filename(token1 + 1);
 			tokens_consumed = 1;
 		}
 		else if (token2)
@@ -96,7 +96,7 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	{
 		if (ft_strlen(token1) > 2)
 		{
-			redir->filename = get_word_quote(token1 + 2);
+			redir->filename = get_filename(token1 + 2);
 			tokens_consumed = 1;
 		}
 		else if (token2)
@@ -116,7 +116,7 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	new_node = ft_lstnew(redir);
 	if (!new_node || !redir->filename)
 		return (-1);
-	printf("get_redir: %s\n", redir->filename);
+//	printf("get_redir: %s\n", redir->filename);
 	ft_lstadd_back(&cmd->files, new_node);
 	return (tokens_consumed);
 }
