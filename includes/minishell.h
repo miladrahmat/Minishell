@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/08 10:15:22 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/08 10:31:28 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,5 +174,9 @@ void	heredoc_signal(void *func);
 //utils
 void	destroy_tlist_of_tcmd(void	*arg);
 void	*free_strs(char **str1, char **str2);
+
+//syntax.c
+int		check_syntax(char *line);
+size_t	skip_quotes(char *str);
 
 #endif

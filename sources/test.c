@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 12:34:35 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/08 09:53:37 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,34 +52,6 @@ void	handle_heredoc(int signal)
 	}
 }
 
-void	print_tlist_string(void *arg)
-{
-	t_redir	*redir;
-
-	redir = (t_redir *) arg;
-	printf("%s;", redir->filename);
-}
-
-// to be passed to ft_lstiter()
-void	print_cmd_list(void *arg)
-{
-	t_cmd	*node;
-	int		i;
-
-	node = (t_cmd *) arg;
-	printf("cmd_args: ");
-	i = 0;
-	while (node->cmd_args[i])
-	{
-		printf("%s;", node->cmd_args[i]);
-		i++;
-	}
-	printf("\n");
-	printf("files: ");
-	ft_lstiter(node->files, &print_tlist_string);
-	printf("\n");
-}
-
 // TODO: variable names cannot start with number
 int	main(int ac, char **av, char **envp)
 {
@@ -100,23 +72,28 @@ int	main(int ac, char **av, char **envp)
 		line = readline("\e[1;32m[MINISHELL]$> \e[0m");
 		if (line)
 		{
-			cmd_table = init_cmd_table(line, env, g_last_ret_val);
-			if (cmd_table)
+			if (check_syntax(line) > 0)
 			{
-				if (((t_cmd *)cmd_table->content)->path_error == 0)
+				cmd_table = init_cmd_table(line, env, g_last_ret_val);
+				if (cmd_table)
 				{
-					last_ret_val = g_last_ret_val;
-					g_last_ret_val = 0;
-					add_history(line);
-					free(line);
-					process_heredocs(cmd_table, env); // returns 1 in case of malloc fail
-					if (cmd_table != NULL && g_last_ret_val == 0)
-						g_last_ret_val = prepare_exec(cmd_table, &env, last_ret_val);
-					check_child_signal(g_last_ret_val);
+					if (((t_cmd *)cmd_table->content)->path_error == 0)
+					{
+						last_ret_val = g_last_ret_val;
+						g_last_ret_val = 0;
+						process_heredocs(cmd_table, env); // returns 1 in case of malloc fail
+						if (cmd_table != NULL && g_last_ret_val == 0)
+							g_last_ret_val = prepare_exec(cmd_table, &env, last_ret_val);
+						check_child_signal(g_last_ret_val);
+					}
+					else
+						g_last_ret_val = ((t_cmd *)cmd_table->content)->path_error;
 				}
-				else
-					g_last_ret_val = ((t_cmd *)cmd_table->content)->path_error;
 			}
+			else
+				g_last_ret_val = 2;
+			add_history(line);
+			free(line);
 			ft_lstclear(&cmd_table, &destroy_tlist_of_tcmd);
 		}
 		else
