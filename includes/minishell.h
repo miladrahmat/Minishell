@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/08 12:33:41 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/08 14:32:57 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <fcntl.h> // open()
 # include <errno.h>
 # include <unistd.h>
+# include <sys/stat.h> //stat()
 # include <sys/wait.h>
 # include <signal.h>
 # include "libft.h"
@@ -77,6 +78,7 @@ void	free_strv(char **strv);
 bool	is_abs_or_pwd_path(char *cmd);
 int		check_exec_access(char *cmd);
 char	**get_paths(t_env *env);
+bool	is_directory(char *path);
 // parsing/paths.c
 char	*get_exec_path(char *command, t_env *env, int *path_error);
 // parsing/quotes.c
@@ -86,11 +88,10 @@ void	str_del_first_last(char *s);
 char	*strip_quotes(char *s, int *ret_val);
 int		handle_quotes(char *new, char *org, size_t *new_i, ssize_t *org_i);
 // parsing/redir.c
-void	parse_redir_loop(void *arg);
+int		parse_redir_loop(t_list *cmd_table);
 // parsing/split_token.c
 t_list	*split_token(char *cmd_token);
 // parsing/split_on_pipes.c
-char	*skip_until(char *s, char delim);
 t_list	*split_on_pipes(char *line);
 // parsing/heredoc.c
 int		process_heredocs(t_list *cmd_table, t_env *env);
@@ -139,10 +140,12 @@ t_env	*copy_env(char **envp);
 
 // string_utils.c
 char	*ft_strndup(const char *s1, size_t len);
+char	*skip_until(char *s, char delim);
 bool	is_whitespace(char c);
 char	*skip_whitespace(char *s);
 int		substr_len(char *start, char *end);
 char	*get_word(char *start);
+char	*get_filename(char *start);
 char	*get_word_quote(char *start);
 char	*skip_word(char *s);
 

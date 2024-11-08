@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 15:59:59 by lemercie          #+#    #+#             */
-/*   Updated: 2024/10/11 15:02:13 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/08 14:20:36 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,31 +36,15 @@ int	check_exec_access(char *cmd)
 char	**get_paths(t_env *env)
 {
 	return (ft_split(ft_env_get_value_by_key("PATH", env), ':'));
-	/*
-	char	*line;
-
-	t_list	*env_iter;
-
-	env_iter = env;
-	while (env_iter)
-	{
-		line = (char *) env_iter->content;
-		if (ft_strncmp(line, "PATH=", 5) == 0)
-			return (ft_split(line, ':'));
-		env_iter = env_iter->next;
-	}
-	return (NULL);
-	*/
 }
-/*
-char	**get_paths(char **envp)
+
+bool	is_directory(char *path)
 {
-	while (*envp)
-	{
-		if (ft_strncmp(*envp, "PATH=", 5) == 0)
-			return (ft_split(*envp, ':'));
-		envp++;
-	}
-	return (NULL);
+	struct stat	sb;
+
+	stat(path, &sb);
+//	if (stat(path, &sb) == -1)
+//		perror("stat");
+	return (S_ISDIR(sb.st_mode));
 }
-*/
+

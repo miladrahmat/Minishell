@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 15:50:22 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/08 10:31:53 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,16 @@
 void	*init_t_cmd(void *content)
 {
 	t_cmd	*cmd;
-	
+
 	cmd = malloc(sizeof(t_cmd));
+	if (!cmd)
+		return (NULL);
 	cmd->split_token = split_token(content);
+	if (!cmd->split_token)
+	{
+		free(cmd);
+		return (NULL);
+	}
 	cmd->cmd_args = NULL;
 	cmd->files = NULL;
 	cmd->path_error = 0;
@@ -38,8 +45,8 @@ int	transform_tokens1(t_list **head, t_env *env, int *last_ret_val)
 	split_tokens_iter = *head;
 	while (split_tokens_iter)
 	{
-		expanded_token = expand_vars(
-			split_tokens_iter->content, env, last_ret_val);
+		expanded_token = expand_vars(split_tokens_iter->content,
+				env, last_ret_val);
 		if (!expanded_token)
 			return (1);
 		if (ft_strlen(expanded_token) == 0)
@@ -55,8 +62,6 @@ int	transform_tokens1(t_list **head, t_env *env, int *last_ret_val)
 		}
 		if (split_tokens_iter)
 			split_tokens_iter = split_tokens_iter->next;
-		else
-			break ;
 	}
 	return (0);
 }
@@ -70,8 +75,8 @@ int	transform_tokens2(t_list **head, int *last_ret_val)
 	split_tokens_iter = *head;
 	while (split_tokens_iter)
 	{
-		unquoted_token =
-			strip_quotes((char *) split_tokens_iter->content, last_ret_val);
+		unquoted_token = strip_quotes((char *) split_tokens_iter->content,
+				last_ret_val);
 		if (ft_strlen(unquoted_token) == 0)
 		{
 			ft_lstdel_and_connect(head, &split_tokens_iter);
@@ -85,11 +90,10 @@ int	transform_tokens2(t_list **head, int *last_ret_val)
 		}
 		if (split_tokens_iter)
 			split_tokens_iter = split_tokens_iter->next;
-		else
-			break ;
 	}
 	return (0);
 }
+
 // Can return NULL in case of a failed malloc() in functions called from here
 //
 // When an incorrect variable name is given, expand_vars() will return 
@@ -97,6 +101,7 @@ int	transform_tokens2(t_list **head, int *last_ret_val)
 //
 // After parsing redirs AND expanding variables, we can assume that 
 // the first token is the cmd. 
+// TODO: check malloc fails in parse_redir_loop
 t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 {
 	t_list	*pipe_tokens;
@@ -105,6 +110,8 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 	t_cmd	*cmd;
 
 	pipe_tokens = split_on_pipes(line);
+	if (!pipe_tokens)
+		return (NULL);
 	cmd_table = ft_lstmap(pipe_tokens, &init_t_cmd, &free);
 	cmd_table_iter = cmd_table;
 	while (cmd_table_iter)
@@ -115,10 +122,18 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 			cmd_table_iter = cmd_table_iter->next;
 			continue ;
 		}
-		transform_tokens1(&cmd->split_token, env, &last_ret_val);
+		if (transform_tokens1(&cmd->split_token, env, &last_ret_val) == 1)
+		{
+			ft_lstclear(&pipe_tokens, free);
+			return (NULL);
+		}
 		cmd_table_iter = cmd_table_iter->next;
 	}
-	ft_lstiter(cmd_table, parse_redir_loop);
+	if (parse_redir_loop(cmd_table) != 0)
+	{
+		ft_lstclear(&pipe_tokens, free);
+		return (NULL);
+	}
 	cmd_table_iter = cmd_table;
 	while (cmd_table_iter)
 	{
@@ -128,9 +143,18 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 			cmd_table_iter = cmd_table_iter->next;
 			continue ;
 		}
-		transform_tokens2(&cmd->split_token, &last_ret_val);
-		build_cmd_args(cmd, env);
+		if (transform_tokens2(&cmd->split_token, &last_ret_val) == 1)
+		{
+			ft_lstclear(&pipe_tokens, free);
+			return (NULL);
+		}
+		if (build_cmd_args(cmd, env) == 1)
+		{
+			ft_lstclear(&pipe_tokens, free);
+			return (NULL);
+		}
 		cmd_table_iter = cmd_table_iter->next;
 	}
+	ft_lstclear(&pipe_tokens, free);
 	return (cmd_table);
 }

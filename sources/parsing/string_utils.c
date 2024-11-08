@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 10:49:45 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 12:45:06 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/08 12:26:11 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,15 @@ char	*ft_strndup(const char *s1, size_t len)
 	}
 	s2[i] = '\0';
 	return (s2);
+}
+
+char	*skip_until(char *s, char delim)
+{
+	while (s && *s && *s != delim)
+	{
+		s++;
+	}
+	return (s);
 }
 
 bool	is_whitespace(char c)
@@ -73,6 +82,68 @@ char	*get_word(char *start)
 	return (ft_strndup(start, substr_len(start, end)));
 }
 
+char	*skip_until_last(char *start, char delim)
+{
+	char	*last;
+
+	last = NULL;
+	while (start && *start)
+	{
+		if (*start == delim)
+			last = start;
+		start++;
+	}
+	return (last);
+}
+
+char	*get_filename(char *start)
+{
+	char	*end;
+	char	*new_str;
+	char	*ret;
+
+	ret = NULL;
+	start = skip_whitespace(start);
+	end = start;
+	while (*start)
+	{
+		while (*end)
+		{
+			if (*end == '\'')
+			{
+				end++;
+				start = end;
+				end = skip_until(end, '\'');
+				break ;
+			}
+			else if (*end == '\"')
+			{
+				end++;
+				start = end;
+				end = skip_until(end, '\"');
+				break ;
+			}
+			else if (is_whitespace(*end))
+				break ;
+			else
+				end++;
+		}
+		new_str = ft_strndup(start, substr_len(start, end));
+		if (!new_str)
+			return (NULL);
+		ret = ft_strjoin(ret, new_str);
+		if (!ret)
+		{
+			if (new_str)
+				free(new_str);
+			return (NULL);
+		}
+		start = end;
+	}
+	return (ret);
+}
+
+// malloc fails returned directly
 char	*get_word_quote(char *start)
 {
 	char	*end;

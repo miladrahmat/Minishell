@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:23:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 15:38:18 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/08 12:27:16 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,30 +32,24 @@ t_redir_type	get_redir_type(char *content)
 		return (error);
 	if (ft_strlen(content) <= 0)
 		return (error);
-//	if (is_quoted_str(content))
-//		str_del_first_last(content);
 	if (content[0] == '>')
 	{
 		if (content[1] == '>')
-		{
 			return (out_append);
-		}
 		else
 			return (out_trunc);
 	}
 	else if (content[0] == '<')
 	{
 		if (content[1] == '<')
-		{
 			return (heredoc);
-		}
 		else
 			return (input);
 	}
 	return (error);
 }
 
-// return amount of tokens consumed?
+// return amount of tokens consumed and negative number on error
 // TODO: "cat <<" should be syntax error
 int	get_redir(t_cmd *cmd, char *token1, char *token2)
 {
@@ -66,87 +60,73 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	tokens_consumed = 0;
 //	printf("get_redir(): token1: %s, token2: %s\n", token1, token2);
 	if (get_redir_type(token1) == error)
-	{
-//		printf("get_redir(): error in get_redir_type()\n");
 		return (0);
-	}
 	redir = malloc(sizeof(t_redir));
-	
 	if (!redir)
-		return (1); //TODO: return and handle malloc error
+		return (-1);
 	redir->heredoc_quoted_delim = false;
 	redir->redir_type = get_redir_type(token1);
 	if (redir->redir_type == out_append)
 	{
 		if (ft_strlen(token1) > 2)
 		{
-			// TODO: handle filenames with spaces
-			redir->filename = get_word_quote(token1 + 2);
+			redir->filename = get_filename(token1 + 2);
 			tokens_consumed = 1;
 		}
-		else
+		else if (token2)
 		{
-			if (token2)
-			{
-				redir->filename = ft_strdup(token2);
-				tokens_consumed = 2;
-			}
+			redir->filename = ft_strdup(token2);
+			tokens_consumed = 2;
 		}
 	}
 	else if (redir->redir_type == out_trunc || redir->redir_type == input)
 	{
 		if (ft_strlen(token1) > 1)
 		{
-			redir->filename = get_word_quote(token1 + 1);
+			redir->filename = get_filename(token1 + 1);
 			tokens_consumed = 1;
 		}
-		else
+		else if (token2)
 		{
-			if (token2)
-			{
-				redir->filename = ft_strdup(token2);
-				tokens_consumed = 2;
-			}
+			redir->filename = ft_strdup(token2);
+			tokens_consumed = 2;
 		}
 	}
 	else if (redir->redir_type == heredoc)
 	{
 		if (ft_strlen(token1) > 2)
 		{
-			redir->filename = get_word_quote(token1 + 2);
+			redir->filename = get_filename(token1 + 2);
 			tokens_consumed = 1;
 		}
-		else
+		else if (token2)
 		{
-			if (token2)
-			{
-				redir->filename = ft_strdup(token2);
-				tokens_consumed = 2;
-			}
+			redir->filename = ft_strdup(token2);
+			tokens_consumed = 2;
 		}
 		check_quoted_heredoc_delim(redir);
-//		printf("get_redir(): heredoc delim: %s\n", redir->filename);
 	}
-//	printf("get_redir(): %s\n", redir->filename);
+	if (!redir->filename)
+	{
+		free(redir);
+		return (-1);
+	}
 	if (is_quoted_str(redir->filename))
 		str_del_first_last(redir->filename);
-//	printf("get_redir(): %s\n", redir->filename);
 	new_node = ft_lstnew(redir);
 	if (!new_node || !redir->filename)
-		return (1);
+		return (-1);
+//	printf("get_redir: %s\n", redir->filename);
 	ft_lstadd_back(&cmd->files, new_node);
 	return (tokens_consumed);
 }
 
-void	parse_redirs(t_cmd *cmd)
+int	parse_redirs(t_cmd *cmd)
 {
-	t_list	*tokens;
 	t_list	*tokens_iter;
 	int		tokens_consumed;
 
-//	printf("parse_redirs()\n");
-	tokens = cmd->split_token;
-	tokens_iter = tokens;
+	tokens_iter = cmd->split_token;
 	while (tokens_iter)
 	{
 		tokens_consumed = 0;
@@ -157,25 +137,36 @@ void	parse_redirs(t_cmd *cmd)
 		}
 		else
 			tokens_consumed = get_redir(cmd, tokens_iter->content, NULL);
+		if (tokens_consumed < 0)
+			return (1);
 		if (tokens_consumed > 0)
-		{
 			ft_lstdel_and_connect(&cmd->split_token, &tokens_iter);
-		}
 		if (tokens_consumed == 2)
 		{
 			tokens_iter = tokens_iter->next;
 			if (tokens_iter)
-			{
 				ft_lstdel_and_connect(&cmd->split_token, &tokens_iter);
-			}
 		}
 		if (!tokens_iter)
-			return ;
+			break ;
 		tokens_iter = tokens_iter->next;
 	}
+	return (0);
 }
 
-void	parse_redir_loop(void *arg)
+int	parse_redir_loop(t_list *cmd_table)
 {
-	parse_redirs((t_cmd *) arg);
+	t_list *cmd_table_iter;
+	int		err;
+
+	err = 0;
+	cmd_table_iter = cmd_table;
+	while (cmd_table_iter)
+	{
+		err = parse_redirs((t_cmd *) cmd_table_iter->content);
+		if (err)
+			return (err);
+		cmd_table_iter = cmd_table_iter->next;
+	}
+	return (0);
 }
