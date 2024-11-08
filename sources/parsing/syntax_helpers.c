@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 09:58:07 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/08 12:33:54 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/08 14:43:35 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,13 @@ int	check_error_redir(char *str, char redir_type, int *redir_num, bool *is)
 		*redir_num = 0;
 	if (*is == true && ft_strchr(special_chars, *str) != 0)
 		return (-1);
-	if (*is && str[1] == '\0')
-		return (-1);
 	else if (ft_isalnum(*str) && *is == true)
 	{
 		*redir_num = 0;
 		*is = false;
 	}
+	if (*is && str[1] == '\0')
+		return (-1);
 	return (1);
 }
 
