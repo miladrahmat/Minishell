@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:23:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/08 12:27:16 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/11 13:47:44 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,11 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	if (is_quoted_str(redir->filename))
 		str_del_first_last(redir->filename);
 	new_node = ft_lstnew(redir);
-	if (!new_node || !redir->filename)
+	if (!new_node)
+	{
+		free(redir);
 		return (-1);
+	}
 //	printf("get_redir: %s\n", redir->filename);
 	ft_lstadd_back(&cmd->files, new_node);
 	return (tokens_consumed);
