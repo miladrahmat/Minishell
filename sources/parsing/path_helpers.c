@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_helpers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 15:59:59 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/08 14:20:36 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/11 15:04:18 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,10 @@ bool	is_directory(char *path)
 {
 	struct stat	sb;
 
-	stat(path, &sb);
-//	if (stat(path, &sb) == -1)
-//		perror("stat");
+	if (stat(path, &sb) == -1)
+	{
+		errno = 0;
+		return (false);
+	}
 	return (S_ISDIR(sb.st_mode));
 }
-
