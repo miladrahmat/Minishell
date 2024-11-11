@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 10:55:16 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/06 11:03:52 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/11 15:50:05 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	**update_shlvl(t_env **node)
 	return ((void **)node);
 }
 
-t_env	*copy_env(char **envp)
+t_env	*copy_env(char **envp, int *err)
 {
 	t_env	*env;
 	t_env	*new_node;
@@ -44,16 +44,16 @@ t_env	*copy_env(char **envp)
 		new_node = set_key_value(*envp);
 		if (new_node == NULL)
 		{
-			ft_envclear(&env, &free);
-			return (NULL);
+			*err = 1;
+			return (env);
 		}
 		if (ft_strcmp(new_node->key, "SHLVL") == 0)
 		{
 			update_shlvl(&new_node);
 			if (new_node == NULL)
 			{
-				ft_envclear(&env, &free);
-				return (NULL);
+				*err = 1;
+				return (env);
 			}
 		}
 		ft_envadd_back(&env, new_node);

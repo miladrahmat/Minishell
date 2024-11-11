@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/11/11 12:29:51 by lemercie         ###   ########.fr        #
+#    Updated: 2024/11/11 16:38:44 by mrahmat-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ UTILS_DIR	:= $(SRCDIR)utils/
 
 OBJDIR := ./objects/
 
-MAIN_FILES	:= test.c debug.c
+MAIN_FILES	:= main.c debug.c
 
 BUILTIN_FILES	:= builtin_cmds.c \
 				builtin_child.c \
