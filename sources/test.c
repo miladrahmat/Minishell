@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/08 17:58:56 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/11 12:27:16 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	main(int ac, char **av, char **envp)
 	cmd_table = NULL;
 	while (true)
 	{
-		line = readline("\e[1;32m[MINISHELL]$> \e[0m");
+		line = readline("[MINISHELL]$> ");
 		if (line)
 		{
 			if (check_syntax(line) > 0)
