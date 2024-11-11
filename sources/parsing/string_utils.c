@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 10:49:45 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/08 12:26:11 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/11 13:43:46 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ char	*skip_until_last(char *start, char delim)
 	return (last);
 }
 
+// returns NULL only in malloc fail
 char	*get_filename(char *start)
 {
 	char	*end;

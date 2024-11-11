@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/11 13:39:06 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/11 13:59:02 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,14 @@ int	transform_tokens2(t_list **head, int *last_ret_val)
 	return (0);
 }
 
+void	*init_cmd_table_destroyer(t_list **pipe_tokens, t_list *cmd_table)
+{
+	if (*pipe_tokens)
+		ft_lstclear(pipe_tokens, free);
+	if (cmd_table)
+		destroy_tlist_of_tcmd(cmd_table);
+	return (NULL);
+}
 // Can return NULL in case of a failed malloc() in functions called from here
 //
 // When an incorrect variable name is given, expand_vars() will return 
@@ -129,19 +137,11 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 			continue ;
 		}
 		if (transform_tokens1(&cmd->split_token, env, &last_ret_val) == 1)
-		{
-			ft_lstclear(&pipe_tokens, free);
-			destroy_tlist_of_tcmd(cmd_table);
-			return (NULL);
-		}
+			return (init_cmd_table_destroyer(&pipe_tokens, cmd_table));
 		cmd_table_iter = cmd_table_iter->next;
 	}
 	if (parse_redir_loop(cmd_table) != 0)
-	{
-		ft_lstclear(&pipe_tokens, free);
-		destroy_tlist_of_tcmd(cmd_table);
-		return (NULL);
-	}
+		return (init_cmd_table_destroyer(&pipe_tokens, cmd_table));
 	cmd_table_iter = cmd_table;
 	while (cmd_table_iter)
 	{
@@ -152,17 +152,9 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 			continue ;
 		}
 		if (transform_tokens2(&cmd->split_token, &last_ret_val) == 1)
-		{
-			ft_lstclear(&pipe_tokens, free);
-			destroy_tlist_of_tcmd(cmd_table);
-			return (NULL);
-		}
+			return (init_cmd_table_destroyer(&pipe_tokens, cmd_table));
 		if (build_cmd_args(cmd, env) == 1)
-		{
-			ft_lstclear(&pipe_tokens, free);
-			destroy_tlist_of_tcmd(cmd_table);
-			return (NULL);
-		}
+			return (init_cmd_table_destroyer(&pipe_tokens, cmd_table));
 		cmd_table_iter = cmd_table_iter->next;
 	}
 	ft_lstclear(&pipe_tokens, free);
