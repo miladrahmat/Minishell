@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 13:57:01 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 12:25:18 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/08 16:03:40 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	print_error(char *message, char *filename)
 {
 	ft_putstr_fd(message, 2);
 	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(filename, 2);
+	if (filename)
+		ft_putstr_fd(filename, 2);
 	ft_putstr_fd("\n", 2);
 	errno = 0;
 }

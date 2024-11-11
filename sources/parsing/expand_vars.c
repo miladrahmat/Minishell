@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 12:45:49 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/08 16:28:58 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ bool	is_varname(char c)
 // $VAR in env
 // token is NOT freed here because it is contained in a list node in the caller
 // returns NULL in case of malloc fails
+// TODO: echo "'$HOME'" should expand because it is in double quotes
 char	*expand_vars(char *token, t_env *env, int *last_ret_val)
 {
 	char	*ret;
@@ -117,20 +118,26 @@ char	*expand_vars(char *token, t_env *env, int *last_ret_val)
 			exit(1);
 		}
 		end = concatenate_until(&ret, start, "$'");
-	//	printf("after first concat: %s\n", end);
+//		printf("after first concat: %s\n", end);
 		if (!end)
 			return (expand_vars_fail(ret, varname));
 		if (!ret)
 		{
-			printf("expand_vars() returning NULL\n");
+//			printf("expand_vars() returning NULL\n");
 			return (expand_vars_fail(ret, varname));
 		}
 		if (*end == '$')
 		{
 			if (!is_varname(*(end + 1)))
 			{
-				ret = ft_strjoin(ret, "$");
 				end++;
+				if (!*end )
+					ret = ft_strjoin(ret, "$");
+				else if (!*end || is_whitespace(*end) || *end == '\"')
+				{
+					if (!end[1] || is_whitespace(end[1]))
+						ret = ft_strjoin(ret, "$");
+				}
 				start = end;
 				continue;
 			}

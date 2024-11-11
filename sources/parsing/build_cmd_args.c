@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 14:27:47 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 15:08:22 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/08 16:49:24 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	build_cmd_args(t_cmd *cmd, t_env *env)
 			get_exec_path(cmd->split_token->content, env, &cmd->path_error);
 		if (!cmd->cmd_args[0])
 		{
+//			printf("cmd_args[0] is NULL\n");
 			//TODO: if we end up here, it can either be malloc fail or 
 			// command not found, so we need to check path_error
 			// and cleanup in case of malloc fails

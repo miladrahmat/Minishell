@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/08 10:31:53 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/11 11:48:50 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,9 @@ int	transform_tokens2(t_list **head, int *last_ret_val)
 	{
 		unquoted_token = strip_quotes((char *) split_tokens_iter->content,
 				last_ret_val);
+		if (!unquoted_token)
+			return (1);
+		/*
 		if (ft_strlen(unquoted_token) == 0)
 		{
 			ft_lstdel_and_connect(head, &split_tokens_iter);
@@ -84,10 +87,11 @@ int	transform_tokens2(t_list **head, int *last_ret_val)
 		}
 		else
 		{
-			if (split_tokens_iter->content)
-				free(split_tokens_iter->content);
-			split_tokens_iter->content = unquoted_token;
-		}
+			*/
+		if (split_tokens_iter->content)
+			free(split_tokens_iter->content);
+		split_tokens_iter->content = unquoted_token;
+//		}
 		if (split_tokens_iter)
 			split_tokens_iter = split_tokens_iter->next;
 	}
