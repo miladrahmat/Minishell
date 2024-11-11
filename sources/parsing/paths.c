@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:38:19 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/11 14:15:36 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/11 15:08:17 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	find_in_paths(char **paths, char **exec_args, int *path_error)
 		if (*path_error == 0)
 		{
 			free(exec_args[0]);
-			free_strv(paths);
+			split_free(paths, 0);
 			exec_args[0] = exec_path;
 			return (0);
 		}
@@ -70,14 +70,14 @@ static char	**search_paths(char **exec_args, t_env *env, int *path_error)
 	if (!paths)
 	{
 		print_error("Command not found", exec_args[0]);
-		free_strv(exec_args);
+		split_free(exec_args, 0);
 		return (NULL);
 	}
 	if (find_in_paths(paths, exec_args, path_error))
 	{
 		print_error("Command not found", exec_args[0]);
-		free_strv(exec_args);
-		free_strv(paths);
+		split_free(exec_args, 0);
+		split_free(paths, 0);
 		return (NULL);
 	}
 	return (exec_args);
@@ -102,7 +102,7 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 	if (!exec_args[0])
 	{
 		print_error("Command not found", exec_args[0]);
-		free_strv(exec_args);
+		split_free(exec_args, 0);
 		*path_error = 127;
 		return (NULL);
 	}
@@ -112,7 +112,7 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 		{
 			print_builtin_error(exec_args[0], NULL, "is a directory", true);
 			*path_error = 126;
-			free_strv(exec_args);
+			split_free(exec_args, 0);
 			return (NULL);
 		}
 		*path_error = check_exec_access(exec_args[0]);
@@ -121,7 +121,7 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 		if (*path_error == 126 || *path_error == 127)
 		{
 			print_error(strerror(errno), exec_args[0]);
-			free_strv(exec_args);
+			split_free(exec_args, 0);
 			return (NULL);
 		}
 	}
@@ -133,7 +133,7 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 char	*get_exec_path(char *command, t_env *env, int *path_error)
 {
 	char	**temp;
-	char	*ret; //for final return
+	char	*ret;
 
 	if (!command || !command[0])
 	{
@@ -144,8 +144,8 @@ char	*get_exec_path(char *command, t_env *env, int *path_error)
 	temp = get_exec_path_more(command, env, path_error);
 	if (temp)
 	{
-		ret = ft_strdup(temp[0]); // getting the value we need
-		free_strv(temp); // freeing everything else
+		ret = ft_strdup(temp[0]);
+		split_free(temp, 0);
 		return (ret);
 	}
 	return (NULL);
