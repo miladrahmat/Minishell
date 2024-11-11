@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 14:27:47 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/08 16:49:24 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/11 15:27:58 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,11 @@ int	build_cmd_args(t_cmd *cmd, t_env *env)
 		}
 	}
 	else
-		cmd->cmd_args[0] = cmd->split_token->content;
+	{
+		cmd->cmd_args[0] = ft_strdup(cmd->split_token->content);
+		if (!cmd->cmd_args[0])
+			return (1);
+	}
 	i = 1;
 	split_tokens_iter = cmd->split_token;
 	split_tokens_iter = split_tokens_iter->next;
