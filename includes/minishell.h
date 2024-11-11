@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/11 15:09:44 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/11 16:24:51 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,10 @@ void			print_list(void *arg);
 int				build_cmd_args(t_cmd *cmd, t_env *env);
 // parsing/cmd_table.c
 t_list			*init_cmd_table(char *line, t_env *env, int last_ret_val);
+// parsing/expand_vars.c
+char			*expand_vars(char *token, t_env *env, int *last_ret_val);
+// parsing/heredoc.c
+int				process_heredocs(t_list *cmd_table, t_env *env);
 // parsing/path_utils.c
 void			close_all(t_files files, int pipefd[2]);
 void			print_error(char *message, char *filename);
@@ -93,10 +97,9 @@ int				parse_redir_loop(t_list *cmd_table);
 t_list			*split_token(char *cmd_token);
 // parsing/split_on_pipes.c
 t_list			*split_on_pipes(char *line);
-// parsing/heredoc.c
-int				process_heredocs(t_list *cmd_table, t_env *env);
-// parsing/expand_vars.c
-char			*expand_vars(char *token, t_env *env, int *last_ret_val);
+// parsing/transform_tokens.c
+int				transform_tokens1(t_list **head, t_env *env, int *last_ret_val);
+int				transform_tokens2(t_list **head, int *last_ret_val);
 // parsing/tokenizing_utils.c
 char			*get_token(char *start, char *end);
 

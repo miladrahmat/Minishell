@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:23:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/11 13:47:44 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/11 15:38:30 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	new_node = ft_lstnew(redir);
 	if (!new_node)
 	{
+		free(redir->filename);
 		free(redir);
 		return (-1);
 	}
