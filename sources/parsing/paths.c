@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:38:19 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/11 15:08:17 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/11 16:40:46 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 	{
 		if (is_directory(exec_args[0]))
 		{
-			print_builtin_error(exec_args[0], NULL, "is a directory", true);
+			print_builtin_error(exec_args[0], NULL, "Is a directory", true);
 			*path_error = 126;
 			split_free(exec_args, 0);
 			return (NULL);
