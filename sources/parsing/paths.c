@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:38:19 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/08 14:29:35 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/11 12:04:59 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 	return (search_paths(exec_args, env, path_error));
 }
 
+// TODO: if no PATH, search courrent dir
 char	*get_exec_path(char *command, t_env *env, int *path_error)
 {
 	char	**ret;
