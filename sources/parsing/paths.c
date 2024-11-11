@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:38:19 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/11 15:08:17 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/11 17:40:36 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ static int	find_in_paths(char **paths, char **exec_args, int *path_error)
 		if (*path_error == 0)
 		{
 			free(exec_args[0]);
-			split_free(paths, 0);
 			exec_args[0] = exec_path;
 			return (0);
 		}
@@ -69,17 +68,31 @@ static char	**search_paths(char **exec_args, t_env *env, int *path_error)
 	paths = get_paths(env);
 	if (!paths)
 	{
-		print_error("Command not found", exec_args[0]);
+		*path_error = check_exec_access(exec_args[0]);
+		if (*path_error == 0)
+			return (exec_args);
+		if (*path_error == 126)
+		{
+			if (is_directory(exec_args[0]))
+				print_builtin_error(exec_args[0], NULL,
+						"Is a directory", false);
+			else
+				print_builtin_error(exec_args[0], NULL,
+						"Permission denied", false);
+		}
+		else if (*path_error == 127)
+			print_builtin_error(exec_args[0], NULL, "command not found", false);
 		split_free(exec_args, 0);
 		return (NULL);
 	}
 	if (find_in_paths(paths, exec_args, path_error))
 	{
-		print_error("Command not found", exec_args[0]);
+		print_builtin_error(exec_args[0], NULL, "command not found", false);
 		split_free(exec_args, 0);
 		split_free(paths, 0);
 		return (NULL);
 	}
+	split_free(paths, 0);
 	return (exec_args);
 }
 
@@ -101,7 +114,7 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 		return (NULL);
 	if (!exec_args[0])
 	{
-		print_error("Command not found", exec_args[0]);
+		print_builtin_error(NULL, NULL, "command not found", false);
 		split_free(exec_args, 0);
 		*path_error = 127;
 		return (NULL);
@@ -110,7 +123,7 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 	{
 		if (is_directory(exec_args[0]))
 		{
-			print_builtin_error(exec_args[0], NULL, "is a directory", true);
+			print_builtin_error(exec_args[0], NULL, "Is a directory", false);
 			*path_error = 126;
 			split_free(exec_args, 0);
 			return (NULL);
@@ -125,11 +138,9 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 			return (NULL);
 		}
 	}
-	//TODO: also check for directory in here
 	return (search_paths(exec_args, env, path_error));
 }
 
-// TODO: if no PATH, search courrent dir
 char	*get_exec_path(char *command, t_env *env, int *path_error)
 {
 	char	**temp;
