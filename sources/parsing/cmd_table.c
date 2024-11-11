@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/11 11:48:50 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/11 13:39:06 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,8 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 	if (!pipe_tokens)
 		return (NULL);
 	cmd_table = ft_lstmap(pipe_tokens, &init_t_cmd, &free);
+	if (!cmd_table)
+		return (NULL);
 	cmd_table_iter = cmd_table;
 	while (cmd_table_iter)
 	{
@@ -129,6 +131,7 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 		if (transform_tokens1(&cmd->split_token, env, &last_ret_val) == 1)
 		{
 			ft_lstclear(&pipe_tokens, free);
+			destroy_tlist_of_tcmd(cmd_table);
 			return (NULL);
 		}
 		cmd_table_iter = cmd_table_iter->next;
@@ -136,6 +139,7 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 	if (parse_redir_loop(cmd_table) != 0)
 	{
 		ft_lstclear(&pipe_tokens, free);
+		destroy_tlist_of_tcmd(cmd_table);
 		return (NULL);
 	}
 	cmd_table_iter = cmd_table;
@@ -150,11 +154,13 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 		if (transform_tokens2(&cmd->split_token, &last_ret_val) == 1)
 		{
 			ft_lstclear(&pipe_tokens, free);
+			destroy_tlist_of_tcmd(cmd_table);
 			return (NULL);
 		}
 		if (build_cmd_args(cmd, env) == 1)
 		{
 			ft_lstclear(&pipe_tokens, free);
+			destroy_tlist_of_tcmd(cmd_table);
 			return (NULL);
 		}
 		cmd_table_iter = cmd_table_iter->next;
