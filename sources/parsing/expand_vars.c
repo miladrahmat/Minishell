@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/08 16:28:58 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/11 14:08:18 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,10 @@ char	*concatenate_until(char **dst, char *src, char *delim)
 	if (!temp)
 		return (NULL);
 	temp_joined = ft_strjoin(*dst, temp);
+	free(temp); //Added this to fix leak
 	if (!temp_joined)
 		return (NULL);
+	free(*dst); //And this
 	*dst = temp_joined;
 	return (src_end);
 }

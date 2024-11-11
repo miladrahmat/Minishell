@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   paths.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:38:19 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/11 12:04:59 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/11 14:15:36 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 		{
 			print_builtin_error(exec_args[0], NULL, "is a directory", true);
 			*path_error = 126;
+			free_strv(exec_args);
 			return (NULL);
 		}
 		*path_error = check_exec_access(exec_args[0]);
@@ -131,7 +132,8 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 // TODO: if no PATH, search courrent dir
 char	*get_exec_path(char *command, t_env *env, int *path_error)
 {
-	char	**ret;
+	char	**temp;
+	char	*ret; //for final return
 
 	if (!command || !command[0])
 	{
@@ -139,8 +141,12 @@ char	*get_exec_path(char *command, t_env *env, int *path_error)
 		*path_error = 126;
 		return (NULL);
 	}
-	ret = get_exec_path_more(command, env, path_error);
-	if (ret)
-		return (ret[0]);
+	temp = get_exec_path_more(command, env, path_error);
+	if (temp)
+	{
+		ret = ft_strdup(temp[0]); // getting the value we need
+		free_strv(temp); // freeing everything else
+		return (ret);
+	}
 	return (NULL);
 }
