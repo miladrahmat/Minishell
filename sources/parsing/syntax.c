@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:53:41 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/08 12:34:56 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/11 13:58:36 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,8 @@ static int	check_pipes(char *line)
 
 int	check_syntax(char *line)
 {
+	if (check_whitespace(line) == -1)
+		return (-2);
 	if (ft_strchr(line, '|') != 0)
 	{
 		if (check_pipes(line) < 0)

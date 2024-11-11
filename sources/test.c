@@ -6,13 +6,13 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/11 12:27:16 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/11 13:59:47 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-sig_atomic_t	g_last_ret_val = 0;
+sig_atomic_t	g_got_signal = 0;
 
 void	check_child_signal(int ret_val)
 {
@@ -32,7 +32,7 @@ void	handle_signals(int signal)
 {
 	if (signal == SIGINT)
 	{
-		g_last_ret_val = 130;
+		g_got_signal = 130;
 		ft_putchar_fd('\n', 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
@@ -45,35 +45,37 @@ void	handle_heredoc(int signal)
 {
 	if (signal == SIGINT)
 	{
-		g_last_ret_val = 130;
+		g_got_signal = 130;
 		rl_replace_line("", 0);
 		rl_done = 1;
 		return ;
 	}
 }
 
-void	inner_loop(t_list *cmd_table, t_env **env)
+int	inner_loop(t_list *cmd_table, t_env **env, int last_ret_val)
 {
 	t_list	*cmd_table_iter;
-	int		last_ret_val;
+	int		ret_val;
 
 	cmd_table_iter = cmd_table;
 	while (cmd_table_iter->next != NULL)
 		cmd_table_iter = cmd_table_iter->next;
-	last_ret_val = g_last_ret_val;
-	g_last_ret_val = 0;
+	g_got_signal = 0;
 	process_heredocs(cmd_table, *env); // returns 1 in case of malloc fail
-	if (cmd_table != NULL && g_last_ret_val == 0)
+	if (cmd_table != NULL && g_got_signal == 0)
 	{
 		if (((t_cmd *)cmd_table_iter->content)->path_error == 0)
-			g_last_ret_val = prepare_exec(cmd_table, env, last_ret_val);
+			ret_val = prepare_exec(cmd_table, env, last_ret_val);
 		else
 		{
 			prepare_exec(cmd_table, env, last_ret_val);
-			g_last_ret_val = ((t_cmd *)cmd_table_iter->content)->path_error;
+			ret_val = ((t_cmd *)cmd_table_iter->content)->path_error;
 		}
+		check_child_signal(ret_val);
 	}
-	check_child_signal(g_last_ret_val);
+	else
+		ret_val = g_got_signal;
+	return (ret_val);
 }
 
 // TODO: variable names cannot start with number
@@ -82,6 +84,8 @@ int	main(int ac, char **av, char **envp)
 	char				*line;
 	t_list				*cmd_table;
 	t_env				*env;
+	int					last_ret_val;
+	int					check;
 
 	(void)av;
 	(void)ac;
@@ -90,24 +94,31 @@ int	main(int ac, char **av, char **envp)
 	if (env == NULL)
 		exit(1);
 	cmd_table = NULL;
+	last_ret_val = 0;
 	while (true)
 	{
 		line = readline("[MINISHELL]$> ");
 		if (line)
 		{
-			if (check_syntax(line) > 0)
+			if (g_got_signal != 0)
+				last_ret_val = g_got_signal;
+			check = check_syntax(line);
+			if (check > 0)
 			{
-				cmd_table = init_cmd_table(line, env, g_last_ret_val);
+				cmd_table = init_cmd_table(line, env, last_ret_val);
 				if (cmd_table)
-					inner_loop(cmd_table, &env);
+					last_ret_val = inner_loop(cmd_table, &env, last_ret_val);
+				add_history(line);
 			}
-			else
-				g_last_ret_val = 2;
-			add_history(line);
+			else if (check == -1)
+			{
+				last_ret_val = 2;
+				add_history(line);
+			}
 			free(line);
 			ft_lstclear(&cmd_table, &destroy_tlist_of_tcmd);
 		}
 		else
-			exit_signal(&cmd_table, &env, g_last_ret_val);
+			exit_signal(&cmd_table, &env, last_ret_val);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 09:58:07 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/08 14:43:35 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/11 13:57:28 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,18 @@ int	print_syntax_error(char	token)
 	ft_putchar_fd('\'', 2);
 	ft_putchar_fd('\n', 2);
 	return (-1);
+}
+
+int	check_whitespace(char *str)
+{
+	size_t	i;
+
+	i = 0;
+	while (is_whitespace(str[i]))
+		i++;
+	if (str[i] == '\0')
+		return (-1);
+	return (1);
 }
 
 int	check_error_redir(char *str, char redir_type, int *redir_num, bool *is)
