@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 12:01:27 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/12 16:58:32 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/12 18:06:52 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static void	clean_files(void *arg)
 	file = NULL;
 }
 
+// use with ft_lstclear()
 void	destroy_tlist_of_tcmd(void	*arg)
 {
 	t_cmd	*cmd;

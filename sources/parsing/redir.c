@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:23:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/12 15:34:32 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/12 17:47:18 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ static int	parse_redirs(t_cmd *cmd)
 	t_list	*tokens_iter;
 	int		tokens_consumed;
 
+	if (ft_lstsize(cmd->split_token) < 2)
+		return (0);
 	tokens_iter = cmd->split_token;
 	while (tokens_iter)
 	{
