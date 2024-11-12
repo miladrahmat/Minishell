@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:38:19 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/11 17:40:36 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/12 11:19:17 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,6 @@ static int	find_in_paths(char **paths, char **exec_args, int *path_error)
 		*path_error = check_exec_access(exec_path);
 		if (*path_error == 126)
 			return (1);
-		if (is_directory(exec_path))
-		{
-			*path_error = 126;
-			return (1);
-		}
 		if (*path_error == 0)
 		{
 			free(exec_args[0]);
@@ -68,20 +63,9 @@ static char	**search_paths(char **exec_args, t_env *env, int *path_error)
 	paths = get_paths(env);
 	if (!paths)
 	{
-		*path_error = check_exec_access(exec_args[0]);
+		*path_error = check_exec_access_print_err(exec_args[0]);
 		if (*path_error == 0)
 			return (exec_args);
-		if (*path_error == 126)
-		{
-			if (is_directory(exec_args[0]))
-				print_builtin_error(exec_args[0], NULL,
-						"Is a directory", false);
-			else
-				print_builtin_error(exec_args[0], NULL,
-						"Permission denied", false);
-		}
-		else if (*path_error == 127)
-			print_builtin_error(exec_args[0], NULL, "command not found", false);
 		split_free(exec_args, 0);
 		return (NULL);
 	}
@@ -105,6 +89,10 @@ static char	**search_paths(char **exec_args, t_env *env, int *path_error)
 // if the cmd is a space ==> return 127
 // if the cmd is a real file but not executable ==> return 126
 // if the cmd is not found ==> return 127
+//
+// if cmd has a /, then check first without using paths
+// if PATH is unset, do the same
+// then check in PATH
 static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 {	
 	char	**exec_args;
@@ -121,22 +109,11 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 	}
 	if (is_abs_or_pwd_path(exec_args[0]))
 	{
-		if (is_directory(exec_args[0]))
-		{
-			print_builtin_error(exec_args[0], NULL, "Is a directory", false);
-			*path_error = 126;
-			split_free(exec_args, 0);
-			return (NULL);
-		}
-		*path_error = check_exec_access(exec_args[0]);
+		*path_error = check_exec_access_print_err(exec_args[0]);
 		if (*path_error == 0)
 			return (exec_args);
-		if (*path_error == 126 || *path_error == 127)
-		{
-			print_error(strerror(errno), exec_args[0]);
-			split_free(exec_args, 0);
-			return (NULL);
-		}
+		split_free(exec_args, 0);
+		return (NULL);
 	}
 	return (search_paths(exec_args, env, path_error));
 }
