@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 14:27:47 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/11 15:27:58 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:53:09 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,26 +23,16 @@ int	build_cmd_args(t_cmd *cmd, t_env *env)
 		ft_putstr_fd("Error: command \"\" not found\n", 2);
 		return (1);
 	}
-	cmd->cmd_args =
-		malloc(sizeof(char *) * (ft_lstsize(cmd->split_token) + 1));
+	cmd->cmd_args = malloc(sizeof(char *) * (ft_lstsize(cmd->split_token) + 1));
 	if (!cmd->cmd_args)
-	{
-		//cleanup function in case of malloc fails
 		return (1);
-	}
 	if (!test_builtin_cmd(cmd->split_token->content))
 	{
-//		printf("not builtin cmd, %s\n", (char *) cmd->split_token->content);
+		cmd->path_error = 0;
 		cmd->cmd_args[0] =
 			get_exec_path(cmd->split_token->content, env, &cmd->path_error);
-		if (!cmd->cmd_args[0])
-		{
-//			printf("cmd_args[0] is NULL\n");
-			//TODO: if we end up here, it can either be malloc fail or 
-			// command not found, so we need to check path_error
-			// and cleanup in case of malloc fails
-//			printf("build_cmd_args(): cmd not found\n");
-		}
+		if (!cmd->cmd_args[0] && cmd->path_error == 0)
+			return (1);
 	}
 	else
 	{

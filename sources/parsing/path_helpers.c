@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 15:59:59 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/12 11:10:24 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/12 11:45:11 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,22 @@ int	check_exec_access_print_err(char *cmd)
 	return (127);
 }
 
-char	**get_paths(t_env *env)
+char	**get_paths(t_env *env, int *err)
 {
-	return (ft_split(ft_env_get_value_by_key("PATH", env), ':'));
+	char	*path;
+	char	**split_path;
+
+	*err = 0;
+	path = ft_env_get_value_by_key("PATH", env);
+	if (!path)
+		return (NULL);
+	split_path = ft_split(path, ':');
+	if (!split_path)
+	{
+		*err = 1;
+		return (NULL);
+	}
+	return (split_path);
 }
 
 bool	is_directory(char *path)

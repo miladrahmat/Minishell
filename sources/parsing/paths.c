@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:38:19 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/12 11:19:17 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/12 14:00:52 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	find_in_paths(char **paths, char **exec_args, int *path_error)
 	{
 		exec_path = create_path(paths[i], exec_args[0]);
 		if (!exec_path)
-			return (1);
+			return (2);
 		*path_error = check_exec_access(exec_path);
 		if (*path_error == 126)
 			return (1);
@@ -59,8 +59,11 @@ static int	find_in_paths(char **paths, char **exec_args, int *path_error)
 static char	**search_paths(char **exec_args, t_env *env, int *path_error)
 {
 	char	**paths;
+	int		err;
 
-	paths = get_paths(env);
+	paths = get_paths(env, &err);
+	if (err)
+		return (NULL);
 	if (!paths)
 	{
 		*path_error = check_exec_access_print_err(exec_args[0]);
@@ -69,14 +72,16 @@ static char	**search_paths(char **exec_args, t_env *env, int *path_error)
 		split_free(exec_args, 0);
 		return (NULL);
 	}
-	if (find_in_paths(paths, exec_args, path_error))
+	*path_error = 0;
+	err = find_in_paths(paths, exec_args, path_error);
+	split_free(paths, 0);
+	if (err > 0)
 	{
-		print_builtin_error(exec_args[0], NULL, "command not found", false);
 		split_free(exec_args, 0);
-		split_free(paths, 0);
+		if (err == 1)
+			print_builtin_error(exec_args[0], NULL, "command not found", false);
 		return (NULL);
 	}
-	split_free(paths, 0);
 	return (exec_args);
 }
 
@@ -118,6 +123,7 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 	return (search_paths(exec_args, env, path_error));
 }
 
+// If this returns NULL and path_error = 0, that is a malloc fail
 char	*get_exec_path(char *command, t_env *env, int *path_error)
 {
 	char	**temp;

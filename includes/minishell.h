@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/12 11:11:18 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/12 11:45:35 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void			print_error(char *message, char *filename);
 bool			is_abs_or_pwd_path(char *cmd);
 int				check_exec_access(char *cmd);
 int				check_exec_access_print_err(char *cmd);
-char			**get_paths(t_env *env);
+char			**get_paths(t_env *env, int *err);
 bool			is_directory(char *path);
 // parsing/paths.c
 char			*get_exec_path(char *command, t_env *env, int *path_error);

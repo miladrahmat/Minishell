@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/11 16:23:28 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/12 12:05:02 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	init_cmd_table_more(t_list *cmd_table, t_env *env, int *last_ret_val)
 			destroy_tlist_of_tcmd(cmd_table);
 			return (1);
 		}
-		if (build_cmd_args(cmd, env) == 1)
+		if (build_cmd_args(cmd, env) == 1 && cmd->path_error == 0)
 		{
 			destroy_tlist_of_tcmd(cmd_table);
 			return (1);
