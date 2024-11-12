@@ -6,18 +6,35 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 14:27:47 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/12 13:53:09 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/12 14:07:27 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// checks first token for a cmd, then just appends the rest of the tokens
-int	build_cmd_args(t_cmd *cmd, t_env *env)
-{	
+static int	add_arguments(t_cmd *cmd)
+{
 	int		i;
 	t_list	*split_tokens_iter;
 
+	i = 1;
+	split_tokens_iter = cmd->split_token;
+	split_tokens_iter = split_tokens_iter->next;
+	while (split_tokens_iter)
+	{
+		cmd->cmd_args[i] = ft_strdup(split_tokens_iter->content);
+		if (!cmd->cmd_args[i])
+			return (1);
+		split_tokens_iter = split_tokens_iter->next;
+		i++;
+	}
+	cmd->cmd_args[i] = NULL;
+	return (0);
+}
+
+// checks first token for a cmd, then just appends the rest of the tokens
+int	build_cmd_args(t_cmd *cmd, t_env *env)
+{	
 	if (!cmd->split_token->content || ft_strlen(cmd->split_token->content) <= 0)
 	{
 		ft_putstr_fd("Error: command \"\" not found\n", 2);
@@ -29,8 +46,8 @@ int	build_cmd_args(t_cmd *cmd, t_env *env)
 	if (!test_builtin_cmd(cmd->split_token->content))
 	{
 		cmd->path_error = 0;
-		cmd->cmd_args[0] =
-			get_exec_path(cmd->split_token->content, env, &cmd->path_error);
+		cmd->cmd_args[0] = get_exec_path(
+				cmd->split_token->content, env, &cmd->path_error);
 		if (!cmd->cmd_args[0] && cmd->path_error == 0)
 			return (1);
 	}
@@ -40,15 +57,5 @@ int	build_cmd_args(t_cmd *cmd, t_env *env)
 		if (!cmd->cmd_args[0])
 			return (1);
 	}
-	i = 1;
-	split_tokens_iter = cmd->split_token;
-	split_tokens_iter = split_tokens_iter->next;
-	while (split_tokens_iter)
-	{
-		cmd->cmd_args[i] = ft_strdup(split_tokens_iter->content);
-		split_tokens_iter = split_tokens_iter->next;
-		i++;
-	}
-	cmd->cmd_args[i] = NULL;
-	return (0);
+	return (add_arguments(cmd));
 }
