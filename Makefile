@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/11/11 16:25:37 by lemercie         ###   ########.fr        #
+#    Updated: 2024/11/12 15:38:12 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,7 @@ PARSING_FILES	:= paths.c \
 				path_helpers.c \
 				quotes.c \
 				redir.c \
+				redir_helpers.c \
 				split_token.c \
 				split_on_pipes.c \
 				build_cmd_args.c \

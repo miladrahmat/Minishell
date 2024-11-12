@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/12 11:45:35 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/12 15:37:49 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,11 @@ int				handle_quotes(char *new, char *org, \
 	size_t *new_i, ssize_t *org_i);
 // parsing/redir.c
 int				parse_redir_loop(t_list *cmd_table);
+// parsing/redir_helpers.c
+void	check_quoted_heredoc_delim(t_redir *redir);
+int		get_filename_wrapper(
+			t_redir *redir, int *tokens_consumed, char *token1, char *token2);
+int		get_redir_destroyer(t_redir *redir);
 // parsing/split_token.c
 t_list			*split_token(char *cmd_token);
 // parsing/split_on_pipes.c
