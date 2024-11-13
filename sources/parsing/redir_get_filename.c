@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_get_filename.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:15:01 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 15:26:00 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 19:58:43 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ static char	*get_filename(char *start)
 	while (*start)
 	{
 		end = get_filename_move_end(&start, end);
-		new_str = ft_strndup(start, substr_len(start, end));
+		new_str = ft_strndup(start, substr_len(start, end)); // Leaking
 		if (!new_str)
 			return (NULL);
-		ret = ft_strjoin(ret, new_str);
+		ret = ft_strjoin(ret, new_str); // Leaking
 		if (!ret)
 		{
 			if (new_str)
