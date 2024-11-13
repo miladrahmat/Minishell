@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:28:18 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 15:45:26 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:34:31 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ char	*strip_quotes(char *s, int *ret_val)
 	ret = malloc((ft_strlen(s) + 1) * sizeof(char));
 	if (ret == NULL)
 		return (NULL);
-//		return (free_strs(s, NULL));
 	while ((s)[++s_i] != '\0')
 	{
 		if ((s)[s_i] == '\'' || (s)[s_i] == '\"')
@@ -83,13 +82,11 @@ char	*strip_quotes(char *s, int *ret_val)
 			{
 				*ret_val = 2;
 				return (NULL);
-//				return (free_strs(s, &ret));
 			}
 		}
 		else
 			ret[ret_i++] = (s)[s_i];
 	}
-//	free(*s);
 	ret[ret_i] = '\0';
 	return (ret);
 }
