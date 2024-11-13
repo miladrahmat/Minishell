@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 17:06:04 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 20:27:05 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,7 @@ int			ft_envsize(t_env *env);
 char		*ft_env_get_value_by_key(char *key, t_env *env);
 void		**update_shlvl(t_env **node);
 t_env		*copy_env(char **envp, int *err);
+void		update__(char **cmd, t_env **env);
 
 // file_handler.c
 int			open_files(t_list **cmd_table);

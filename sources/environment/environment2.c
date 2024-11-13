@@ -6,11 +6,37 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 10:55:16 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/11 15:50:05 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/13 20:26:02 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	update__(char **cmd, t_env **env)
+{
+	t_env	*env_iter;
+	char	*temp;
+
+	if (cmd == NULL)
+		return ;
+	if (*cmd == NULL)
+		return ;
+	env_iter = *env;
+	while (env_iter != NULL)
+	{
+		if (ft_strcmp("_", env_iter->key) == 0)
+			break ;
+		else
+			env_iter = env_iter->next;
+	}
+	if (env_iter == NULL)
+		return ;
+	temp = ft_strdup(*cmd);
+	if (temp == NULL)
+		return ;
+	free(env_iter->value);
+	env_iter->value = temp;
+}
 
 void	**update_shlvl(t_env **node)
 {

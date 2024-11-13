@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 17:12:03 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 20:26:32 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ static int	exec_cmd_table(t_list *cmd_table, t_env **env, int last_ret_val)
 	g_got_signal = 0;
 	if (process_heredocs(cmd_table, *env) == 1)
 		return (1);
+	update__(((t_cmd *)cmd_table_iter->content)->cmd_args, env);
 	if (cmd_table != NULL && g_got_signal == 0)
 	{
 		if (((t_cmd *)cmd_table_iter->content)->path_error == 0)
