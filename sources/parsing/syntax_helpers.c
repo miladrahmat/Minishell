@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 09:58:07 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/11 13:57:28 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:26:39 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ size_t	skip_quotes(char *str)
 	return (i);
 }
 
-int	print_syntax_error(char	token)
+int	print_syntax_error(char token)
 {
 	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 	if (token == '\0')

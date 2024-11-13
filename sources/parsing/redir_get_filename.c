@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:15:01 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 15:16:33 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:26:00 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ static char	*get_filename(char *start)
 	}
 	return (ret);
 }
+
 // malloc fail returned directly
 static char	*get_filename_wrapper_helper(
 	int *tokens_consumed, char *token1, char *token2, unsigned int offset)
