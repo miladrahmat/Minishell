@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/07 15:05:40 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/13 17:29:36 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,12 +110,12 @@ static int	prepare_parent(t_list *cmd_table, t_env **env, \
 	int		cmd_count;
 
 	cmd_count = ft_lstsize(cmd_table);
-	child_i = 0;
+	child_i = -1;
 	child = malloc(cmd_count * (sizeof(pid_t)));
 	if (child == NULL)
 		return (1);
 	cmd_iter = cmd_table;
-	while (child_i < cmd_count && cmd_iter != NULL)
+	while (++child_i < cmd_count && cmd_iter != NULL)
 	{
 		if (((t_cmd *)cmd_iter->content)->cmd_args != NULL)
 		{
@@ -127,7 +127,6 @@ static int	prepare_parent(t_list *cmd_table, t_env **env, \
 			}
 		}
 		cmd_iter = cmd_iter->next;
-		child_i++;
 	}
 	return (wait_pids(&child, child_i - 1));
 }
