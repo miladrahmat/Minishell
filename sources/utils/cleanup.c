@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 12:01:27 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/11 15:24:22 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 13:26:15 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,12 @@ static void	clean_files(void *arg)
 	file = NULL;
 }
 
+// use with ft_lstclear()
 void	destroy_tlist_of_tcmd(void	*arg)
 {
 	t_cmd	*cmd;
 
-	if (arg == NULL)
-		return ;
-	cmd = arg;
+	cmd = (t_cmd *) arg;
 	if (cmd == NULL)
 		return ;
 	if (cmd->cmd_args != NULL)
@@ -44,8 +43,10 @@ void	destroy_tlist_of_tcmd(void	*arg)
 		split_free(cmd->cmd_args, 0);
 		cmd->cmd_args = NULL;
 	}
-	ft_lstclear(&cmd->files, &clean_files);
-	ft_lstclear(&cmd->split_token, &free);
+	if (cmd->files != NULL)
+		ft_lstclear(&cmd->files, &clean_files);
+	if (cmd->split_token != NULL)
+		ft_lstclear(&cmd->split_token, &free);
 	free(cmd);
 	cmd = NULL;
 }
@@ -73,4 +74,13 @@ void	*free_strs(char **str1, char **str2)
 	if (*str2 != NULL)
 		free(*str2);
 	return (NULL);
+}
+
+int	free_strs_int(char **str1, char **str2)
+{
+	if (*str1 != NULL)
+		free(*str1);
+	if (*str2 != NULL)
+		free(*str2);
+	return (-1);
 }

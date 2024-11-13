@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/11/11 16:38:44 by mrahmat-         ###   ########.fr        #
+#    Updated: 2024/11/13 15:20:50 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,16 +55,21 @@ PARSING_FILES	:= paths.c \
 				path_helpers.c \
 				quotes.c \
 				redir.c \
+				redir_helpers.c \
+				redir_get_filename.c \
 				split_token.c \
 				split_on_pipes.c \
 				build_cmd_args.c \
 				cmd_table.c \
 				string_utils.c \
+				string_utils_words.c \
 				expand_vars.c \
+				expand_vars_helpers.c \
 				tokenizing_utils.c \
 				heredoc.c \
 				syntax.c \
-				syntax_helpers.c
+				syntax_helpers.c \
+				transform_tokens.c
 
 ENV_FILES	:= environment.c \
 			environment1.c \

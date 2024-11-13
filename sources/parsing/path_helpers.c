@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 15:59:59 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/11 15:04:18 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/12 11:45:11 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ bool	is_abs_or_pwd_path(char *cmd)
 
 int	check_exec_access(char *cmd)
 {
+	if (is_directory(cmd))
+	{
+		return (126);
+	}
 	if (access(cmd, F_OK) == 0)
 	{
 		if (access(cmd, X_OK) == 0)
@@ -33,9 +37,40 @@ int	check_exec_access(char *cmd)
 	return (127);
 }
 
-char	**get_paths(t_env *env)
+int	check_exec_access_print_err(char *cmd)
 {
-	return (ft_split(ft_env_get_value_by_key("PATH", env), ':'));
+	if (is_directory(cmd))
+	{
+		print_builtin_error(cmd, NULL, "Is a directory", false);
+		return (126);
+	}
+	if (access(cmd, F_OK) == 0)
+	{
+		if (access(cmd, X_OK) == 0)
+			return (0);
+		print_builtin_error(cmd, NULL, "Permission denied", false);
+		return (126);
+	}
+	print_builtin_error(cmd, NULL, "No such file or directory", false);
+	return (127);
+}
+
+char	**get_paths(t_env *env, int *err)
+{
+	char	*path;
+	char	**split_path;
+
+	*err = 0;
+	path = ft_env_get_value_by_key("PATH", env);
+	if (!path)
+		return (NULL);
+	split_path = ft_split(path, ':');
+	if (!split_path)
+	{
+		*err = 1;
+		return (NULL);
+	}
+	return (split_path);
 }
 
 bool	is_directory(char *path)

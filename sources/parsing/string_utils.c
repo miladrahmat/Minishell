@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 10:49:45 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/11 13:43:46 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:24:10 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ char	*skip_until(char *s, char delim)
 
 bool	is_whitespace(char c)
 {
-	return (c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\v' ||
-		c =='\f');
+	return (c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\v'
+		|| c == '\f');
 }
 
 char	*skip_whitespace(char *s)
@@ -57,130 +57,9 @@ char	*skip_whitespace(char *s)
 	return (s);
 }
 
-int	substr_len(char *start, char *end)
+char	*ft_strjoin_safe(char const *s1, char const *s2)
 {
-	int	i;
-	i = 0;
-	while (start != end)
-	{
-		start++;
-		i++;
-	}
-	return (i);
-}
-
-char	*get_word(char *start)
-{
-	char	*end;
-
-	start = skip_whitespace(start);
-	end = start;
-	while (*end && !is_whitespace(*end))
-	{
-		end++;
-	}
-	return (ft_strndup(start, substr_len(start, end)));
-}
-
-char	*skip_until_last(char *start, char delim)
-{
-	char	*last;
-
-	last = NULL;
-	while (start && *start)
-	{
-		if (*start == delim)
-			last = start;
-		start++;
-	}
-	return (last);
-}
-
-// returns NULL only in malloc fail
-char	*get_filename(char *start)
-{
-	char	*end;
-	char	*new_str;
-	char	*ret;
-
-	ret = NULL;
-	start = skip_whitespace(start);
-	end = start;
-	while (*start)
-	{
-		while (*end)
-		{
-			if (*end == '\'')
-			{
-				end++;
-				start = end;
-				end = skip_until(end, '\'');
-				break ;
-			}
-			else if (*end == '\"')
-			{
-				end++;
-				start = end;
-				end = skip_until(end, '\"');
-				break ;
-			}
-			else if (is_whitespace(*end))
-				break ;
-			else
-				end++;
-		}
-		new_str = ft_strndup(start, substr_len(start, end));
-		if (!new_str)
-			return (NULL);
-		ret = ft_strjoin(ret, new_str);
-		if (!ret)
-		{
-			if (new_str)
-				free(new_str);
-			return (NULL);
-		}
-		start = end;
-	}
-	return (ret);
-}
-
-// malloc fails returned directly
-char	*get_word_quote(char *start)
-{
-	char	*end;
-
-	start = skip_whitespace(start);
-	if (*start == '\'')
-	{
-		start++;
-		end = start;
-		end = skip_until(end, '\'');
-		return (ft_strndup(start, substr_len(start, end)));
-	}
-	if (*start == '\"')
-	{
-		start++;
-		end = start;
-		end = skip_until(end, '\"');
-		return (ft_strndup(start, substr_len(start, end)));
-	}
-	end = start;
-	while (*end && !is_whitespace(*end))
-	{
-		end++;
-	}
-	return (ft_strndup(start, substr_len(start, end)));
-}
-
-char	*skip_word(char *s)
-{
-	if (!s)
-		return (NULL);
-	s = skip_whitespace(s);
-	while (*s && !is_whitespace(*s))
-	{
-		s++;
-	}
-//	s = skip_whitespace(s);
-	return (s);
+	if (!s2)
+		return (ft_strdup(s1));
+	return (ft_strjoin(s1, s2));
 }
