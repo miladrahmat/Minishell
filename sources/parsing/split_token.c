@@ -6,11 +6,49 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:22:20 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 18:00:23 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 14:55:13 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// skips max two arrows
+char	*skip_arrows(char *s)
+{	
+	if (*s == '<' || *s == '>')
+	{
+		s++;
+		if (*s == '<' || *s == '>')
+			s++;
+	}
+	return (s);
+}
+
+// advances until arrow ow whitespace that is not inside of quotes
+char	*find_end(char *s)
+{
+	int	quotes;
+
+	quotes = 0;
+	while (*s)
+	{
+		if (quotes == 0)
+		{
+			if (*s == '\'')
+				quotes = 1;
+			else if (*s == '\"')
+				quotes = 2;
+			else if (*s == '<' || *s == '>' || is_whitespace(*s))
+				break ;
+		}
+		else if (quotes == 1 && *s == '\'')
+			quotes = 0;
+		else if (quotes == 2 && *s == '\"')
+			quotes = 0;
+		s++;
+	}
+	return (s);
+}
 
 // env vars can expand into commands, arguments or redir filenames,
 // 		but cannot contain < or > in themselves
@@ -23,62 +61,23 @@ t_list	*split_token(char *cmd_token)
 	char	*end;
 	t_list	*new_token;
 	t_list	*tokens;
-	int		quotes;
 	char	*new_str;
 
 	if (!cmd_token)
-		return NULL;
+		return (NULL);
 	start = cmd_token;
 	tokens = NULL;
 	end = start;
-	quotes = 0;
-//	printf("split_token incoming token: %s\n", end);
 	while (*start && *end)
 	{
 		start = skip_whitespace(start);
-		end = start;
-		if (*end == '<' || *end == '>')
-		{
-			end++;
-			if (*end == '<' || *end == '>')
-				end++;
-		}
-		while (*end)
-		{
-			if (quotes == 0)
-			{
-				if (*end == '\'')
-				{
-					quotes = 1;
-				}
-				else if (*end == '\"')
-				{
-					quotes = 2;
-				}
-				else if (*end == '<' || *end == '>' || is_whitespace(*end))
-					break ;
-			}
-			else if (quotes == 1 && *end == '\'')
-			{
-				quotes = 0;
-			}
-			else if (quotes == 2 && *end == '\"')
-			{
-				quotes = 0;
-			}
-			end++;
-		}
+		end = skip_arrows(start);
+		end = find_end(end);
 		if (start == end)
 			continue ;
-		new_str = get_token(start, end);
-		if (!new_str)
-			return (NULL);
-		new_token = ft_lstnew(new_str);
-		if (!new_token)
-		{
-			free(new_str);
-			return (NULL);
-		}
+		new_token = ft_lstnew(get_token(start, end));
+		if (!new_token || !new_token->content)
+			return (free_strs(&new_str, NULL));
 		ft_lstadd_back(&tokens, new_token);
 		start = end;
 	}
