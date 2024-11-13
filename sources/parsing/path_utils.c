@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 13:57:01 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/11 15:09:34 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:26:12 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	close_all(t_files files, int pipefd[2])
 	close(pipefd[0]);
 	close(pipefd[1]);
 }
-
+/*
 void	print_error(char *message, char *filename)
 {
 	ft_putstr_fd(message, 2);
@@ -31,3 +31,4 @@ void	print_error(char *message, char *filename)
 	ft_putstr_fd("\n", 2);
 	errno = 0;
 }
+*/

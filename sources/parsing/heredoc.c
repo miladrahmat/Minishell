@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 15:26:02 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:14:39 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,48 +24,11 @@ int	event(void)
 	return (0);
 }
 
-char	*increment_suffix(char	*s)
-{
-	static int	suffix = 0;
-
-	s = ft_itoa(suffix);
-	suffix++;
-	return (s);
-}
-
-char	*create_filename(void)
-{
-	const char	*prefix = ".minishell-heredoc";
-	char		*suffix;
-	char		*filename;
-
-	suffix = NULL;
-	filename = ft_strdup(prefix);
-	if (!filename)
-		return (NULL);
-	while (access(filename, F_OK) == 0)
-	{
-		free(filename);
-		suffix = increment_suffix(suffix);
-		if (!suffix)
-			return (NULL);
-		filename = ft_strjoin(prefix, suffix);
-		if (!filename)
-		{
-			if (suffix)
-				free(suffix);
-			return (NULL);
-		}
-	}
-	return (filename);
-}
-
 // returns 0 on ctrl-D and 1 on ctrl-C
 // 0 also on malloc fail in readline
-int	read_into_file(int fd, char *delim, t_env *env, bool expand)
+static int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 {
 	char	*line;
-	char	*expanded_line;
 
 	rl_done = 0;
 	rl_event_hook = event;
@@ -81,14 +44,7 @@ int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 	{
 		if (*line == '\n')
 			return (1);
-		if (expand)
-		{
-			expanded_line = expand_vars(line, env, 0);
-			write(fd, expanded_line, ft_strlen(expanded_line));
-			free(expanded_line);
-		}
-		else
-			write(fd, line, ft_strlen(line));
+		try_expand_write(line, env, fd, expand);
 		write(fd, "\n", 1);
 		free(line);
 		line = readline(">");
@@ -104,14 +60,17 @@ int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 // then
 // return filename
 
-char	*get_heredoc(char *delim, t_env *env, bool expand)
+static char	*get_heredoc(char *delim, t_env *env, bool expand, int *err)
 {
 	char	*filename;
 	int		write_fd;
 
 	filename = create_filename();
 	if (!filename)
+	{
+		*err = 1;
 		return (NULL);
+	}
 	write_fd = open(filename, O_WRONLY | O_APPEND | O_CREAT, 0666);
 	heredoc_signal(&handle_heredoc);
 	if (read_into_file(write_fd, delim, env, expand) == 1)
@@ -124,46 +83,52 @@ char	*get_heredoc(char *delim, t_env *env, bool expand)
 	return (filename);
 }
 
+// return 2 on malloc fail, 1 on signal
+static int	get_heredoc_wrapper(t_redir *redir, t_env *env)
+{
+	char	*filename;
+	int		err;
+
+	if (redir->heredoc_quoted_delim)
+		filename = get_heredoc(redir->filename, env, true, &err);
+	else
+		filename = get_heredoc(redir->filename, env, false, &err);
+	if (filename)
+		redir->filename = filename;
+	else
+	{
+		if (err == 1)
+			return (2);
+		return (1);
+	}
+	return (0);
+}
+
 // in case of heredoc, the filename field initially used to store the delimiter
 // and after processing stores the filename to the temporary file
 // returns 1 in case of malloc fail
 int	process_heredocs(t_list *cmd_table, t_env *env)
 {
-	t_cmd	*cmd;
 	t_list	*files_iter;
 	t_list	*cmd_table_iter;
-	char	*filename;
 	t_redir	*redir;
 
 	(void) env;
 	cmd_table_iter = cmd_table;
 	while (cmd_table_iter)
 	{
-		cmd = (t_cmd *) cmd_table_iter->content;
-		files_iter = cmd->files;
+		files_iter = ((t_cmd *) cmd_table_iter->content)->files;
 		while (files_iter)
 		{
 			redir = (t_redir *) files_iter->content;
 			if (redir->redir_type == heredoc)
 			{
-				if (redir->heredoc_quoted_delim)
-					filename = get_heredoc(redir->filename, env, true);
-				else
-					filename = get_heredoc(redir->filename, env, false);
-				if (filename)
-					redir->filename = filename;
-				else
-				{
-//				TODO: if we end up here, is that always a syscall fail or a signal
-					ft_lstdel_and_connect(&cmd->files, &files_iter);
-		//			redir->filename = NULL;
-		//			return (1);
-				}
+				if (get_heredoc_wrapper(redir, env) == 2)
+					return (1);
 			}
-			if (files_iter)
-				files_iter = files_iter->next;
-			else
+			if (!files_iter)
 				break ;
+			files_iter = files_iter->next;
 		}
 		cmd_table_iter = cmd_table_iter->next;
 	}
