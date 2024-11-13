@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:13:40 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/13 15:18:22 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:43:21 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,14 @@ static void	print_export(int fd, t_env *envp)
 		return ;
 	ft_putstr_fd("declare -x ", fd);
 	ft_putstr_fd(envp->key, fd);
-	ft_putstr_fd("=\"", fd);
-	ft_putstr_fd(envp->value, fd);
-	ft_putendl_fd("\"", fd);
+	if (envp->flag)
+	{
+		ft_putstr_fd("=\"", fd);
+		ft_putstr_fd(envp->value, fd);
+		ft_putendl_fd("\"", fd);
+	}
+	else
+		ft_putchar_fd('\n', fd);
 }
 
 static int	env_alpha(int fd, t_env *envp)
