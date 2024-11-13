@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 14:20:03 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:22:50 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,14 +106,26 @@ int				handle_quotes(char *new, char *org, \
 // parsing/redir.c
 int				parse_redir_loop(t_list *cmd_table);
 // parsing/redir_helpers.c
-void	check_quoted_heredoc_delim(t_redir *redir);
-int		get_filename_wrapper(
-			t_redir *redir, int *tokens_consumed, char *token1, char *token2);
-int		get_redir_destroyer(t_redir *redir);
+void			check_quoted_heredoc_delim(t_redir *redir);
+int				get_redir_destroyer(t_redir *redir);
+// parsing/redir_get_filename.c
+int				get_filename_wrapper(t_redir *redir, int *tokens_consumed, \
+							char *token1, char *token2);
 // parsing/split_token.c
 t_list			*split_token(char *cmd_token);
 // parsing/split_on_pipes.c
 t_list			*split_on_pipes(char *line);
+// parsing/string_utils.c
+char			*ft_strndup(const char *s1, size_t len);
+char			*skip_until(char *s, char delim);
+bool			is_whitespace(char c);
+char			*skip_whitespace(char *s);
+char			*ft_strjoin_safe(char const *s1, char const *s2);
+// parsing/string_utils_words.c
+int				substr_len(char *start, char *end);
+char			*get_word(char *start);
+char			*get_word_quote(char *start);
+char			*skip_word(char *s);
 // parsing/transform_tokens.c
 int				transform_tokens1(t_list **head, t_env *env, int *last_ret_val);
 int				transform_tokens2(t_list **head, int *last_ret_val);
@@ -162,18 +174,6 @@ int				ft_envsize(t_env *env);
 char			*ft_env_get_value_by_key(char *key, t_env *env);
 void			**update_shlvl(t_env **node);
 t_env			*copy_env(char **envp, int *err);
-
-// string_utils.c
-char			*ft_strndup(const char *s1, size_t len);
-char			*skip_until(char *s, char delim);
-bool			is_whitespace(char c);
-char			*skip_whitespace(char *s);
-int				substr_len(char *start, char *end);
-char			*get_word(char *start);
-char			*get_filename(char *start);
-char			*get_word_quote(char *start);
-char			*skip_word(char *s);
-char			*ft_strjoin_safe(char const *s1, char const *s2);
 
 // file_handler.c
 int				open_files(t_list **cmd_table);
