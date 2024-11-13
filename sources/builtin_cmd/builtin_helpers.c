@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 18:32:17 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/16 12:35:41 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:16:26 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,21 +73,15 @@ size_t	ft_strlen_eq(char *str)
 	return (eq);
 }
 
-bool	check_key(char *cmd, t_env *node)
+int	add_new_env(char *new_variable, t_env **envp)
 {
-	size_t	occ_cmd;
-	bool	match;
+	t_env	*new_node;
 
-	occ_cmd = 0;
-	while (cmd[occ_cmd] != '=' && cmd[occ_cmd] != '\0')
-		occ_cmd++;
-	if (occ_cmd != ft_strlen(node->key))
-		return (true);
-	if (ft_strncmp(cmd, node->key, ft_strlen(node->key)) == 0)
-		match = false;
-	else
-		match = true;
-	return (match);
+	new_node = set_key_value(new_variable);
+	if (new_node == NULL)
+		return (-1);
+	ft_envadd_back(envp, new_node);
+	return (1);
 }
 
 size_t	get_cmd_amount(char **cmd)

@@ -6,11 +6,40 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:13:40 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/30 18:46:08 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:18:22 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static bool	append_export(char *str, t_env **envp)
+{
+	char	*temp;
+	t_env	*env_iter;
+
+	env_iter = *envp;
+	while (env_iter != NULL)
+	{
+		if (ft_strncmp(str, env_iter->key, ft_strlen(env_iter->key)) == 0)
+			break ;
+		else
+			env_iter = env_iter->next;
+	}
+	if (env_iter == NULL)
+		return (false);
+	while (*str != '=' && *str != '\0')
+		str++;
+	if (*str == '=')
+	{
+		str++;
+		temp = env_iter->value;
+		env_iter->value = ft_strjoin(env_iter->value, str);
+		free(temp);
+		if (env_iter->value == NULL)
+			return (false);
+	}
+	return (true);
+}
 
 static bool	export_existing_key(char *cmd, t_env **envp)
 {
@@ -23,7 +52,7 @@ static bool	export_existing_key(char *cmd, t_env **envp)
 	cut = ft_strlen_eq(cmd);
 	while (list_iter != NULL)
 	{
-		if (!check_key(cmd, list_iter))
+		if (ft_strncmp(cmd, list_iter->key, ft_strlen(list_iter->key)) == 0)
 		{
 			key = ft_substr(cmd, 0, cut);
 			if (key == NULL)
@@ -79,7 +108,6 @@ static int	env_alpha(int fd, t_env *envp)
 
 int	export(char **cmd, int fd, t_env **envp)
 {
-	t_env	*new;
 	size_t	cmd_nbr;
 
 	cmd_nbr = 1;
@@ -87,12 +115,18 @@ int	export(char **cmd, int fd, t_env **envp)
 		return (env_alpha(fd, ft_envcpy(*envp)));
 	while (cmd_nbr < get_cmd_amount(cmd))
 	{
-		if (export_existing_key(*(cmd + cmd_nbr), envp) == false)
+		if (ft_strnstr(*(cmd + cmd_nbr), "+=", \
+			ft_strlen(*(cmd + cmd_nbr))) != NULL)
 		{
-			new = set_key_value(*(cmd + cmd_nbr));
-			if (new != NULL)
-				ft_envadd_back(envp, new);
-			else
+			if (append_export(*(cmd + cmd_nbr), envp) == false)
+			{
+				if (add_new_env(*(cmd + cmd_nbr), envp) < 0)
+					return (1);
+			}
+		}
+		else if (export_existing_key(*(cmd + cmd_nbr), envp) == false)
+		{
+			if (add_new_env(*(cmd + cmd_nbr), envp) < 0)
 				return (1);
 		}
 		cmd_nbr++;

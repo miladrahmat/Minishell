@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 14:01:20 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:26:02 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,17 +69,17 @@ int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 
 	rl_done = 0;
 	rl_event_hook = event;
-	line = readline(">");
+	line = readline("> ");
 	if (!line)
 		return (0);
-	if (!*line)
+	if (*line == '\n')
 	{
 		free(line);
 		return (1);
 	}
 	while (line && ft_strcmp(line, delim) != 0)
 	{
-		if (!*line)
+		if (*line == '\n')
 			return (1);
 		if (expand)
 		{

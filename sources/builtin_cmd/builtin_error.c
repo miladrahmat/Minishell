@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:46:02 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/08 15:39:11 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:20:14 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	is_overflown(char *str)
 
 	if (ft_strcmp("-9223372036854775808", str) == 0)
 		return (1);
-	nbr	= ft_atoll(str);
+	nbr = ft_atoll(str);
 	len = ft_strlen(str);
 	if ((nbr == 0 && len != 1) || (nbr == -1 && len != 2))
 		return (-1);

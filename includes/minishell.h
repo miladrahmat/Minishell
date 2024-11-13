@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 15:22:50 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:25:07 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ void			check_child_signal(int ret_val);
 //helper functions
 int				split_free(char **str, int ret_val);
 void			connect_list(t_env **list, t_env **node);
-bool			check_key(char *cmd, t_env *node);
+int				add_new_env(char *new_variable, t_env **envp);
 size_t			get_cmd_amount(char **cmd);
 size_t			ft_strlen_eq(char *str);
 int				validate_str(char *str, char *acc_values);
