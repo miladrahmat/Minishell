@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 11:09:10 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 14:01:20 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ char	*create_filename(void)
 	return (filename);
 }
 
-// TODO: does this return NULL only on read/write/mallc fail, or also on
-// a signal?
+// returns 0 on ctrl-D and 1 on ctrl-C
+// 0 also on malloc fail in readline
 int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 {
 	char	*line;
@@ -73,7 +73,10 @@ int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 	if (!line)
 		return (0);
 	if (!*line)
+	{
+		free(line);
 		return (1);
+	}
 	while (line && ft_strcmp(line, delim) != 0)
 	{
 		if (!*line)

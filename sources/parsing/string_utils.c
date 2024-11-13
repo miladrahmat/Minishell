@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 10:49:45 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/11 13:43:46 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 14:15:55 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,4 +183,11 @@ char	*skip_word(char *s)
 	}
 //	s = skip_whitespace(s);
 	return (s);
+}
+
+char	*ft_strjoin_safe(char const *s1, char const *s2)
+{
+	if (!s2)
+		return (ft_strdup(s1));
+	return (ft_strjoin(s1, s2));
 }

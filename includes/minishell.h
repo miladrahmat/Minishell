@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 10:59:20 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 14:20:03 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@ typedef struct s_env
 	bool			flag;
 	struct s_env	*next;
 }	t_env;
+
+typedef struct s_var_expander
+{
+	t_env	*env;
+	int		*last_ret_val;
+}	t_var_expander;
 
 typedef enum e_redir_type
 {
@@ -72,6 +78,11 @@ int				build_cmd_args(t_cmd *cmd, t_env *env);
 t_list			*init_cmd_table(char *line, t_env *env, int last_ret_val);
 // parsing/expand_vars.c
 char			*expand_vars(char *token, t_env *env, int *last_ret_val);
+// parsing/expand_vars_helpers.c
+char			*skip_varname(char *s);
+char			*get_varname(char *start);
+bool			is_varname(char c);
+int				not_varname(char **start, char **end, char **ret);
 // parsing/heredoc.c
 int				process_heredocs(t_list *cmd_table, t_env *env);
 // parsing/path_utils.c
@@ -162,6 +173,7 @@ char			*get_word(char *start);
 char			*get_filename(char *start);
 char			*get_word_quote(char *start);
 char			*skip_word(char *s);
+char			*ft_strjoin_safe(char const *s1, char const *s2);
 
 // file_handler.c
 int				open_files(t_list **cmd_table);
@@ -190,6 +202,7 @@ void			heredoc_signal(void *func);
 //utils
 void			destroy_tlist_of_tcmd(void	*arg);
 void			*free_strs(char **str1, char **str2);
+int				free_strs_int(char **str1, char **str2);
 
 //syntax.c
 int				check_syntax(char *line);

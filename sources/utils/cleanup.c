@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 12:01:27 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/12 18:06:52 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 13:26:15 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,13 @@ void	*free_strs(char **str1, char **str2)
 	if (*str2 != NULL)
 		free(*str2);
 	return (NULL);
+}
+
+int	free_strs_int(char **str1, char **str2)
+{
+	if (*str1 != NULL)
+		free(*str1);
+	if (*str2 != NULL)
+		free(*str2);
+	return (-1);
 }
