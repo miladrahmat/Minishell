@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 16:04:18 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:26:28 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char			*create_filename(void);
 void			try_expand_write(char *line, t_env *env, int fd, bool expand);
 // parsing/path_utils.c
 void			close_all(t_files files, int pipefd[2]);
-void			print_error(char *message, char *filename);
+//void			print_error(char *message, char *filename);
 // parsing/path_helpers.c
 bool			is_abs_or_pwd_path(char *cmd);
 int				check_exec_access(char *cmd);

@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:38:19 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 11:00:29 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:24:28 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ static char	**search_paths(char **exec_args, t_env *env, int *path_error)
 	split_free(paths, 0);
 	if (err > 0)
 	{
-		split_free(exec_args, 0);
 		if (err == 1)
 			print_builtin_error(exec_args[0], NULL, "command not found", false);
+		split_free(exec_args, 0);
 		return (NULL);
 	}
 	return (exec_args);
@@ -131,7 +131,7 @@ char	*get_exec_path(char *command, t_env *env, int *path_error)
 
 	if (!command || !command[0])
 	{
-		print_error("Command not found", NULL);
+		print_builtin_error(NULL, NULL, "command not found", false);
 		*path_error = 126;
 		return (NULL);
 	}

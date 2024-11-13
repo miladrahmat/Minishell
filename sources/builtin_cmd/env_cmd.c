@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:02:40 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/13 15:06:49 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:28:29 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	env(char **cmd, int fd, t_env **envp)
 
 	if (cmd[1] != NULL)
 	{
-		print_error("env", "Too many arguments");
+		print_builtin_error("env", NULL, "Too many arguments", false);
 		return (0);
 	}
 	list_iter = *envp;
