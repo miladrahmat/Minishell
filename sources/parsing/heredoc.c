@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/05 20:02:12 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/13 11:09:10 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*increment_suffix(char	*s)
 	return (s);
 }
 
-char	*create_filename()
+char	*create_filename(void)
 {
 	const char	*prefix = ".minishell-heredoc";
 	char		*suffix;
@@ -57,10 +57,11 @@ char	*create_filename()
 			return (NULL);
 		}
 	}
-//	printf("create_filename(): %s\n", filename);
 	return (filename);
 }
 
+// TODO: does this return NULL only on read/write/mallc fail, or also on
+// a signal?
 int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 {
 	char	*line;
@@ -73,7 +74,6 @@ int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 		return (0);
 	if (!*line)
 		return (1);
-//	printf("read_into_file(): delim: %sX\n", delim);
 	while (line && ft_strcmp(line, delim) != 0)
 	{
 		if (!*line)
@@ -91,31 +91,28 @@ int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 		line = readline(">");
 	}
 	return (0);
-//	printf("leaving read_into_file()\n");
 }
 
+//create unique filename
+// open file
+// readline until delimiter
+// and write into the file
+// close file
+// then
+// return filename
+
 char	*get_heredoc(char *delim, t_env *env, bool expand)
-{	//create unique filename
-	// open file
-	// readline until delimiter
-	// and write into the file
-	// close file
-	// then
-	// return filename
+{
 	char	*filename;
 	int		write_fd;
 
-
-//	printf("get_heredoc()\n");
 	filename = create_filename();
 	if (!filename)
 		return (NULL);
 	write_fd = open(filename, O_WRONLY | O_APPEND | O_CREAT, 0666);
-//	write_fd = open("./", O_TMPFILE | O_WRONLY, 0666);
 	heredoc_signal(&handle_heredoc);
 	if (read_into_file(write_fd, delim, env, expand) == 1)
 	{
-//		printf("get_heredoc(): returning null: %s\n", filename);
 		unlink(filename);
 		return (NULL);
 	}
@@ -154,6 +151,7 @@ int	process_heredocs(t_list *cmd_table, t_env *env)
 					redir->filename = filename;
 				else
 				{
+//				TODO: if we end up here, is that always a syscall fail or a signal
 					ft_lstdel_and_connect(&cmd->files, &files_iter);
 		//			redir->filename = NULL;
 		//			return (1);
