@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 15:25:07 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:04:18 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,9 @@ bool			is_varname(char c);
 int				not_varname(char **start, char **end, char **ret);
 // parsing/heredoc.c
 int				process_heredocs(t_list *cmd_table, t_env *env);
+// parsing/heredoc_helpers.c
+char			*create_filename(void);
+void			try_expand_write(char *line, t_env *env, int fd, bool expand);
 // parsing/path_utils.c
 void			close_all(t_files files, int pipefd[2]);
 void			print_error(char *message, char *filename);
