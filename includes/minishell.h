@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/12 15:37:49 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/13 10:59:20 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ t_env			*print_export_error(char **variable);
 void			update_pwd(t_env **envp);
 int				builtin_exit(t_list **cmd_table, \
 	t_env **envp, int last_ret_val);
+void			check_child_signal(int ret_val);
 
 //helper functions
 int				split_free(char **str, int ret_val);
@@ -149,7 +150,7 @@ t_env			*ft_envcpy(t_env *envp);
 int				ft_envsize(t_env *env);
 char			*ft_env_get_value_by_key(char *key, t_env *env);
 void			**update_shlvl(t_env **node);
-t_env			*copy_env(char **envp);
+t_env			*copy_env(char **envp, int *err);
 
 // string_utils.c
 char			*ft_strndup(const char *s1, size_t len);

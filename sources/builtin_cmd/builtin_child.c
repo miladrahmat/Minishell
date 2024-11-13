@@ -6,11 +6,25 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 13:46:43 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/01 13:23:13 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/11 15:59:30 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	check_child_signal(int ret_val)
+{
+	if (ret_val == 130)
+	{
+		ft_putchar('\n');
+		return ;
+	}
+	if (ret_val == 131)
+	{
+		ft_putendl_fd("Quit (core dumped)", 2);
+		return ;
+	}
+}
 
 int	builtin_exit_child(t_cmd *cmd_table, t_env **envp, int last_ret_val)
 {
