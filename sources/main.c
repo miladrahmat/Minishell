@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 14:56:57 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/13 17:12:03 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ static void	prepare_cmd(char *line, t_env **env, int *last_ret_val)
 		exit_signal(&cmd_table, env, *last_ret_val);
 }
 
-// TODO: variable names cannot start with number
 int	main(int ac, char **av, char **envp)
 {
 	char				*line;
