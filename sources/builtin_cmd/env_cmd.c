@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:02:40 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/10/10 17:52:50 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:06:49 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ int	unset(char **cmd, t_env **envp)
 		cmd_iter = 0;
 		while (cmd_iter < get_cmd_amount(cmd))
 		{
-			if (!check_key(*(cmd + cmd_iter), list_iter))
+			if (ft_strncmp(*(cmd + cmd_iter), list_iter->key, \
+				ft_strlen(list_iter->key)) == 0)
 				connect_list(envp, &list_iter);
 			cmd_iter++;
 		}
