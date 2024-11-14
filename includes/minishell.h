@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/14 17:42:02 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:36:28 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdbool.h> // bool type
-# include <stdlib.h> // malloc()
 # include <fcntl.h> // open()
 # include <errno.h>
-# include <unistd.h>
 # include <sys/stat.h> //stat()
 # include <sys/wait.h>
 # include <signal.h>
@@ -93,7 +91,6 @@ void		try_expand_write(char *line, t_env *env, int fd, bool expand);
 int			heredoc_free_str(char *s);
 // parsing/path_utils.c
 void		close_all(t_files files, int pipefd[2]);
-//void		print_error(char *message, char *filename);
 // parsing/path_helpers.c
 bool		is_abs_or_pwd_path(char *cmd);
 int			check_exec_access(char *cmd);
@@ -182,10 +179,8 @@ void		update__(char **cmd, t_env **env);
 // file_handler.c
 int			open_files(t_list **cmd_table);
 void		close_cmd_fd(t_cmd *curr_cmd);
-// int	close_in_out(t_list **cmd_table);
 
 // pipe_file_handler.c
-// int	check_pipe_fd(t_list **cmd_table);
 int			check_pipe_fd(t_cmd **curr_cmd, t_cmd **next_cmd);
 
 //execute
