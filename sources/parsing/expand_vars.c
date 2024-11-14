@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 17:12:34 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/14 14:41:15 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,17 @@ int	reached_dollar(
 		value = ft_itoa(*extra_args.last_ret_val);
 		if (!value)
 			return (free_strs_int(ret, &varname));
+		*ret = ft_strjoin_safe(*ret, value);
+		free(value);
 		*end = (*end) + 2;
 	}
 	else
 	{
-		value = ft_env_get_value_by_key(varname, extra_args.env);
+		
+		*ret = ft_strjoin_safe(*ret, ft_env_get_value_by_key(
+			varname, extra_args.env));
 		*end = skip_varname(*end);
 	}
-	*ret = ft_strjoin_safe(*ret, value);
 	if (!*ret)
 		return (free_strs_int(ret, &varname));
 	free(varname);
