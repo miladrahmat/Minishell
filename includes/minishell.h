@@ -6,13 +6,12 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 20:27:05 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/14 14:20:56 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# include <stdio.h> // printf
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdbool.h> // bool type
@@ -70,8 +69,6 @@ typedef struct s_cmd
 	t_files	fd;
 }	t_cmd;
 
-// debug.c
-void		print_list(void *arg);
 // parsing/build_cmd_args.c
 int			build_cmd_args(t_cmd *cmd, t_env *env);
 // parsing/cmd_table.c
