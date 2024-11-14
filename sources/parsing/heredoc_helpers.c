@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:02:53 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/14 13:57:36 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/14 14:18:24 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,11 @@ void	try_expand_write(char *line, t_env *env, int fd, bool expand)
 	}
 	else
 		write(fd, line, ft_strlen(line));
+}
+
+int	heredoc_free_str(char *s)
+{
+	if (s)
+		free(s);
+	return (1);
 }
