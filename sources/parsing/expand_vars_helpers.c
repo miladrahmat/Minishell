@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:18:23 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 14:18:52 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/14 15:07:52 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,27 @@ bool	is_varname(char c)
 
 int	not_varname(char **start, char **end, char **ret)
 {
+	char	*temp;
+
 	(*end)++;
 	if (!(**end))
+	{
+		temp = *ret;
 		*ret = ft_strjoin(*ret, "$");
+		free(temp);
+		if (!*ret)
+			return (-1);
+	}
 	else if (!**end || is_whitespace(**end) || **end == '\"')
 	{
 		if (!(*end)[1] || is_whitespace((*end)[1]))
+		{
+			temp = *ret;
 			*ret = ft_strjoin(*ret, "$");
+			free(temp);
+			if (!*ret)
+				return (-1);
+		}
 	}
 	*start = *end;
 	return (1);
