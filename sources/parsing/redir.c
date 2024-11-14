@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:23:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/12 17:47:18 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/14 13:44:16 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	redir = malloc(sizeof(t_redir));
 	if (!redir)
 		return (-1);
+	redir->heredoc_quoted_delim = false;
 	redir->redir_type = get_redir_type(token1);
 	if (get_filename_wrapper(redir, &tokens_consumed, token1, token2) == 1)
 	{
