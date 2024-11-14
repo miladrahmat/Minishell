@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 15:32:24 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 15:15:36 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/14 14:03:22 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ void	check_quoted_heredoc_delim(t_redir *redir)
 
 int	get_redir_destroyer(t_redir *redir)
 {
-	free(redir->filename);
-	free(redir);
+	if (redir && redir->filename)
+		free(redir->filename);
+	if (redir)
+		free(redir);
 	return (-1);
 }
