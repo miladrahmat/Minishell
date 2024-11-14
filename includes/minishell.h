@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/14 14:23:27 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/14 17:42:02 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,11 @@ char		*skip_varname(char *s);
 char		*get_varname(char *start);
 bool		is_varname(char c);
 int			not_varname(char **start, char **end, char **ret);
+// expand_vars_process_var.c
+int			process_questionmark(char **end, char **ret, \
+					t_var_expander extra_args);
+int			process_env_var(char **end, char **ret, char *varname, \
+					t_var_expander extra_args);
 // parsing/heredoc.c
 int			process_heredocs(t_list *cmd_table, t_env *env);
 // parsing/heredoc_helpers.c

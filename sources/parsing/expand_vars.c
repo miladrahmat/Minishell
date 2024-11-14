@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/14 15:17:04 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/14 16:02:14 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ int	reached_dollar(
 	char **start, char **end, char **ret, t_var_expander extra_args)
 {
 	char	*varname;
-	char	*value;
-	char	*temp;
+	int		flag;
 
 	if (!is_varname(*((*end) + 1)))
 		return (not_varname(start, end, ret));
@@ -54,29 +53,10 @@ int	reached_dollar(
 	if (!varname)
 		return (free_strs_int(ret, &varname));
 	if (ft_strcmp(varname, "?") == 0)
-	{
-		value = ft_itoa(*extra_args.last_ret_val);
-		if (!value)
-			return (free_strs_int(ret, &varname));
-		temp = *ret;
-		*ret = ft_strjoin_safe(*ret, value);
-		free(temp);
-		free(value);
-		if (!*ret)
-			return (free_strs_int(ret, &varname));
-		*end = (*end) + 2;
-	}
+		flag = process_questionmark(end, ret, extra_args);
 	else
-	{
-		temp = *ret;
-		*ret = ft_strjoin_safe(*ret, ft_env_get_value_by_key(
-					varname, extra_args.env));
-		free(temp);
-		if (!*ret)
-			return (free_strs_int(ret, &varname));
-		*end = skip_varname(*end);
-	}
-	if (!*ret)
+		flag = process_env_var(end, ret, varname, extra_args);
+	if (flag < 0 || !*ret)
 		return (free_strs_int(ret, &varname));
 	free(varname);
 	return (0);
@@ -84,7 +64,12 @@ int	reached_dollar(
 
 int	reached_single_quote(char **end, char **ret)
 {
+	char	*temp;
+
+	temp = *ret;
 	*ret = ft_strjoin(*ret, "'");
+	if (temp)
+		free(temp);
 	if (!*ret)
 		return (-1);
 	*end = concatenate_until(ret, (*end) + 1, "'");
