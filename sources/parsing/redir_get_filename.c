@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:15:01 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/14 13:54:13 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/14 16:09:02 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ static char	*get_filename(char *start)
 	char	*end;
 	char	*new_str;
 	char	*ret;
+	char	*temp;
 
 	ret = NULL;
 	start = skip_whitespace(start);
@@ -54,8 +55,9 @@ static char	*get_filename(char *start)
 		new_str = ft_strndup(start, substr_len(start, end));
 		if (!new_str)
 			return (NULL);
+		temp = ret;
 		ret = ft_strjoin(ret, new_str);
-		free(new_str);
+		free_strs(&temp, &new_str);
 		if (!ret)
 		{
 			free(new_str);
