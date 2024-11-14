@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 15:38:40 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/14 15:51:01 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/14 16:02:33 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int	process_questionmark(char **end, char **ret, t_var_expander extra_args)
 		return (-1);
 	temp = *ret;
 	*ret = ft_strjoin_safe(*ret, value);
-	free(temp);
+	if (temp)
+		free(temp);
 	free(value);
 	if (!*ret)
 		return (-1);
@@ -38,7 +39,8 @@ int	process_env_var(char **end, char **ret, char *varname,
 	temp = *ret;
 	*ret = ft_strjoin_safe(*ret, ft_env_get_value_by_key(
 				varname, extra_args.env));
-	free(temp);
+	if (temp)
+		free(temp);
 	if (!*ret)
 		return (-1);
 	*end = skip_varname(*end);

@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/14 15:50:28 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/14 16:02:14 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,12 @@ int	reached_dollar(
 
 int	reached_single_quote(char **end, char **ret)
 {
+	char	*temp;
+
+	temp = *ret;
 	*ret = ft_strjoin(*ret, "'");
+	if (temp)
+		free(temp);
 	if (!*ret)
 		return (-1);
 	*end = concatenate_until(ret, (*end) + 1, "'");
