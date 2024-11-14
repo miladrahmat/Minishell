@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:15:01 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 19:58:43 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/14 13:54:13 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ static char	*get_filename(char *start)
 	while (*start)
 	{
 		end = get_filename_move_end(&start, end);
-		new_str = ft_strndup(start, substr_len(start, end)); // Leaking
+		new_str = ft_strndup(start, substr_len(start, end));
 		if (!new_str)
 			return (NULL);
-		ret = ft_strjoin(ret, new_str); // Leaking
+		ret = ft_strjoin(ret, new_str);
+		free(new_str);
 		if (!ret)
 		{
-			if (new_str)
-				free(new_str);
+			free(new_str);
 			return (NULL);
 		}
 		start = end;

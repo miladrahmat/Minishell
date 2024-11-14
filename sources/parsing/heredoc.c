@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 20:10:11 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/14 13:52:20 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ static int	get_heredoc_wrapper(t_redir *redir, t_env *env)
 		filename = get_heredoc(redir->filename, env, true, &err);
 	else
 		filename = get_heredoc(redir->filename, env, false, &err);
+	free(redir->filename);
+	redir->filename = NULL;
 	if (filename)
 		redir->filename = filename;
 	else

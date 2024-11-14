@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:02:53 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 16:04:26 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/14 13:57:36 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,9 @@ char	*create_filename(void)
 		if (!suffix)
 			return (NULL);
 		filename = ft_strjoin(prefix, suffix);
+		free(suffix);
 		if (!filename)
-		{
-			if (suffix)
-				free(suffix);
 			return (NULL);
-		}
 	}
 	return (filename);
 }
