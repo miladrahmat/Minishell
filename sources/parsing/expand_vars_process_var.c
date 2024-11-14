@@ -6,27 +6,26 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 15:38:40 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/14 15:39:00 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/14 15:51:01 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	process_questionmark(char **end, char **ret, char *varname,
-						t_var_expander extra_args)
+int	process_questionmark(char **end, char **ret, t_var_expander extra_args)
 {
 	char	*value;
 	char	*temp;
 
 	value = ft_itoa(*extra_args.last_ret_val);
 	if (!value)
-		return (free_strs_int(ret, &varname));
+		return (-1);
 	temp = *ret;
 	*ret = ft_strjoin_safe(*ret, value);
 	free(temp);
 	free(value);
 	if (!*ret)
-		return (free_strs_int(ret, &varname));
+		return (-1);
 	*end = (*end) + 2;
 	return (0);
 }
@@ -41,7 +40,7 @@ int	process_env_var(char **end, char **ret, char *varname,
 				varname, extra_args.env));
 	free(temp);
 	if (!*ret)
-		return (free_strs_int(ret, &varname));
+		return (-1);
 	*end = skip_varname(*end);
 	return (0);
 }

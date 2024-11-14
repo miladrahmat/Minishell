@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/14 15:39:03 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/14 15:50:28 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	reached_dollar(
 	if (!varname)
 		return (free_strs_int(ret, &varname));
 	if (ft_strcmp(varname, "?") == 0)
-		flag = process_questionmark(end, ret, varname, extra_args);
+		flag = process_questionmark(end, ret, extra_args);
 	else
 		flag = process_env_var(end, ret, varname, extra_args);
 	if (flag < 0 || !*ret)
