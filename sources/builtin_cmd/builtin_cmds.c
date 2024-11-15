@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:20:32 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/11 15:23:58 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/15 15:15:47 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,13 @@ int	pwd(int fd)
 	res = malloc(PATH_MAX * sizeof(char));
 	if (res == NULL)
 		return (0);
-	getcwd(res, PATH_MAX);
-	if (errno != 0)
+	if (getcwd(res, PATH_MAX) == NULL)
 	{
-		free(res);
-		return (print_builtin_error("pwd", NULL, NULL, false));
+		if (errno != 0)
+		{
+			free(res);
+			return (print_builtin_error("pwd", NULL, NULL, false));
+		}
 	}
 	ft_putendl_fd(res, fd);
 	free(res);
@@ -37,9 +39,11 @@ int	cd(char **cmd, t_env **envp)
 		if (cmd[1] != NULL)
 			return (print_builtin_error("cd", NULL, \
 				"too many arguments", false));
-		chdir(*cmd);
-		if (errno != 0)
-			return (print_builtin_error("cd", *cmd, NULL, false));
+		if (chdir(*cmd) == -1)
+		{
+			if (errno != 0)
+				return (print_builtin_error("cd", *cmd, NULL, false));
+		}
 		update_pwd(envp);
 	}
 	return (0);
