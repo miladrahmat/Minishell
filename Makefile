@@ -6,13 +6,13 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/11/14 15:40:45 by lemercie         ###   ########.fr        #
+#    Updated: 2024/11/14 18:36:35 by mrahmat-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC		:= cc
 
-CFLAGS	:= -g -Wextra -Wall -Werror
+CFLAGS	:= -Wextra -Wall -Werror
 
 LDFLAGS	:= -lreadline
 
@@ -40,7 +40,7 @@ UTILS_DIR	:= $(SRCDIR)utils/
 
 OBJDIR := ./objects/
 
-MAIN_FILES	:= main.c debug.c
+MAIN_FILES	:= main.c
 
 BUILTIN_FILES	:= builtin_cmds.c \
 				builtin_child.c \

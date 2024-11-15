@@ -6,20 +6,17 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/14 15:51:39 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:36:28 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# include <stdio.h> // printf
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdbool.h> // bool type
-# include <stdlib.h> // malloc()
 # include <fcntl.h> // open()
 # include <errno.h>
-# include <unistd.h>
 # include <sys/stat.h> //stat()
 # include <sys/wait.h>
 # include <signal.h>
@@ -70,8 +67,6 @@ typedef struct s_cmd
 	t_files	fd;
 }	t_cmd;
 
-// debug.c
-void		print_list(void *arg);
 // parsing/build_cmd_args.c
 int			build_cmd_args(t_cmd *cmd, t_env *env);
 // parsing/cmd_table.c
@@ -96,7 +91,6 @@ void		try_expand_write(char *line, t_env *env, int fd, bool expand);
 int			heredoc_free_str(char *s);
 // parsing/path_utils.c
 void		close_all(t_files files, int pipefd[2]);
-//void		print_error(char *message, char *filename);
 // parsing/path_helpers.c
 bool		is_abs_or_pwd_path(char *cmd);
 int			check_exec_access(char *cmd);
@@ -185,10 +179,8 @@ void		update__(char **cmd, t_env **env);
 // file_handler.c
 int			open_files(t_list **cmd_table);
 void		close_cmd_fd(t_cmd *curr_cmd);
-// int	close_in_out(t_list **cmd_table);
 
 // pipe_file_handler.c
-// int	check_pipe_fd(t_list **cmd_table);
 int			check_pipe_fd(t_cmd **curr_cmd, t_cmd **next_cmd);
 
 //execute

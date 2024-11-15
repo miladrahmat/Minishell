@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 10:55:16 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/13 20:26:02 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/15 15:23:28 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,10 @@ void	**update_shlvl(t_env **node)
 	int	shlvl;
 
 	shlvl = ft_atoi((*node)->value);
-	if (shlvl <= 0)
-	{
-		ft_envclear(node, &free);
-		return (NULL);
-	}
-	shlvl++;
+	if (shlvl <= 0 || shlvl == INT_MAX)
+		shlvl = 0;
+	else
+		shlvl++;
 	free((*node)->value);
 	(*node)->value = ft_itoa(shlvl);
 	if ((*node)->value == NULL)
