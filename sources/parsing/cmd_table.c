@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/12 18:06:20 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/15 16:08:58 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,16 @@ int	init_cmd_table_more(t_list *cmd_table, t_env *env, int *last_ret_val)
 t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 {
 	t_list	*cmd_table;
-	t_list	*cmd_table_iter;
-	t_cmd	*cmd;
+	//t_list	*cmd_table_iter;
+	//t_cmd	*cmd;
+	char	*expanded;
 
-	cmd_table = create_cmd_table(line);
+	expanded = expand_vars(line, env, &last_ret_val);
+
+	cmd_table = create_cmd_table(expanded);
 	if (!cmd_table)
 		return (NULL);
+	/*
 	cmd_table_iter = cmd_table;
 	while (cmd_table_iter)
 	{
@@ -105,6 +109,7 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 			return (init_cmd_table_destroyer(&cmd_table));
 		cmd_table_iter = cmd_table_iter->next;
 	}
+	*/
 	if (parse_redir_loop(cmd_table) != 0)
 		return (init_cmd_table_destroyer(&cmd_table));
 	if (init_cmd_table_more(cmd_table, env, &last_ret_val) == 1)
