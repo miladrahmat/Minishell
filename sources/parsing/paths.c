@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:38:19 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 16:24:28 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/15 15:57:31 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,10 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 {	
 	char	**exec_args;
 
-	exec_args = ft_split(command, ' ');
+//	printf("get_exec_path_more: %s\n", command);
+	exec_args = (char **) malloc(sizeof(char *));
+	exec_args[0] = ft_strdup(command);
+	//exec_args = ft_split(command, ' ');
 	if (!exec_args)
 		return (NULL);
 	if (!exec_args[0])

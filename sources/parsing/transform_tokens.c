@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 16:22:58 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/14 15:02:34 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/15 15:57:37 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	transform_tokens1(t_list **head, t_env *env, int *last_ret_val)
 				env, last_ret_val);
 		if (!expanded_token)
 			return (1);
+//		printf("expanded: %s\n", expanded_token);
 		if (ft_strlen(expanded_token) == 0)
 		{
 			ft_lstdel_and_connect(head, &split_tokens_iter);
