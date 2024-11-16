@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/16 15:33:14 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/16 17:49:16 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 // vars are expanded inside of heredocs
 // but not if the delimiter is in quotes!
 
-int	event(void)
+static int	event(void)
 {
 	return (0);
 }

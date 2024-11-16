@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/14 16:02:14 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/16 17:48:45 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 // replace dst
 // NULL pointer is returned in case of malloc() failure in ft_strndup() or 
 // ft_strjoin()
-char	*concatenate_until(char **dst, char *src, char *delim)
+static char	*concatenate_until(char **dst, char *src, char *delim)
 {
 	char	*src_end;
 	char	*temp;
@@ -41,7 +41,7 @@ char	*concatenate_until(char **dst, char *src, char *delim)
 
 // return -1 on malloc fail
 // return 1 ==> use continue in caller
-int	reached_dollar(
+static int	reached_dollar(
 	char **start, char **end, char **ret, t_var_expander extra_args)
 {
 	char	*varname;
@@ -62,7 +62,7 @@ int	reached_dollar(
 	return (0);
 }
 
-int	reached_single_quote(char **end, char **ret)
+static int	reached_single_quote(char **end, char **ret)
 {
 	char	*temp;
 
@@ -86,7 +86,7 @@ int	reached_single_quote(char **end, char **ret)
 // $VAR in env
 // token is NOT freed here because it is contained in a list node in the caller
 // returns NULL in case of malloc fails
-char	*var_expander(char *token, t_var_expander extra_args)
+static char	*var_expander(char *token, t_var_expander extra_args)
 {
 	char	*ret;
 	char	*end;

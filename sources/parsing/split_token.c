@@ -6,14 +6,14 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:22:20 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 14:55:13 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/16 17:50:56 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // skips max two arrows
-char	*skip_arrows(char *s)
+static char	*skip_arrows(char *s)
 {	
 	if (*s == '<' || *s == '>')
 	{
@@ -25,7 +25,7 @@ char	*skip_arrows(char *s)
 }
 
 // advances until arrow ow whitespace that is not inside of quotes
-char	*find_end(char *s)
+static char	*find_end(char *s)
 {
 	int	quotes;
 

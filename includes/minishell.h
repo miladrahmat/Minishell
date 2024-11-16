@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/16 12:46:04 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/16 17:47:26 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ char		*skip_varname(char *s);
 char		*get_varname(char *start);
 bool		is_varname(char c);
 int			not_varname(char **start, char **end, char **ret);
+int			expand_vars_in_filenames(t_cmd *cmd, t_env *env, int *last_ret_val);
 // expand_vars_process_var.c
 int			process_questionmark(char **end, char **ret, \
 					t_var_expander extra_args);

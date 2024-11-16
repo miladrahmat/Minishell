@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 14:27:47 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/15 15:57:40 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/16 18:03:12 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static int	add_arguments(t_cmd *cmd)
 	split_tokens_iter = split_tokens_iter->next;
 	while (split_tokens_iter)
 	{
-		
 		cmd->cmd_args[i] = ft_strdup(split_tokens_iter->content);
 		if (!cmd->cmd_args[i])
 			return (1);

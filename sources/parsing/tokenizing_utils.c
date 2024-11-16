@@ -6,13 +6,13 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 10:26:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/07 18:00:57 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/16 17:51:48 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-size_t	get_token_len(char *start, char *end)
+static size_t	get_token_len(char *start, char *end)
 {
 	size_t	len;
 

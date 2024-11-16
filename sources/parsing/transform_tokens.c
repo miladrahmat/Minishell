@@ -6,20 +6,41 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 16:22:58 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/16 17:39:55 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/16 18:01:38 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_lstadd_middle(t_list **start, t_list *to_add)
+static void	ft_lstadd_middle(t_list **start, t_list *to_add)
 {
 	t_list	*trail;
 
 	trail = (*start)->next;
 	(*start)->next = to_add;
 	ft_lstadd_back(&to_add, trail);
-//	to_add->next = trail;
+}
+
+static int	split_expanded_token( \
+	t_list *split_tokens_iter, char *expanded_token)
+{
+	t_list	*split_again;
+
+	if (split_tokens_iter->content)
+		free(split_tokens_iter->content);
+	split_again = split_token(expanded_token);
+	free(expanded_token);
+	split_tokens_iter->content = ft_strdup(split_again->content);
+	if (!split_tokens_iter->content)
+		return (1);
+	if (ft_lstsize(split_again) == 1)
+		ft_lstdelone(split_again, free);
+	else if (split_again->next)
+	{
+		ft_lstadd_middle(&split_tokens_iter, split_again->next);
+		ft_lstdelone(split_again, free);
+	}
+	return (0);
 }
 
 // return 1 on malloc fails
@@ -27,7 +48,6 @@ int	transform_tokens1(t_list **head, t_env *env, int *last_ret_val)
 {
 	t_list	*split_tokens_iter;
 	char	*expanded_token;
-	t_list	*split_again;
 
 	split_tokens_iter = *head;
 	while (split_tokens_iter)
@@ -43,22 +63,8 @@ int	transform_tokens1(t_list **head, t_env *env, int *last_ret_val)
 		}
 		else
 		{
-			if (split_tokens_iter->content)
-				free(split_tokens_iter->content);
-			split_again = split_token(expanded_token);
-			free(expanded_token);
-			split_tokens_iter->content = ft_strdup(split_again->content);
-			if (!split_tokens_iter->content)
+			if (split_expanded_token(split_tokens_iter, expanded_token) == 1)
 				return (1);
-			if (ft_lstsize(split_again) == 1)
-			{
-				ft_lstdelone(split_again, free);
-			}
-			else if (split_again->next)
-			{
-				ft_lstadd_middle(&split_tokens_iter, split_again->next);
-				ft_lstdelone(split_again, free);
-			}
 			// we could skp the added tokens after this
 		}
 		if (split_tokens_iter)

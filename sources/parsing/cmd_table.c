@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/16 17:41:39 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/16 17:52:54 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // Must be passed to ft_lstmap(). 
 // For each node in t_list tokens, creates a node in t_list of t_cmd. 
 // Init each t_cmd of the list (but not cmd->cmd_args yet). 
-void	*init_t_cmd(void *content)
+static void	*init_t_cmd(void *content)
 {
 	t_cmd	*cmd;
 
@@ -36,7 +36,7 @@ void	*init_t_cmd(void *content)
 	return (cmd);
 }
 
-void	*init_cmd_table_destroyer(t_list **cmd_table)
+static void	*init_cmd_table_destroyer(t_list **cmd_table)
 {
 	if (*cmd_table)
 		ft_lstclear(cmd_table, &destroy_tlist_of_tcmd);
@@ -45,7 +45,7 @@ void	*init_cmd_table_destroyer(t_list **cmd_table)
 }
 
 // can return NULL in case of malloc fail
-t_list	*create_cmd_table(char *line)
+static t_list	*create_cmd_table(char *line)
 {
 	t_list	*pipe_tokens;
 	t_list	*cmd_table;
@@ -58,7 +58,8 @@ t_list	*create_cmd_table(char *line)
 	return (cmd_table);
 }
 
-int	init_cmd_table_more(t_list *cmd_table, t_env *env, int *last_ret_val)
+static int	init_cmd_table_more( \
+	t_list *cmd_table, t_env *env, int *last_ret_val)
 {
 	t_list	*cmd_table_iter;
 	t_cmd	*cmd;
@@ -81,27 +82,6 @@ int	init_cmd_table_more(t_list *cmd_table, t_env *env, int *last_ret_val)
 	return (0);
 }
 
-int	expand_vars_in_filenames(t_cmd *cmd, t_env *env, int *last_ret_val)
-{
-	t_list	*files_iter;
-	t_redir	*redir;
-	char	*expanded_filename;
-
-	files_iter = cmd->files;
-	while (files_iter)
-	{
-		redir = files_iter->content;
-		expanded_filename = expand_vars(redir->filename, env, last_ret_val);
-		if (!expanded_filename)
-			return (1);
-		if (redir->filename)
-			free(redir->filename);
-		redir->filename = expanded_filename;
-		files_iter = files_iter->next;
-	}
-	return (0);
-}
-
 // Can return NULL in case of a failed malloc() in functions called from here
 //
 // When an incorrect variable name is given, expand_vars() will return 
@@ -118,10 +98,8 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 	cmd_table = create_cmd_table(line);
 	if (!cmd_table)
 		return (NULL);
-	
 	if (parse_redir_loop(cmd_table) != 0)
 		return (init_cmd_table_destroyer(&cmd_table));
-
 	cmd_table_iter = cmd_table;
 	while (cmd_table_iter)
 	{
@@ -132,7 +110,6 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 			return (init_cmd_table_destroyer(&cmd_table));
 		cmd_table_iter = cmd_table_iter->next;
 	}
-	
 	if (init_cmd_table_more(cmd_table, env, &last_ret_val) == 1)
 		return (init_cmd_table_destroyer(&cmd_table));
 	return (cmd_table);

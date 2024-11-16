@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:18:23 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/14 15:07:52 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/16 17:47:05 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,25 @@ int	not_varname(char **start, char **end, char **ret)
 	}
 	*start = *end;
 	return (1);
+}
+
+int	expand_vars_in_filenames(t_cmd *cmd, t_env *env, int *last_ret_val)
+{
+	t_list	*files_iter;
+	t_redir	*redir;
+	char	*expanded_filename;
+
+	files_iter = cmd->files;
+	while (files_iter)
+	{
+		redir = files_iter->content;
+		expanded_filename = expand_vars(redir->filename, env, last_ret_val);
+		if (!expanded_filename)
+			return (1);
+		if (redir->filename)
+			free(redir->filename);
+		redir->filename = expanded_filename;
+		files_iter = files_iter->next;
+	}
+	return (0);
 }
