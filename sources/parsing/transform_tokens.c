@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 16:22:58 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/16 13:36:25 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/16 17:39:55 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void	ft_lstadd_middle(t_list **start, t_list *to_add)
 
 	trail = (*start)->next;
 	(*start)->next = to_add;
-	to_add->next = trail;
+	ft_lstadd_back(&to_add, trail);
+//	to_add->next = trail;
 }
 
 // return 1 on malloc fails
@@ -46,9 +47,19 @@ int	transform_tokens1(t_list **head, t_env *env, int *last_ret_val)
 				free(split_tokens_iter->content);
 			split_again = split_token(expanded_token);
 			free(expanded_token);
-			split_tokens_iter->content = split_again->content;
-			if (split_again->next)
+			split_tokens_iter->content = ft_strdup(split_again->content);
+			if (!split_tokens_iter->content)
+				return (1);
+			if (ft_lstsize(split_again) == 1)
+			{
+				ft_lstdelone(split_again, free);
+			}
+			else if (split_again->next)
+			{
 				ft_lstadd_middle(&split_tokens_iter, split_again->next);
+				ft_lstdelone(split_again, free);
+			}
+			// we could skp the added tokens after this
 		}
 		if (split_tokens_iter)
 			split_tokens_iter = split_tokens_iter->next;

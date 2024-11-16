@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/16 11:59:46 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/16 17:41:39 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,27 @@ int	init_cmd_table_more(t_list *cmd_table, t_env *env, int *last_ret_val)
 	return (0);
 }
 
+int	expand_vars_in_filenames(t_cmd *cmd, t_env *env, int *last_ret_val)
+{
+	t_list	*files_iter;
+	t_redir	*redir;
+	char	*expanded_filename;
+
+	files_iter = cmd->files;
+	while (files_iter)
+	{
+		redir = files_iter->content;
+		expanded_filename = expand_vars(redir->filename, env, last_ret_val);
+		if (!expanded_filename)
+			return (1);
+		if (redir->filename)
+			free(redir->filename);
+		redir->filename = expanded_filename;
+		files_iter = files_iter->next;
+	}
+	return (0);
+}
+
 // Can return NULL in case of a failed malloc() in functions called from here
 //
 // When an incorrect variable name is given, expand_vars() will return 
@@ -93,25 +114,25 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 	t_list	*cmd_table;
 	t_list	*cmd_table_iter;
 	t_cmd	*cmd;
-	//char	*expanded;
 
-	//expanded = expand_vars(line, env, &last_ret_val);
-	//cmd_table = create_cmd_table(expanded);
 	cmd_table = create_cmd_table(line);
 	if (!cmd_table)
 		return (NULL);
 	
+	if (parse_redir_loop(cmd_table) != 0)
+		return (init_cmd_table_destroyer(&cmd_table));
+
 	cmd_table_iter = cmd_table;
 	while (cmd_table_iter)
 	{
 		cmd = (t_cmd *) cmd_table_iter->content;
 		if (transform_tokens1(&cmd->split_token, env, &last_ret_val) == 1)
 			return (init_cmd_table_destroyer(&cmd_table));
+		if (expand_vars_in_filenames(cmd, env, &last_ret_val) == 1)
+			return (init_cmd_table_destroyer(&cmd_table));
 		cmd_table_iter = cmd_table_iter->next;
 	}
 	
-	if (parse_redir_loop(cmd_table) != 0)
-		return (init_cmd_table_destroyer(&cmd_table));
 	if (init_cmd_table_more(cmd_table, env, &last_ret_val) == 1)
 		return (init_cmd_table_destroyer(&cmd_table));
 	return (cmd_table);
