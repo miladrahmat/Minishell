@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:23:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/16 13:37:10 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/16 15:36:00 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	int		tokens_consumed;
 
 	tokens_consumed = 0;
+	// check flag was_var here and return 0
 	if (get_redir_type(token1) == error)
 		return (0);
 	redir = malloc(sizeof(t_redir));

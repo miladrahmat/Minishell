@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 15:32:24 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/14 14:03:22 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/16 15:36:12 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	check_quoted_heredoc_delim(t_redir *redir)
 {
-	if (is_double_quoted_str(redir->filename))
+	if (is_quoted_str(redir->filename))
 	{
 		str_del_first_last(redir->filename);
 		redir->heredoc_quoted_delim = true;
