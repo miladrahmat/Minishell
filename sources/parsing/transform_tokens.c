@@ -6,17 +6,27 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 16:22:58 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/15 16:11:08 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/16 13:36:25 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_lstadd_middle(t_list **start, t_list *to_add)
+{
+	t_list	*trail;
+
+	trail = (*start)->next;
+	(*start)->next = to_add;
+	to_add->next = trail;
+}
 
 // return 1 on malloc fails
 int	transform_tokens1(t_list **head, t_env *env, int *last_ret_val)
 {
 	t_list	*split_tokens_iter;
 	char	*expanded_token;
+	t_list	*split_again;
 
 	split_tokens_iter = *head;
 	while (split_tokens_iter)
@@ -34,7 +44,11 @@ int	transform_tokens1(t_list **head, t_env *env, int *last_ret_val)
 		{
 			if (split_tokens_iter->content)
 				free(split_tokens_iter->content);
-			split_tokens_iter->content = expanded_token;
+			split_again = split_token(expanded_token);
+			free(expanded_token);
+			split_tokens_iter->content = split_again->content;
+			if (split_again->next)
+				ft_lstadd_middle(&split_tokens_iter, split_again->next);
 		}
 		if (split_tokens_iter)
 			split_tokens_iter = split_tokens_iter->next;

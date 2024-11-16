@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/14 18:36:28 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/16 12:46:04 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 # include <sys/stat.h> //stat()
 # include <sys/wait.h>
 # include <signal.h>
+# include <stdio.h>
 # include "libft.h"
-
 typedef struct s_env
 {
 	char			*key;
