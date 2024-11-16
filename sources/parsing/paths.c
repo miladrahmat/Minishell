@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:38:19 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/16 13:06:16 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/16 14:00:58 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	find_in_paths(char **paths, char **exec_args, int *path_error)
 	i = 0;
 	while (paths[i])
 	{
-		exec_path = create_path(paths[i], exec_args[0]);
+		exec_path = create_path(paths[i], *exec_args);
 		if (!exec_path)
 			return (2);
 		*path_error = check_exec_access(exec_path);
@@ -43,8 +43,8 @@ static int	find_in_paths(char **paths, char **exec_args, int *path_error)
 			return (1);
 		if (*path_error == 0)
 		{
-			free(exec_args[0]);
-			exec_args[0] = exec_path;
+			free(*exec_args);
+			*exec_args = exec_path;
 			return (0);
 		}
 		if (*path_error == 126)
@@ -56,7 +56,7 @@ static int	find_in_paths(char **paths, char **exec_args, int *path_error)
 	return (1);
 }
 
-static char	**search_paths(char **exec_args, t_env *env, int *path_error)
+static char	*search_paths(char *exec_args, t_env *env, int *path_error)
 {
 	char	**paths;
 	int		err;
@@ -66,20 +66,20 @@ static char	**search_paths(char **exec_args, t_env *env, int *path_error)
 		return (NULL);
 	if (!paths)
 	{
-		*path_error = check_exec_access_print_err(exec_args[0]);
+		*path_error = check_exec_access_print_err(exec_args);
 		if (*path_error == 0)
 			return (exec_args);
-		split_free(exec_args, 0);
+		free(exec_args);
 		return (NULL);
 	}
 	*path_error = 0;
-	err = find_in_paths(paths, exec_args, path_error);
+	err = find_in_paths(paths, &exec_args, path_error);
 	split_free(paths, 0);
 	if (err > 0)
 	{
 		if (err == 1)
-			print_builtin_error(exec_args[0], NULL, "command not found", false);
-		split_free(exec_args, 0);
+			print_builtin_error(exec_args, NULL, "command not found", false);
+		free(exec_args);
 		return (NULL);
 	}
 	return (exec_args);
@@ -98,30 +98,23 @@ static char	**search_paths(char **exec_args, t_env *env, int *path_error)
 // if cmd has a /, then check first without using paths
 // if PATH is unset, do the same
 // then check in PATH
-static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
+static char	*get_exec_path_more(char *command, t_env *env, int *path_error)
 {	
-	char	**exec_args;
+	char	*exec_args;
 
-	
-	exec_args = (char **) malloc(sizeof(char *));
-	exec_args[0] = ft_strdup(command);
-	
-//	exec_args = ft_split(command, ' ');
+	exec_args = ft_strdup(command);
 	if (!exec_args)
-		return (NULL);
-	if (!exec_args[0])
 	{
 		print_builtin_error(NULL, NULL, "command not found", false);
-		split_free(exec_args, 0);
 		*path_error = 127;
 		return (NULL);
 	}
-	if (is_abs_or_pwd_path(exec_args[0]))
+	if (is_abs_or_pwd_path(exec_args))
 	{
-		*path_error = check_exec_access_print_err(exec_args[0]);
+		*path_error = check_exec_access_print_err(exec_args);
 		if (*path_error == 0)
 			return (exec_args);
-		split_free(exec_args, 0);
+		free(exec_args);
 		return (NULL);
 	}
 	return (search_paths(exec_args, env, path_error));
@@ -130,7 +123,7 @@ static char	**get_exec_path_more(char *command, t_env *env, int *path_error)
 // If this returns NULL and path_error = 0, that is a malloc fail
 char	*get_exec_path(char *command, t_env *env, int *path_error)
 {
-	char	**temp;
+	char	*temp;
 	char	*ret;
 
 	if (!command || !command[0])
@@ -142,8 +135,8 @@ char	*get_exec_path(char *command, t_env *env, int *path_error)
 	temp = get_exec_path_more(command, env, path_error);
 	if (temp)
 	{
-		ret = ft_strdup(temp[0]);
-		split_free(temp, 0);
+		ret = ft_strdup(temp);
+		free(temp);
 		return (ret);
 	}
 	return (NULL);
