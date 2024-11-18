@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/16 17:52:54 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/18 14:50:57 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static void	*init_t_cmd(void *content)
 
 static void	*init_cmd_table_destroyer(t_list **cmd_table)
 {
+	printf("init_cmd_table_destroyer()\n");
 	if (*cmd_table)
 		ft_lstclear(cmd_table, &destroy_tlist_of_tcmd);
 	*cmd_table = NULL;
@@ -53,7 +54,7 @@ static t_list	*create_cmd_table(char *line)
 	pipe_tokens = split_on_pipes(line);
 	if (!pipe_tokens)
 		return (NULL);
-	cmd_table = ft_lstmap(pipe_tokens, &init_t_cmd, &free);
+	cmd_table = ft_lstmap(pipe_tokens, &init_t_cmd, &destroy_tlist_of_tcmd);
 	ft_lstclear(&pipe_tokens, free);
 	return (cmd_table);
 }
