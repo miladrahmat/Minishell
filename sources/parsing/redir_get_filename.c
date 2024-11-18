@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:15:01 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/16 15:35:16 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/18 12:18:06 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,30 +71,27 @@ static char	*get_filename(char *start, bool heredoc)
 		ret = ft_strjoin(ret, new_str);
 		free_strs(&temp, &new_str);
 		if (!ret)
-		{
-			free(new_str);
-			return (NULL);
-		}
+			free_strs(&new_str, NULL);
 		start = end;
 	}
 	return (ret);
 }
 
 // malloc fail returned directly
-static char	*get_filename_wrapper_helper(int *tokens_consumed, char *token1,
-							char *token2, unsigned int offset, bool heredoc)
+static char	*get_filename_wrapper_helper(
+	int *tokens_consumed, char *tokens[2], unsigned int offset, bool heredoc)
 {
 	char	*filename;
 
 	filename = NULL;
-	if (ft_strlen(token1) > offset)
+	if (ft_strlen(tokens[0]) > offset)
 	{
-		filename = get_filename(token1 + offset, heredoc);
+		filename = get_filename(tokens[0] + offset, heredoc);
 		*tokens_consumed = 1;
 	}
-	else if (token2)
+	else if (tokens[1])
 	{
-		filename = ft_strdup(token2);
+		filename = ft_strdup(tokens[1]);
 		*tokens_consumed = 2;
 	}
 	return (filename);
@@ -104,20 +101,24 @@ static char	*get_filename_wrapper_helper(int *tokens_consumed, char *token1,
 int	get_filename_wrapper(
 	t_redir *redir, int *tokens_consumed, char *token1, char *token2)
 {
+	char	*tokens[2];
+
+	tokens[0] = token1;
+	tokens[1] = token2;
 	if (redir->redir_type == out_append)
 	{
 		redir->filename = get_filename_wrapper_helper(
-				tokens_consumed, token1, token2, 2, false);
+				tokens_consumed, tokens, 2, false);
 	}
 	else if (redir->redir_type == heredoc)
 	{
 		redir->filename = get_filename_wrapper_helper(
-				tokens_consumed, token1, token2, 2, true);
+				tokens_consumed, tokens, 2, true);
 	}
 	else if (redir->redir_type == out_trunc || redir->redir_type == input)
 	{
 		redir->filename = get_filename_wrapper_helper(
-				tokens_consumed, token1, token2, 1, false);
+				tokens_consumed, tokens, 1, false);
 	}
 	if (!redir->filename)
 		return (1);

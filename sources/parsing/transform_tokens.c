@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 16:22:58 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/16 18:01:38 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/18 12:18:57 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ int	transform_tokens1(t_list **head, t_env *env, int *last_ret_val)
 		{
 			if (split_expanded_token(split_tokens_iter, expanded_token) == 1)
 				return (1);
-			// we could skp the added tokens after this
 		}
 		if (split_tokens_iter)
 			split_tokens_iter = split_tokens_iter->next;
