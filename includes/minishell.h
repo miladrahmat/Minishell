@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/18 12:00:31 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:02:32 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,13 @@ typedef struct s_env
 	bool			flag;
 	struct s_env	*next;
 }	t_env;
+
+typedef struct s_list_and_index
+{
+	t_list	*lst;
+	int		i;
+	pid_t	*pids;
+}	t_list_and_index;
 
 typedef struct s_var_expander
 {

@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/18 14:50:57 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:23:22 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ static void	*init_t_cmd(void *content)
 
 static void	*init_cmd_table_destroyer(t_list **cmd_table)
 {
-	printf("init_cmd_table_destroyer()\n");
 	if (*cmd_table)
 		ft_lstclear(cmd_table, &destroy_tlist_of_tcmd);
 	*cmd_table = NULL;
