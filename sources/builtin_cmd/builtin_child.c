@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 13:46:43 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/11 15:59:30 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:33:02 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	builtin_exit_child(t_cmd *cmd_table, t_env **envp, int last_ret_val)
 			ret_val = ft_atoi(cmd[1]);
 	}
 	ft_envclear(envp, &free);
+	// not sure what we should be trying to destroy here
 	destroy_tlist_of_tcmd(cmd_table);
 	clear_history();
 	if (ret_val == INT_MIN)
