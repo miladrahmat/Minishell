@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:16:52 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/13 17:28:16 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/19 11:14:46 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void	heredoc_signal(void *func)
 
 void	exit_signal(t_list **cmd_table, t_env **env, int ret_val)
 {
-	(void)cmd_table;
 	ft_envclear(env, &free);
 	ft_lstclear(cmd_table, &destroy_tlist_of_tcmd);
 	clear_history();
