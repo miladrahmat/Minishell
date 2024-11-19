@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/18 17:02:32 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:55:36 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ typedef struct s_env
 typedef struct s_list_and_index
 {
 	t_list	*lst;
-	int		i;
+	int		index;
+	char	**env_copy;
 	pid_t	*pids;
 }	t_list_and_index;
 
@@ -147,8 +148,8 @@ char		*get_token(char *start, char *end);
 //builtin_cmds
 bool		test_builtin_cmd(char *cmd);
 int			check_builtin_cmd(t_list **cmd_table, t_env **envp, int ret_val);
-int			check_builtin_cmd_child(t_cmd *cmd_table, \
-	t_env **envp, int ret_val);
+int			check_builtin_cmd_child(t_list_and_index child_args, t_env **envp, \
+	int ret_val);
 int			echo(char **str, int fd);
 int			env(char **cmd, int fd, t_env **envp);
 int			unset(char **cmd, t_env **envp);
