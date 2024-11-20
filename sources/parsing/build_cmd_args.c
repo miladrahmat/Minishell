@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 14:27:47 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/20 13:11:12 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:24:55 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,19 @@ int	build_cmd_args(t_cmd *cmd, t_env *env)
 		cmd->path_error = 0;
 		cmd->cmd_args[0] = get_exec_path(
 				cmd->split_token->content, env, &cmd->path_error);
-		if (!cmd->cmd_args[0] && cmd->path_error == 0)
+		if (!cmd->cmd_args[0])
 		{
-//		if (!cmd->cmd_args[0])a
+			if (cmd->path_error == 0)
+			{
 //			printf("build_cmd_args(): B\n");
 			return (1);
+			}
+			cmd->cmd_args[0] = ft_strdup("");
+			if (!cmd->cmd_args[0])
+			{
+				cmd->path_error = 0;
+				return (1);
+			}
 		}
 	}
 	else
