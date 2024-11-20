@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 09:58:07 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/13 15:26:39 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/19 18:17:45 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ size_t	skip_quotes(char *str)
 	if (str[i] == '\'')
 	{
 		i++;
-		while (str[i] != '\"' && str[i] != '\0')
+		while (str[i] != '\'' && str[i] != '\0')
 			i++;
 	}
 	if (str[i] == '\"')
 	{
 		i++;
-		while (str[i] != '\'' && str[i] != '\0')
+		while (str[i] != '\"' && str[i] != '\0')
 			i++;
 	}
 	return (i);
@@ -90,9 +90,10 @@ int	check_error_pipe(char *str, bool *is)
 		*is = true;
 	else if (*is == true && *str == '|')
 		return (-1);
-	if (str[1] == '\0' && *is == true)
+	if ((str[1] == '\0' || str[1] == '|') && *is == true)
 		return (-1);
-	else if (ft_isprint(*str) && *is == true)
+	else if (ft_isprint(*str) && *is == true && *str != '|' \
+		&& !is_whitespace(*str))
 		*is = false;
 	return (1);
 }
