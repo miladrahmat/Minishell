@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/16 17:49:16 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:57:11 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,14 @@ static int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 
 	rl_done = 0;
 	rl_event_hook = event;
-	line = readline("> ");
+	if (isatty(fileno(stdin)))
+			line = readline("> ");
+	else
+	{
+		line = get_next_line(fileno(stdin));
+		line = ft_strtrim(line, "\n");
+	}
+//	line = readline("> ");
 	if (!line)
 		return (0);
 	if (*line == '\n')
@@ -44,7 +51,14 @@ static int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 		try_expand_write(line, env, fd, expand);
 		write(fd, "\n", 1);
 		free(line);
-		line = readline(">");
+	//	line = readline(">");
+		if (isatty(fileno(stdin)))
+				line = readline("> ");
+		else
+		{
+			line = get_next_line(fileno(stdin));
+			line = ft_strtrim(line, "\n");
+		}
 	}
 	if (line)
 		free(line);

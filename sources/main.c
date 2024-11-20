@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/20 13:11:43 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:23:35 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,14 @@ int	main(int ac, char **av, char **envp)
 	last_ret_val = 0;
 	while (true)
 	{
-		line = readline("[MINISHELL]$> ");
+		if (isatty(fileno(stdin)))
+			line = readline("[MINISHELL]$> ");
+		else
+		{
+			line = get_next_line(fileno(stdin));
+			if (line)
+				line = ft_strtrim(line, "\n");
+		}
 		prepare_cmd(line, &env, &last_ret_val);
 		free(line);
 	}
