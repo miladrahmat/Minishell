@@ -6,11 +6,15 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 20:26:32 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:11:43 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// DEBUG
+#include <stdio.h>
+// DEBUG
 
 sig_atomic_t	g_got_signal = 0;
 
@@ -80,6 +84,9 @@ static void	prepare_cmd(char *line, t_env **env, int *last_ret_val)
 		if (check > 0)
 		{
 			cmd_table = init_cmd_table(line, *env, *last_ret_val);
+//			if (!cmd_table)
+//				printf("prepare_cmd(): its NULL\n");
+//			printf("prepare_cmd(): size: %i\n", ft_lstsize(cmd_table));
 			if (cmd_table)
 				*last_ret_val = exec_cmd_table(cmd_table, env, *last_ret_val);
 			add_history(line);

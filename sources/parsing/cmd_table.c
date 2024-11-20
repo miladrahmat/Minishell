@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 09:48:22 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/18 17:23:22 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:11:26 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,15 @@ static int	init_cmd_table_more( \
 			continue ;
 		}
 		if (transform_tokens2(&cmd->split_token, last_ret_val) == 1)
+		{
+			printf("init_cmd_table_more(): A\n");
 			return (1);
+		}
 		if (build_cmd_args(cmd, env) == 1 && cmd->path_error == 0)
+		{
+			printf("init_cmd_table_more(): B\n");
 			return (1);
+		}
 		cmd_table_iter = cmd_table_iter->next;
 	}
 	return (0);
@@ -97,7 +103,10 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 
 	cmd_table = create_cmd_table(line);
 	if (!cmd_table)
+	{
+		//printf("init_cmd_table(): A\n");
 		return (NULL);
+	}
 	if (parse_redir_loop(cmd_table) != 0)
 		return (init_cmd_table_destroyer(&cmd_table));
 	cmd_table_iter = cmd_table;
@@ -105,12 +114,21 @@ t_list	*init_cmd_table(char *line, t_env *env, int last_ret_val)
 	{
 		cmd = (t_cmd *) cmd_table_iter->content;
 		if (transform_tokens1(&cmd->split_token, env, &last_ret_val) == 1)
+		{
+		//	printf("init_cmd_table(): B\n");
 			return (init_cmd_table_destroyer(&cmd_table));
+		}
 		if (expand_vars_in_filenames(cmd, env, &last_ret_val) == 1)
+		{
+		//	printf("init_cmd_table(): C\n");
 			return (init_cmd_table_destroyer(&cmd_table));
+		}
 		cmd_table_iter = cmd_table_iter->next;
 	}
 	if (init_cmd_table_more(cmd_table, env, &last_ret_val) == 1)
+	{
+		//printf("init_cmd_table(): D\n");
 		return (init_cmd_table_destroyer(&cmd_table));
+	}
 	return (cmd_table);
 }
