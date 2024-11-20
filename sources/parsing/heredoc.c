@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/20 13:57:11 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:46:16 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ static int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 	else
 	{
 		line = get_next_line(fileno(stdin));
-		line = ft_strtrim(line, "\n");
+		if (line)
+			line = ft_strtrim(line, "\n");
 	}
 //	line = readline("> ");
 	if (!line)
@@ -57,7 +58,8 @@ static int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 		else
 		{
 			line = get_next_line(fileno(stdin));
-			line = ft_strtrim(line, "\n");
+			if (line)
+				line = ft_strtrim(line, "\n");
 		}
 	}
 	if (line)
