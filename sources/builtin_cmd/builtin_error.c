@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:46:02 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/21 18:05:38 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/21 18:19:28 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,15 +98,15 @@ long long	exit_error_check(char **cmd)
 		{
 			print_builtin_error("exit", cmd[1], "numeric argument required", \
 				false);
-			ret_val = 2;
+			return (2);
 		}
 		else
 			ret_val = ft_atoll(cmd[1]);
 	}
-	else if (cmd[1] != NULL && cmd[2] != NULL)
+	if (cmd[1] != NULL && cmd[2] != NULL)
 	{
 		print_builtin_error("exit", NULL, "too many arguments", false);
-		ret_val = 1;
+		return (1);
 	}
 	return (ret_val);
 }
