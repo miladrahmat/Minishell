@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 18:20:21 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/13 14:27:00 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/21 19:13:41 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ t_env	*set_key_value(char *str)
 	size_t	check;
 
 	cut = ft_strlen_eq(str);
+	if (cut == 0)
+		return (NULL);
 	if (str[cut - 1] == '+')
 		key = ft_substr(str, 0, cut - 1);
 	else
