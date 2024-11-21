@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/20 14:46:16 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/21 14:46:46 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 
 	rl_done = 0;
 	rl_event_hook = event;
+	/*
 	if (isatty(fileno(stdin)))
 			line = readline("> ");
 	else
@@ -40,7 +41,8 @@ static int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 		if (line)
 			line = ft_strtrim(line, "\n");
 	}
-//	line = readline("> ");
+*/
+	line = readline("> ");
 	if (!line)
 		return (0);
 	if (*line == '\n')
@@ -52,7 +54,8 @@ static int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 		try_expand_write(line, env, fd, expand);
 		write(fd, "\n", 1);
 		free(line);
-	//	line = readline(">");
+		line = readline(">");
+		/*
 		if (isatty(fileno(stdin)))
 				line = readline("> ");
 		else
@@ -61,6 +64,7 @@ static int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 			if (line)
 				line = ft_strtrim(line, "\n");
 		}
+		*/
 	}
 	if (line)
 		free(line);
