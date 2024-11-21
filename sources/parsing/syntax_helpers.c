@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 09:58:07 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/19 18:17:45 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/21 18:32:15 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ size_t	skip_quotes(char *str)
 		while (str[i] != '\'' && str[i] != '\0')
 			i++;
 	}
-	if (str[i] == '\"')
+	else if (str[i] == '\"')
 	{
 		i++;
 		while (str[i] != '\"' && str[i] != '\0')

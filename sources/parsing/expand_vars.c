@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/21 17:45:21 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/21 18:43:18 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static char	*concatenate_until(char **dst, char *src, char *delim)
 	{
 	//	printf("here\n");
 		quote = skip_quotes(src);
-		temp = ft_substr(src, 0, quote);
+		temp = ft_substr(src, 1, quote);
 		if (!temp)
 			return (NULL);
 		if (src[quote] != '\0')
@@ -102,7 +102,7 @@ static int	reached_single_quote(char **end, char **ret)
 // token is NOT freed here because it is contained in a list node in the caller
 // returns NULL in case of malloc fails
 //
-// TODO: maybe rewrite with skip_quotes() + ft_substr()
+//TODO: maybe handler for double quotes
 static char	*var_expander(char *token, t_var_expander extra_args)
 {
 	char	*ret;
@@ -137,7 +137,7 @@ char	*expand_vars(char *token, t_env *env, int *last_ret_val)
 	
 	char	*tmp;
 
-	//printf("expand_vars(): in: %s\n", token);
+//	printf("expand_vars(): in: %s\n", token);
 	extra_args.env = env;
 	extra_args.last_ret_val = last_ret_val;
 	if (!token)
@@ -147,7 +147,7 @@ char	*expand_vars(char *token, t_env *env, int *last_ret_val)
 	else
 	{
 		tmp =  var_expander(token, extra_args);
-	//	printf("expand_vars(): out: %s\n", tmp);
+//		printf("expand_vars(): out: %s\n", tmp);
 		return (tmp);
 
 		//return (var_expander(token, extra_args));
