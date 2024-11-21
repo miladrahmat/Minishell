@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/19 11:01:47 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/21 20:06:17 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ static int	prepare_parent(t_list *cmd_table, t_env **env, \
 	c_args.lst = cmd_table;
 	c_args.pids = child;
 	cmd_iter = cmd_table;
-	while (++c_args.index < ft_lstsize(cmd_table) && cmd_iter != NULL)
+	while (cmd_iter != NULL && ++c_args.index < ft_lstsize(cmd_table))
 	{
 		if (((t_cmd *)cmd_iter->content)->cmd_args != NULL)
 		{
@@ -126,7 +126,7 @@ static int	prepare_parent(t_list *cmd_table, t_env **env, \
 		}
 		cmd_iter = cmd_iter->next;
 	}
-	return (wait_pids(&child, c_args.index - 1));
+	return (wait_pids(&child, c_args.index));
 }
 
 int	prepare_exec(t_list *cmd_table, t_env **env, int last_ret_val)

@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 14:27:47 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/20 13:24:55 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/21 19:26:06 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	build_cmd_args(t_cmd *cmd, t_env *env)
 {	
 	if (!cmd->split_token->content || ft_strlen(cmd->split_token->content) <= 0)
 	{
+		cmd->path_error = 127;
 		print_builtin_error("", NULL, "command not found", false);
 		return (0);
 	}
