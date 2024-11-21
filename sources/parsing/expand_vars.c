@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/21 14:56:12 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/21 17:45:21 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,30 @@ static char	*concatenate_until(char **dst, char *src, char *delim)
 	char	*src_end;
 	char	*temp;
 	char	*temp_joined;
+	size_t	quote;
 
-	src_end = src;
-	while (*src_end && !ft_strchr(delim, *src_end))
+	if (*delim == '\'')
 	{
-		src_end++;
+	//	printf("here\n");
+		quote = skip_quotes(src);
+		temp = ft_substr(src, 0, quote);
+		if (!temp)
+			return (NULL);
+		if (src[quote] != '\0')
+			src_end = src + quote + 1;
+		else
+			src_end = src + quote;
+
 	}
-	temp = ft_strndup(src, substr_len(src, src_end));
-	if (!temp)
-		return (NULL);
+	else
+	{
+		src_end = src;
+		while (*src_end && !ft_strchr(delim, *src_end))
+			src_end++;
+		temp = ft_strndup(src, substr_len(src, src_end));
+		if (!temp)
+			return (NULL);
+	}
 	temp_joined = ft_strjoin(*dst, temp);
 	free(temp);
 	if (!temp_joined)
@@ -72,7 +87,7 @@ static int	reached_single_quote(char **end, char **ret)
 		free(temp);
 	if (!*ret)
 		return (-1);
-	*end = concatenate_until(ret, (*end) + 1, "'");
+	*end = concatenate_until(ret, (*end) , "'");
 	if (!*end)
 		return (-1);
 	return (0);
@@ -86,6 +101,8 @@ static int	reached_single_quote(char **end, char **ret)
 // $VAR in env
 // token is NOT freed here because it is contained in a list node in the caller
 // returns NULL in case of malloc fails
+//
+// TODO: maybe rewrite with skip_quotes() + ft_substr()
 static char	*var_expander(char *token, t_var_expander extra_args)
 {
 	char	*ret;
@@ -100,6 +117,7 @@ static char	*var_expander(char *token, t_var_expander extra_args)
 			return (free_strs(&ret, NULL));
 		if (*end == '$')
 		{
+		//	printf("found $\n");
 			flag = reached_dollar(&token, &end, &ret, extra_args);
 			if (flag < 0)
 				return (free_strs(&ret, NULL));
@@ -119,7 +137,7 @@ char	*expand_vars(char *token, t_env *env, int *last_ret_val)
 	
 	char	*tmp;
 
-	printf("expand_vars(): in: %s\n", token);
+	//printf("expand_vars(): in: %s\n", token);
 	extra_args.env = env;
 	extra_args.last_ret_val = last_ret_val;
 	if (!token)
@@ -129,7 +147,7 @@ char	*expand_vars(char *token, t_env *env, int *last_ret_val)
 	else
 	{
 		tmp =  var_expander(token, extra_args);
-		printf("expand_vars(): out: %s\n", tmp);
+	//	printf("expand_vars(): out: %s\n", tmp);
 		return (tmp);
 
 		//return (var_expander(token, extra_args));

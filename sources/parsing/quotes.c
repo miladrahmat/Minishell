@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:28:18 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/13 16:34:31 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/21 16:22:00 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ char	*strip_quotes(char *s, int *ret_val)
 			if (handle_quotes(ret, s, &ret_i, &s_i) < 0)
 			{
 				*ret_val = 2;
+				free(ret);
 				return (NULL);
 			}
 		}
