@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:02:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/04 13:57:32 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:49:04 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	echo(char **str, int fd)
 		ft_putchar_fd('\n', fd);
 		return (0);
 	}
-	if (echo_n(*str) == 1)
+	while (echo_n(*str) == 1)
 	{
 		str++;
 		n = 1;

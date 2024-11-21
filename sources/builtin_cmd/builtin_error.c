@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:46:02 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/13 15:20:14 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/21 18:05:38 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,7 @@ long long	exit_error_check(char **cmd)
 	long long	ret_val;
 
 	ret_val = LLONG_MIN;
-	if (cmd[1] != NULL && cmd[2] != NULL)
-	{
-		print_builtin_error("exit", NULL, "too many arguments", false);
-		ret_val = 1;
-	}
-	else if (cmd[1] != NULL)
+	if (cmd[1] != NULL)
 	{
 		if (validate_str(cmd[1], "-+0123456789") == -1 \
 			|| is_overflown(cmd[1]) < 0)
@@ -107,6 +102,11 @@ long long	exit_error_check(char **cmd)
 		}
 		else
 			ret_val = ft_atoll(cmd[1]);
+	}
+	else if (cmd[1] != NULL && cmd[2] != NULL)
+	{
+		print_builtin_error("exit", NULL, "too many arguments", false);
+		ret_val = 1;
 	}
 	return (ret_val);
 }
