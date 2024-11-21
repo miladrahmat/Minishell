@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/21 20:06:17 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/21 20:17:25 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,10 @@ static int	wait_pids(pid_t **pid, int index)
 			waitpid((*pid)[iter], NULL, 0);
 	}
 	if ((*pid)[iter] == 0)
+	{
+		free(*pid);
 		return (1);
+	}
 	waitpid((*pid)[iter], &ret_val, 0);
 	free(*pid);
 	handle_sigint(&handle_signals);
@@ -109,6 +112,7 @@ static int	prepare_parent(t_list *cmd_table, t_env **env, \
 	child = malloc(ft_lstsize(cmd_table) * (sizeof(pid_t)));
 	if (child == NULL)
 		return (1);
+	ft_bzero(child, ft_lstsize(cmd_table) * sizeof(pid_t));
 	c_args.index = -1;
 	c_args.lst = cmd_table;
 	c_args.pids = child;
