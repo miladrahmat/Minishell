@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:18:23 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/18 12:05:22 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/22 14:29:36 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,14 @@ int	not_varname(char **start, char **end, char **ret)
 	}
 	else if (!**end || is_whitespace(**end) || **end == '\"')
 	{
-		if (!(*end)[1] || is_whitespace((*end)[1]))
-		{
+	//	if (!(*end)[1] || is_whitespace((*end)[1]))
+	//	{
 			temp = *ret;
 			*ret = ft_strjoin(*ret, "$");
 			free(temp);
 			if (!*ret)
 				return (-1);
-		}
+	//	}
 	}
 	*start = *end;
 	return (1);

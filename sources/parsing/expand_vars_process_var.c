@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 15:38:40 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/14 16:02:33 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:10:50 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	process_env_var(char **end, char **ret, char *varname,
 {
 	char	*temp;
 
+//	printf("process_env-var(): %s\n", varname);
+//	printf("process_env-var(): %s\n", *ret);
 	temp = *ret;
 	*ret = ft_strjoin_safe(*ret, ft_env_get_value_by_key(
 				varname, extra_args.env));
@@ -44,5 +46,7 @@ int	process_env_var(char **end, char **ret, char *varname,
 	if (!*ret)
 		return (-1);
 	*end = skip_varname(*end);
+//	printf("after: %s\n", *end);
+//	printf("after: %s\n", *ret);
 	return (0);
 }

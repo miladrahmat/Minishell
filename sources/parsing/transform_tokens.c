@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 16:22:58 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/18 12:18:57 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:12:01 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ static int	split_expanded_token( \
 		free(split_tokens_iter->content);
 	split_again = split_token(expanded_token);
 	free(expanded_token);
+	if (!split_again || !split_again->content)
+		return (1);
 	split_tokens_iter->content = ft_strdup(split_again->content);
 	if (!split_tokens_iter->content)
 		return (1);
