@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/19 11:45:30 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/22 11:24:05 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,7 @@ int			check_pipe_fd(t_cmd **curr_cmd, t_cmd **next_cmd);
 int			prepare_exec(t_list *cmd_table, t_env **env, int last_ret_val);
 char		*copy_env_node(t_env *env);
 int			execute_one_builtin(t_list *cmd_table, t_env **env, int ret_val);
+int			check_child_exit_code(int status);
 
 //signals
 void		handle_signals(int signal);

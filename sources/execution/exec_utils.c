@@ -6,11 +6,20 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 17:23:18 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/06 10:43:27 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/22 11:23:20 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	check_child_exit_code(int status)
+{
+	if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	return (-1);
+}
 
 int	execute_one_builtin(t_list *cmd_table, t_env **env, int ret_val)
 {
