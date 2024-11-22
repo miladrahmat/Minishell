@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 18:32:17 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/13 15:16:26 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:33:50 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,16 @@ size_t	ft_strlen_eq(char *str)
 int	add_new_env(char *new_variable, t_env **envp)
 {
 	t_env	*new_node;
+	size_t	cut;
 
+	cut = ft_strlen_eq(new_variable);
+	if (cut == 0 && new_variable[cut] == '\0')
+		return (-1);
+	else if (cut == 0 && new_variable[cut] == '=')
+	{
+		print_export_error(&new_variable, false);
+		return (-1);
+	}
 	new_node = set_key_value(new_variable);
 	if (new_node == NULL)
 		return (-1);
