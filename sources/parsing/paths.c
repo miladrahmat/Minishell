@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:38:19 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/21 19:46:57 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/26 15:12:19 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,20 +39,15 @@ static int	find_in_paths(char **paths, char **exec_args, int *path_error)
 		if (!exec_path)
 			return (2);
 		*path_error = check_exec_access(exec_path);
-		if (*path_error == 126)
-		{
-			free(exec_path);
-			return (1);
-		}
 		if (*path_error == 0)
 		{
 			free(*exec_args);
 			*exec_args = exec_path;
 			return (0);
 		}
+		free(exec_path);
 		if (*path_error == 126)
 			return (1);
-		free(exec_path);
 		i++;
 	}
 	*path_error = 127;
