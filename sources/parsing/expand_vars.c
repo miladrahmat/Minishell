@@ -6,71 +6,22 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/26 13:26:43 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:38:03 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static	int	stupid_join(char **s1, char *s2, bool s2_alloc)
-{
-	char	*temp;
-
-	temp = *s1;
-	*s1 = ft_strjoin(*s1, s2);
-	free(temp);
-	if (s2_alloc)
-		free(s2);
-	if (!*s1)
-		return (1);
-	return (0);
-}
-
-// return pointer to the last char copied from src
-// replace dst
-// NULL pointer is returned in case of malloc() failure in ft_strndup() or 
-// ft_strjoin()
-static char	*concatenate_until(char **dst, char *src, char *delim)
-{
-	char	*src_end;
-	char	*new_str;
-	size_t	quote;
-
-	if (*delim == '\'')
-	{
-		quote = skip_quotes(src);
-		new_str = ft_substr(src, 1, quote);
-		if (!new_str)
-			return (NULL);
-		src_end = src + quote;
-		if (src[quote] != '\0')
-			src_end++;
-	}
-	else
-	{
-		src_end = src;
-		while (*src_end && !ft_strchr(delim, *src_end))
-			src_end++;
-		new_str = ft_strndup(src, substr_len(src, src_end));
-		if (!new_str)
-			return (NULL);
-	}
-	if (stupid_join(dst, new_str, true) > 0)
-		return (NULL);
-	return (src_end);
-}
-
 // return -1 on malloc fail
 // return 1 ==> use continue in caller
 static int	reached_dollar(
-	char **start, char **end, char **ret, t_var_expander extra_args,
-		bool in_dquote)
+	char **start, char **end, char **ret, t_var_expander extra_args)
 {
 	char	*varname;
 	int		flag;
 
 	if (!is_varname(*((*end) + 1)))
-		return (not_varname(start, end, ret, in_dquote));
+		return (not_varname(start, end, ret, extra_args.in_dquote));
 	varname = get_varname((*end) + 1);
 	if (!varname)
 		return (free_strs_int(ret, &varname));
@@ -105,7 +56,7 @@ static int	reached_d_quote(char **end, char **ret, \
 {
 	char	*start;
 
-//	printf("reached_d_quote()\n");
+	extra_args.in_dquote = true;
 	(*end)++;
 	if (stupid_join(ret, "\"", false) > 0)
 		return (-1);
@@ -113,9 +64,8 @@ static int	reached_d_quote(char **end, char **ret, \
 	while (*start)
 	{
 		*end = concatenate_until(ret, start, "$\"");
-		if (!end || !ret)
-			return (-1);
-		if (**end == '$' && reached_dollar(&start, end, ret, extra_args, true) < 0)
+		if (!end || !ret || (**end == '$' && reached_dollar(
+					&start, end, ret, extra_args) < 0))
 			return (-1);
 		else if (**end == '\"')
 		{
@@ -153,11 +103,10 @@ static char	*var_expander(char *token, t_var_expander extra_args)
 			return (free_strs(&ret, NULL));
 		if (*end == '$')
 		{
-			flag = reached_dollar(&token, &end, &ret, extra_args, false);
+			extra_args.in_dquote = false;
+			flag = reached_dollar(&token, &end, &ret, extra_args);
 			if (flag < 0)
 				return (free_strs(&ret, NULL));
-			if (flag > 0)
-				continue ;
 		}
 		else if (*end == '\'' && reached_single_quote(&end, &ret) < 0)
 			return (free_strs(&ret, NULL));
@@ -171,7 +120,7 @@ static char	*var_expander(char *token, t_var_expander extra_args)
 char	*expand_vars(char *token, t_env *env, int *last_ret_val)
 {
 	t_var_expander	extra_args;
-	char	*tmp;
+	char			*tmp;
 
 //	printf("expand_vars(): in: %s\n", token);
 	extra_args.env = env;
@@ -180,10 +129,9 @@ char	*expand_vars(char *token, t_env *env, int *last_ret_val)
 		return (NULL);
 	else
 	{
-		tmp =  var_expander(token, extra_args);
+		tmp = var_expander(token, extra_args);
 //		printf("expand_vars(): out: %s\n", tmp);
 		return (tmp);
-
 		//return (var_expander(token, extra_args));
 	}
 }

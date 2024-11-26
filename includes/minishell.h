@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/26 12:05:53 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:37:19 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_var_expander
 {
 	t_env	*env;
 	int		*last_ret_val;
+	bool	in_dquote;
 }	t_var_expander;
 
 typedef enum e_redir_type
@@ -92,6 +93,9 @@ int			process_questionmark(char **end, char **ret, \
 					t_var_expander extra_args);
 int			process_env_var(char **end, char **ret, char *varname, \
 					t_var_expander extra_args);
+// expand_vars_utils.c
+int	stupid_join(char **s1, char *s2, bool s2_alloc);
+char	*concatenate_until(char **dst, char *src, char *delim);
 // parsing/heredoc.c
 int			process_heredocs(t_list *cmd_table, t_env *env);
 // parsing/heredoc_helpers.c

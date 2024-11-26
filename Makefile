@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/11/22 14:40:05 by lemercie         ###   ########.fr        #
+#    Updated: 2024/11/26 14:39:30 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,6 +66,7 @@ PARSING_FILES	:= paths.c \
 				expand_vars.c \
 				expand_vars_helpers.c \
 				expand_vars_process_var.c \
+				expand_vars_utils.c \
 				tokenizing_utils.c \
 				heredoc.c \
 				heredoc_helpers.c \
