@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/22 17:34:11 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/26 13:26:43 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,14 @@ static char	*concatenate_until(char **dst, char *src, char *delim)
 // return -1 on malloc fail
 // return 1 ==> use continue in caller
 static int	reached_dollar(
-	char **start, char **end, char **ret, t_var_expander extra_args)
+	char **start, char **end, char **ret, t_var_expander extra_args,
+		bool in_dquote)
 {
 	char	*varname;
 	int		flag;
 
 	if (!is_varname(*((*end) + 1)))
-		return (not_varname(start, end, ret));
+		return (not_varname(start, end, ret, in_dquote));
 	varname = get_varname((*end) + 1);
 	if (!varname)
 		return (free_strs_int(ret, &varname));
@@ -104,6 +105,7 @@ static int	reached_d_quote(char **end, char **ret, \
 {
 	char	*start;
 
+//	printf("reached_d_quote()\n");
 	(*end)++;
 	if (stupid_join(ret, "\"", false) > 0)
 		return (-1);
@@ -113,7 +115,7 @@ static int	reached_d_quote(char **end, char **ret, \
 		*end = concatenate_until(ret, start, "$\"");
 		if (!end || !ret)
 			return (-1);
-		if (**end == '$' && reached_dollar(&start, end, ret, extra_args) < 0)
+		if (**end == '$' && reached_dollar(&start, end, ret, extra_args, true) < 0)
 			return (-1);
 		else if (**end == '\"')
 		{
@@ -151,7 +153,7 @@ static char	*var_expander(char *token, t_var_expander extra_args)
 			return (free_strs(&ret, NULL));
 		if (*end == '$')
 		{
-			flag = reached_dollar(&token, &end, &ret, extra_args);
+			flag = reached_dollar(&token, &end, &ret, extra_args, false);
 			if (flag < 0)
 				return (free_strs(&ret, NULL));
 			if (flag > 0)

@@ -6,13 +6,13 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/11/14 18:36:35 by mrahmat-         ###   ########.fr        #
+#    Updated: 2024/11/22 14:40:05 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC		:= cc
 
-CFLAGS	:= -Wextra -Wall -Werror
+CFLAGS	:= -g -Wextra -Wall -Werror
 
 LDFLAGS	:= -lreadline
 

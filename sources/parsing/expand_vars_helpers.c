@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:18:23 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/22 14:29:36 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/26 13:32:02 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ bool	is_varname(char c)
 	return (ft_isalnum(c) || c == '_' || c == '?');
 }
 
-int	not_varname(char **start, char **end, char **ret)
+int	not_varname(char **start, char **end, char **ret, bool in_dquote)
 {
 	char	*temp;
 
 	(*end)++;
-	if (!(**end))
+	if (!(**end) || (**end && in_dquote))
 	{
 		temp = *ret;
 		*ret = ft_strjoin(*ret, "$");
@@ -55,16 +55,13 @@ int	not_varname(char **start, char **end, char **ret)
 		if (!*ret)
 			return (-1);
 	}
-	else if (!**end || is_whitespace(**end) || **end == '\"')
+	else if (!in_dquote && **end != '\"' && **end != '\'')
 	{
-	//	if (!(*end)[1] || is_whitespace((*end)[1]))
-	//	{
-			temp = *ret;
-			*ret = ft_strjoin(*ret, "$");
-			free(temp);
-			if (!*ret)
-				return (-1);
-	//	}
+		temp = *ret;
+		*ret = ft_strjoin(*ret, "$");
+		free(temp);
+		if (!*ret)
+			return (-1);
 	}
 	*start = *end;
 	return (1);
