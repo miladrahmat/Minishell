@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 18:20:21 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/21 19:13:41 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/28 14:55:57 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ t_env	*set_key_value(char *str)
 	while (check < cut)
 	{
 		if ((ft_isalnum(str[check]) == 0 && str[check] != '_' \
-			&& str[cut - 1] != '+') || (str[0] > '0' && str[0] < '9'))
+			&& str[cut - 1] != '+') || (str[0] >= '0' && str[0] <= '9'))
 			return (print_export_error(&key));
 		check++;
 	}
