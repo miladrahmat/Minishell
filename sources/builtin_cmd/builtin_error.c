@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:46:02 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/21 18:19:28 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/22 16:46:54 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	print_builtin_error(char *cmd, char *arg, char *err, bool alloc)
 	return (1);
 }
 
-t_env	*print_export_error(char **variable)
+t_env	*print_export_error(char **variable, bool alloc)
 {
 	if (*variable == NULL)
 		return (NULL);
@@ -44,7 +44,8 @@ t_env	*print_export_error(char **variable)
 		ft_putstr_fd(*variable, 2);
 	ft_putstr_fd("\'", 2);
 	ft_putstr_fd(": not a valid identifier\n", 2);
-	free(*variable);
+	if (alloc)
+		free(*variable);
 	return (NULL);
 }
 

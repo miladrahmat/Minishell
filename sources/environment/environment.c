@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:58:31 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/06 10:49:47 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/29 12:28:14 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_env	*ft_envnew(char *key, char *value)
 		return (NULL);
 	node->key = key;
 	node->value = value;
-	if (value == NULL || *value == '\0')
+	if (*value == '\0')
 		node->flag = false;
 	else
 		node->flag = true;

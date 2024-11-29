@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:13:40 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/13 16:43:21 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/29 12:58:38 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,10 @@ static bool	export_existing_key(char *cmd, t_env **envp)
 			if (value == NULL)
 				return (0);
 			ft_env_free_add(list_iter, key, value);
+			if (cmd[cut] == '\0')
+				list_iter->flag = false;
+			else
+				list_iter->flag = true;
 			return (true);
 		}
 		if (list_iter != NULL)

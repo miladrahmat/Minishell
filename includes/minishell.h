@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/26 14:37:19 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/29 13:53:20 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ int			cd(char **cmd, t_env **envp);
 int			pwd(int fd);
 int			export(char **cmd, int fd, t_env **envp);
 int			print_builtin_error(char *cmd, char *arg, char *err, bool alloc);
-t_env		*print_export_error(char **variable);
+t_env		*print_export_error(char **variable, bool alloc);
 void		update_pwd(t_env **envp);
 int			builtin_exit(t_list **cmd_table, t_env **envp, int last_ret_val);
 void		check_child_signal(int ret_val);
@@ -200,6 +200,7 @@ int			check_pipe_fd(t_cmd **curr_cmd, t_cmd **next_cmd);
 int			prepare_exec(t_list *cmd_table, t_env **env, int last_ret_val);
 char		*copy_env_node(t_env *env);
 int			execute_one_builtin(t_list *cmd_table, t_env **env, int ret_val);
+int			check_child_exit_code(int status);
 
 //signals
 void		handle_signals(int signal);
