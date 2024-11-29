@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/11/29 16:13:05 by lemercie         ###   ########.fr        #
+#    Updated: 2024/11/29 16:40:44 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,7 +87,8 @@ EXEC_FILES	:= prepare_exec.c \
 			exec_utils.c
 
 UTILS_FILES	:= cleanup.c \
-			signal_handler.c
+			signal_handler.c \
+			main_errors.c
 
 SRCS	:= $(addprefix $(SRCDIR), $(MAIN_FILES)) \
 		$(addprefix $(BUILTIN_DIR), $(BUILTIN_FILES)) \
