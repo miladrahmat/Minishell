@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:20:32 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/20 13:53:08 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/29 14:31:20 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,26 +96,30 @@ bool	test_builtin_cmd(char *cmd)
 	return (ret);
 }
 
-int	check_builtin_cmd(t_list **cmd_table, t_env **envp, int ret_val)
+int	check_builtin_cmd(t_list **cmd_table, t_env **envp, int last_ret_val)
 {
 	char	**cmd;
 	int		fd;
+	int		ret_val;
 
+	ret_val = -1;
 	cmd = ((t_cmd *)(*cmd_table)->content)->cmd_args;
 	fd = ((t_cmd *)(*cmd_table)->content)->fd.outfile;
 	if (ft_strncmp(*cmd, "pwd", 4) == 0)
-		return (pwd(fd));
+		ret_val = pwd(fd);
 	else if (ft_strncmp("cd", *cmd, 3) == 0)
-		return (cd(cmd + 1, envp));
+		ret_val = cd(cmd + 1, envp);
 	else if (ft_strncmp(*cmd, "echo", 5) == 0)
-		return (echo(cmd + 1, fd));
+		ret_val = echo(cmd + 1, fd);
 	else if (ft_strncmp(*cmd, "exit", 5) == 0)
-		return (builtin_exit(cmd_table, envp, ret_val));
+		ret_val = builtin_exit(cmd_table, envp, last_ret_val);
 	else if (ft_strncmp(*cmd, "env", 4) == 0)
-		return (env(cmd, fd, envp));
+		ret_val = env(cmd, fd, envp);
 	else if (ft_strncmp(*cmd, "unset", 6) == 0)
-		return (unset(cmd + 1, envp));
+		ret_val = unset(cmd + 1, envp);
 	else if (ft_strncmp(*cmd, "export", 7) == 0)
-		return (export(cmd, fd, envp));
-	return (-1);
+		ret_val = export(cmd, fd, envp);
+	if (ret_val >= 0)
+		close_cmd_fd((*cmd_table)->content);
+	return (ret_val);
 }
