@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 17:23:18 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/29 12:39:00 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/29 14:31:53 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int	execute_one_builtin(t_list *cmd_table, t_env **env, int ret_val)
 	else if (((t_cmd *)cmd_table->content)->cmd_args != NULL \
 		&& ((t_cmd *)cmd_table->content)->cmd_args[0] != NULL)
 		check = check_builtin_cmd(&cmd_table, env, ret_val);
-	close_cmd_fd(((t_cmd *)cmd_table->content));
 	return (check);
 }
 
