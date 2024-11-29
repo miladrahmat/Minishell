@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/21 17:46:01 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/29 10:25:41 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,16 @@ static void	prepare_cmd(char *line, t_env **env, int *last_ret_val)
 //			if (!cmd_table)
 //				printf("prepare_cmd(): its NULL\n");
 //			printf("prepare_cmd(): size: %i\n", ft_lstsize(cmd_table));
+			add_history(line);
+			free(line);
 			if (cmd_table)
 				*last_ret_val = exec_cmd_table(cmd_table, env, *last_ret_val);
-			add_history(line);
 		}
 		else if (check == -1)
 		{
 			*last_ret_val = 2;
 			add_history(line);
+			free(line);
 		}
 		ft_lstclear(&cmd_table, &destroy_tlist_of_tcmd);
 	}
@@ -109,7 +111,7 @@ int	main(int ac, char **av, char **envp)
 	int					last_ret_val;
 	int					check;
 
-	char	*tmp;
+//	char	*tmp;
 
 	(void)av;
 	(void)ac;
@@ -124,8 +126,8 @@ int	main(int ac, char **av, char **envp)
 	last_ret_val = 0;
 	while (true)
 	{
-//		line = readline("[MINISHELL]$> ");
-		
+		line = readline("[MINISHELL]$> ");
+	/*	
 		if (isatty(fileno(stdin)))
 			line = readline("[MINISHELL]$> ");
 		else
@@ -136,8 +138,15 @@ int	main(int ac, char **av, char **envp)
 				line = ft_strtrim(line, "\n");
 			free(tmp);
 		}
-		
+		*/
+		/*
+		if (line)
+		{
+			char *temp = ft_strdup(line);
+			free(line);
+			line = temp;
+		}
+	*/
 		prepare_cmd(line, &env, &last_ret_val);
-		free(line);
 	}
 }
