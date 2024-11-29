@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/11/26 14:39:30 by lemercie         ###   ########.fr        #
+#    Updated: 2024/11/29 16:13:05 by lemercie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ BUILTIN_FILES	:= builtin_cmds.c \
 				env_cmd.c \
 				builtin_helpers.c \
 				export_cmd.c \
+				export_cmd_helpers.c \
 				builtin_error.c
 
 PARSING_FILES	:= paths.c \
@@ -76,7 +77,8 @@ PARSING_FILES	:= paths.c \
 
 ENV_FILES	:= environment.c \
 			environment1.c \
-			environment2.c
+			environment2.c \
+			set_key_value.c
 
 FILE_HANDLER_FILES	:= file_handler.c \
 					pipe_file_handler.c

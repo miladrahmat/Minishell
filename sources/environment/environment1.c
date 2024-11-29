@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 18:20:21 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/29 13:54:13 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:15:35 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,36 +39,6 @@ void	ft_env_free_add(t_env *lst, char *key, char *value)
 		lst->flag = true;
 }
 
-t_env	*set_key_value(char *str)
-{
-	t_env	*node;
-	char	*key;
-	char	*value;
-	size_t	cut;
-	size_t	check;
-
-	cut = ft_strlen_eq(str);
-	if (cut == 0)
-		return (NULL);
-	if (str[cut - 1] == '+')
-		key = ft_substr(str, 0, cut - 1);
-	else
-		key = ft_substr(str, 0, cut);
-	if (key == NULL || key[0] == '\0')
-		return (print_export_error(&key, true));
-	check = 0;
-	while (check < cut)
-	{
-		if ((ft_isalnum(str[check]) == 0 && str[check] != '_' \
-			&& str[cut - 1] != '+') || (str[0] >= '0' && str[0] <= '9'))
-			return (print_export_error(&key, true));
-		check++;
-	}
-	value = ft_substr(str, cut + 1, ft_strlen(str) - cut);
-	node = ft_envnew(key, value);
-	return (node);
-}
-
 t_env	*ft_envcpy(t_env *envp)
 {
 	t_env	*new_env;
@@ -80,16 +50,12 @@ t_env	*ft_envcpy(t_env *envp)
 	while (envp != NULL)
 	{
 		key = ft_strdup(envp->key);
-		if (key == NULL)
-		{
-			ft_envclear(&new_env, &free);
-			return (NULL);
-		}
 		value = ft_strdup(envp->value);
-		if (value == NULL)
+		if (value == NULL || key == NULL)
 		{
 			ft_envclear(&new_env, &free);
-			free(key);
+			if (key)
+				free(key);
 			return (NULL);
 		}
 		new_node = ft_envnew(key, value);

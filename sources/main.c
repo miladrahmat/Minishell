@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/29 10:25:41 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/11/29 15:18:36 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,6 @@ int	main(int ac, char **av, char **envp)
 	int					last_ret_val;
 	int					check;
 
-//	char	*tmp;
-
 	(void)av;
 	(void)ac;
 	handle_sigint(&handle_signals);
@@ -127,26 +125,6 @@ int	main(int ac, char **av, char **envp)
 	while (true)
 	{
 		line = readline("[MINISHELL]$> ");
-	/*	
-		if (isatty(fileno(stdin)))
-			line = readline("[MINISHELL]$> ");
-		else
-		{
-			line = get_next_line(fileno(stdin));
-			tmp = line;
-			if (line)
-				line = ft_strtrim(line, "\n");
-			free(tmp);
-		}
-		*/
-		/*
-		if (line)
-		{
-			char *temp = ft_strdup(line);
-			free(line);
-			line = temp;
-		}
-	*/
 		prepare_cmd(line, &env, &last_ret_val);
 	}
 }

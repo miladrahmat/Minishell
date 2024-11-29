@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:13:40 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/29 12:58:38 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/29 15:56:51 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,38 +39,6 @@ static bool	append_export(char *str, t_env **envp)
 			return (false);
 	}
 	return (true);
-}
-
-static bool	export_existing_key(char *cmd, t_env **envp)
-{
-	t_env	*list_iter;
-	char	*key;
-	char	*value;
-	size_t	cut;
-
-	list_iter = *envp;
-	cut = ft_strlen_eq(cmd);
-	while (list_iter != NULL)
-	{
-		if (ft_strncmp(cmd, list_iter->key, ft_strlen(list_iter->key)) == 0)
-		{
-			key = ft_substr(cmd, 0, cut);
-			if (key == NULL)
-				return (0);
-			value = ft_substr(cmd, cut + 1, ft_strlen(cmd) - cut);
-			if (value == NULL)
-				return (0);
-			ft_env_free_add(list_iter, key, value);
-			if (cmd[cut] == '\0')
-				list_iter->flag = false;
-			else
-				list_iter->flag = true;
-			return (true);
-		}
-		if (list_iter != NULL)
-			list_iter = list_iter->next;
-	}
-	return (false);
 }
 
 static void	print_export(int fd, t_env *envp)
