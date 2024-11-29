@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 17:23:18 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/22 11:23:20 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/29 12:39:00 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,18 @@ int	check_child_exit_code(int status)
 
 int	execute_one_builtin(t_list *cmd_table, t_env **env, int ret_val)
 {
+	int	check;
+
+	check = -1;
 	if (ft_lstsize(cmd_table) != 1)
 		return (-1);
 	else if (open_files(&cmd_table) < 0)
 		return (1);
 	else if (((t_cmd *)cmd_table->content)->cmd_args != NULL \
 		&& ((t_cmd *)cmd_table->content)->cmd_args[0] != NULL)
-		return (check_builtin_cmd(&cmd_table, env, ret_val));
-	return (-1);
+		check = check_builtin_cmd(&cmd_table, env, ret_val);
+	close_cmd_fd(((t_cmd *)cmd_table->content));
+	return (check);
 }
 
 char	*copy_env_node(t_env *env)

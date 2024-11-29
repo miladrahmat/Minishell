@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/22 11:38:28 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/29 12:36:22 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ static void	execute_cmd(t_list_and_index child_args, t_env **env, \
 	signal_handling_child();
 	ret_val = 127;
 	if (cmd->fd.infile == -1 || cmd->fd.outfile == -1)
-		exit(1);
-	if (cmd->cmd_args[0] != NULL)
+		ret_val = 1;
+	if (cmd->cmd_args[0] != NULL && ret_val != 1)
 		ret_val = check_builtin_cmd_child(child_args, env, last_ret_val);
 	if (ret_val < 0 && (cmd->fd.infile >= 0 && cmd->fd.outfile > 0))
 	{

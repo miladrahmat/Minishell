@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 18:20:21 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/22 16:47:38 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/11/29 13:03:32 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ t_env	*set_key_value(char *str)
 t_env	*ft_envcpy(t_env *envp)
 {
 	t_env	*new_env;
+	t_env	*new_node;
 	char	*key;
 	char	*value;
 
@@ -91,7 +92,9 @@ t_env	*ft_envcpy(t_env *envp)
 			free(key);
 			return (NULL);
 		}
-		ft_envadd_back(&new_env, ft_envnew(key, value));
+		new_node = ft_envnew(key, value);
+		new_node->flag = envp->flag;
+		ft_envadd_back(&new_env, new_node);
 		envp = envp->next;
 	}
 	return (new_env);
