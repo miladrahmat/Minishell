@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:02:53 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/14 14:18:24 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/02 10:07:50 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,22 @@ char	*create_filename(void)
 	return (filename);
 }
 
-void	try_expand_write(char *line, t_env *env, int fd, bool expand)
+// return 1 on malloc fail in expand_vars()
+int	try_expand_write(char *line, t_env *env, int fd, bool expand)
 {
 	char	*expanded_line;
 
 	if (expand)
 	{
 		expanded_line = expand_vars(line, env, 0);
+		if (!expanded_line)
+			return (1);
 		write(fd, expanded_line, ft_strlen(expanded_line));
 		free(expanded_line);
 	}
 	else
 		write(fd, line, ft_strlen(line));
+	return (0);
 }
 
 int	heredoc_free_str(char *s)

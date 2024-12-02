@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/29 15:19:08 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/02 10:50:16 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,11 @@ static int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 	{
 		if (*line == '\n')
 			return (heredoc_free_str(line));
-		try_expand_write(line, env, fd, expand);
+		if (try_expand_write(line, env, fd, expand) > 0)
+		{
+			free(line);
+			return (1);
+		}
 		write(fd, "\n", 1);
 		free(line);
 		line = readline(">");
@@ -74,6 +78,7 @@ static char	*get_heredoc(char *delim, t_env *env, bool expand, int *err)
 	heredoc_signal(&handle_heredoc);
 	if (read_into_file(write_fd, delim, env, expand) == 1)
 	{
+		*err = 1;
 		unlink(filename);
 		free(filename);
 		return (NULL);

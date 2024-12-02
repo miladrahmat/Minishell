@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 14:35:57 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/02 10:02:14 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/02 10:26:53 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_strjoin_free(char **s1, char *s2, bool s2_alloc)
 // return pointer to the last char copied from src
 // replace dst
 // NULL pointer is returned in case of malloc() failure in ft_strndup() or 
-// ft_strjoin()
+// ft_strjoin_free()
 char	*concatenate_until(char **dst, char *src, char *delim)
 {
 	char	*src_end;

@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/02 10:02:25 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/02 10:34:39 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,18 +120,11 @@ static char	*var_expander(char *token, t_var_expander extra_args)
 char	*expand_vars(char *token, t_env *env, int *last_ret_val)
 {
 	t_var_expander	extra_args;
-	char			*tmp;
 
-//	printf("expand_vars(): in: %s\n", token);
 	extra_args.env = env;
 	extra_args.last_ret_val = last_ret_val;
 	if (!token)
 		return (NULL);
 	else
-	{
-		tmp = var_expander(token, extra_args);
-//		printf("expand_vars(): out: %s\n", tmp);
-		return (tmp);
-		//return (var_expander(token, extra_args));
-	}
+		return (var_expander(token, extra_args));
 }
