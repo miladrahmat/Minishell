@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:28:18 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/21 16:22:00 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/02 11:57:40 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,32 +18,6 @@ bool	is_quoted_str(char *s)
 	{
 		return ((s[0] == '\"' && s[ft_strlen(s) - 1] == '\"') || \
 			(s[0] == '\'' && s[ft_strlen(s) - 1] == '\''));
-	}
-	return (false);
-}
-
-int	handle_quotes(char *new, char *org, size_t *new_i, ssize_t *org_i)
-{
-	char	quote;
-
-	quote = org[(*org_i)];
-	(*org_i)++;
-	while (org[(*org_i)] != quote && org[(*org_i)] != '\0')
-	{
-		new[(*new_i)] = org[(*org_i)];
-		(*new_i)++;
-		(*org_i)++;
-	}
-	if (org[(*org_i)] != quote)
-		return (-1);
-	return (1);
-}
-
-bool	is_double_quoted_str(char *s)
-{
-	if (s)
-	{
-		return ((s[0] == '\"' && s[ft_strlen(s) - 1] == '\"'));
 	}
 	return (false);
 }
@@ -61,6 +35,23 @@ void	str_del_first_last(char *s)
 		i++;
 	}
 	s[len - 2] = 0;
+}
+
+static int	handle_quotes(char *new, char *org, size_t *new_i, ssize_t *org_i)
+{
+	char	quote;
+
+	quote = org[(*org_i)];
+	(*org_i)++;
+	while (org[(*org_i)] != quote && org[(*org_i)] != '\0')
+	{
+		new[(*new_i)] = org[(*org_i)];
+		(*new_i)++;
+		(*org_i)++;
+	}
+	if (org[(*org_i)] != quote)
+		return (-1);
+	return (1);
 }
 
 char	*strip_quotes(char *s, int *ret_val)

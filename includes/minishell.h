@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/02 10:11:17 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/02 12:00:02 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,16 +109,12 @@ bool		is_abs_or_pwd_path(char *cmd);
 int			check_exec_access(char *cmd);
 int			check_exec_access_print_err(char *cmd);
 char		**get_paths(t_env *env, int *err);
-bool		is_directory(char *path);
 // parsing/paths.c
 char		*get_exec_path(char *command, t_env *env, int *path_error);
 // parsing/quotes.c
 bool		is_quoted_str(char *s);
-bool		is_double_quoted_str(char *s);
 void		str_del_first_last(char *s);
 char		*strip_quotes(char *s, int *ret_val);
-int			handle_quotes(char *new, char *org, \
-	size_t *new_i, ssize_t *org_i);
 // parsing/redir.c
 int			parse_redir_loop(t_list *cmd_table);
 // parsing/redir_helpers.c
@@ -141,7 +137,6 @@ char		*ft_strjoin_safe(char const *s1, char const *s2);
 int			substr_len(char *start, char *end);
 char		*get_word(char *start);
 char		*get_word_quote(char *start);
-char		*skip_word(char *s);
 // parsing/transform_tokens.c
 int			transform_tokens1(t_list **head, t_env *env, int *last_ret_val);
 int			transform_tokens2(t_list **head, int *last_ret_val);

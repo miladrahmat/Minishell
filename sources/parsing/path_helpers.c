@@ -6,11 +6,23 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 15:59:59 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/21 19:01:51 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/02 11:54:25 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
+
+static bool	is_directory(char *path)
+{
+	struct stat	sb;
+
+	if (stat(path, &sb) == -1)
+	{
+		errno = 0;
+		return (false);
+	}
+	return (S_ISDIR(sb.st_mode));
+}
 
 bool	is_abs_or_pwd_path(char *cmd)
 {
@@ -73,16 +85,4 @@ char	**get_paths(t_env *env, int *err)
 		return (NULL);
 	}
 	return (split_path);
-}
-
-bool	is_directory(char *path)
-{
-	struct stat	sb;
-
-	if (stat(path, &sb) == -1)
-	{
-		errno = 0;
-		return (false);
-	}
-	return (S_ISDIR(sb.st_mode));
 }
