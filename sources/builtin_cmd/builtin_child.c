@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 13:46:43 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/20 14:45:21 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/02 10:51:56 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	builtin_exit_child(t_list_and_index child_args, t_env **envp, \
 	split_free(child_args.env_copy, 0);
 	ft_lstclear(&child_args.lst, &destroy_tlist_of_tcmd);
 	free(child_args.pids);
-	clear_history();
+	rl_clear_history();
 	if (ret_val == INT_MIN)
 		exit(last_ret_val);
 	exit(ret_val);
