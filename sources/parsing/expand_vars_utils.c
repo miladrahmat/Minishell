@@ -6,13 +6,13 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 14:35:57 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/26 14:38:22 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/02 10:02:14 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	stupid_join(char **s1, char *s2, bool s2_alloc)
+int	ft_strjoin_free(char **s1, char *s2, bool s2_alloc)
 {
 	char	*temp;
 
@@ -53,7 +53,7 @@ char	*concatenate_until(char **dst, char *src, char *delim)
 	}
 	if (!new_str)
 		return (NULL);
-	if (stupid_join(dst, new_str, true) > 0)
+	if (ft_strjoin_free(dst, new_str, true) > 0)
 		return (NULL);
 	return (src_end);
 }

@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/26 14:38:03 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/02 10:02:25 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	reached_d_quote(char **end, char **ret, \
 
 	extra_args.in_dquote = true;
 	(*end)++;
-	if (stupid_join(ret, "\"", false) > 0)
+	if (ft_strjoin_free(ret, "\"", false) > 0)
 		return (-1);
 	start = *end;
 	while (*start)
@@ -70,7 +70,7 @@ static int	reached_d_quote(char **end, char **ret, \
 		else if (**end == '\"')
 		{
 			(*end)++;
-			if (stupid_join(ret, "\"", false) > 0)
+			if (ft_strjoin_free(ret, "\"", false) > 0)
 				return (-1);
 			return (0);
 		}
