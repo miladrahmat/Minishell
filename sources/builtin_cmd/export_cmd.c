@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:13:40 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/29 15:56:51 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/03 15:38:43 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static bool	append_export(char *str, t_env **envp)
 
 static void	print_export(int fd, t_env *envp)
 {
-	if (envp->key[0] == '_')
+	if (ft_strlen(envp->key) == 1 && envp->key[0] == '_')
 		return ;
 	ft_putstr_fd("declare -x ", fd);
 	ft_putstr_fd(envp->key, fd);
