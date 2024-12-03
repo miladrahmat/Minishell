@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 09:58:07 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/21 18:32:15 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/03 16:52:29 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	check_error_redir(char *str, char redir_type, int *redir_num, bool *is)
 		*redir_num = 0;
 	if (*is == true && ft_strchr(special_chars, *str) != 0)
 		return (-1);
-	else if (ft_isalnum(*str) && *is == true)
+	else if (ft_isprint(*str) && *is && *str != '|' && *str != redir_type)
 	{
 		*redir_num = 0;
 		*is = false;
@@ -90,10 +90,10 @@ int	check_error_pipe(char *str, bool *is)
 		*is = true;
 	else if (*is == true && *str == '|')
 		return (-1);
-	if ((str[1] == '\0' || str[1] == '|') && *is == true)
-		return (-1);
-	else if (ft_isprint(*str) && *is == true && *str != '|' \
+	if (ft_isprint(*str) && *is == true && *str != '|' \
 		&& !is_whitespace(*str))
 		*is = false;
+	if ((str[1] == '\0' || str[1] == '|') && *is == true)
+		return (-1);
 	return (1);
 }
