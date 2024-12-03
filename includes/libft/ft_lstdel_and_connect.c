@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 11:59:45 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/03 17:12:06 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:30:30 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,5 @@ void	ft_lstdel_and_connect(t_list **head, t_list **node)
 	node_after = (*node)->next;
 	node_before->next = node_after;
 	ft_lstdelone(*node, &free);
-	*node = node_after;
+	*node = node_before;
 }

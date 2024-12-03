@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:23:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/03 17:12:46 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:34:44 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ static void	delete_tokens(t_list **head, t_list **to_del, int n)
 	{
 		ft_lstdel_and_connect(head, to_del);
 		n--;
+		if (n > 0 && (*to_del)->next)
+			*to_del = (*to_del)->next;
 	}
 }
 
@@ -81,6 +83,8 @@ static int	parse_redirs(t_cmd *cmd)
 	t_list	*tokens_iter;
 	int		tokens_consumed;
 
+	if (ft_lstsize(cmd->split_token) < 2)
+		return (0);
 	tokens_iter = cmd->split_token;
 	while (tokens_iter)
 	{
@@ -94,13 +98,13 @@ static int	parse_redirs(t_cmd *cmd)
 			tokens_consumed = get_redir(cmd, tokens_iter->content, NULL);
 		if (tokens_consumed < 0)
 			return (1);
-		printf("parse_redirs(): before del: %i\n", ft_lstsize(cmd->split_token));
-		printf("parse_redirs(): %s\n", (char *) tokens_iter->content);
+//		printf("parse_redirs(): before del: %i\n", ft_lstsize(cmd->split_token));
+//		printf("parse_redirs(): %s\n", (char *) tokens_iter->content);
 		delete_tokens(&cmd->split_token, &tokens_iter, tokens_consumed);
-		printf("parse_redirs(): after del: %i\n", ft_lstsize(cmd->split_token));
+//		printf("parse_redirs(): after del: %i\n", ft_lstsize(cmd->split_token));
 		if (!tokens_iter)
 		{
-			printf("break\n");
+//			printf("break\n");
 			break ;
 		}
 		tokens_iter = tokens_iter->next;
