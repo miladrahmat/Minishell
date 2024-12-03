@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/02 12:00:02 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/03 15:07:41 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,8 @@ int			prepare_exec(t_list *cmd_table, t_env **env, int last_ret_val);
 char		*copy_env_node(t_env *env);
 int			execute_one_builtin(t_list *cmd_table, t_env **env, int ret_val);
 int			check_child_exit_code(int status);
+int			pid_less_than_zero(pid_t **pid, size_t index);
+void		close_all_fds(t_list *cmd_table);
 
 //signals
 void		handle_signals(int signal);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_key_value.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:10:53 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/29 16:11:27 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/03 15:12:00 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ t_env	*set_key_value(char *str)
 	char	*key;
 	char	*value;
 	size_t	cut;
-//	size_t	check;
 
 	cut = ft_strlen_eq(str);
 	if (cut == 0)
@@ -49,16 +48,6 @@ t_env	*set_key_value(char *str)
 		return (print_export_error(&key, true));
 	if (!is_valid_key(str, key, cut))
 		return (NULL);
-	/*
-	check = 0;
-	while (check < cut)
-	{
-		if ((ft_isalnum(str[check]) == 0 && str[check] != '_' \
-			&& str[cut - 1] != '+') || (str[0] >= '0' && str[0] <= '9'))
-			return (print_export_error(&key, true));
-		check++;
-	}
-	*/
 	value = ft_substr(str, cut + 1, ft_strlen(str) - cut);
 	node = ft_envnew(key, value);
 	return (node);

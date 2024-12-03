@@ -6,11 +6,37 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 17:23:18 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/29 14:31:53 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/12/03 15:07:25 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	close_all_fds(t_list *cmd_table)
+{
+	t_list	*cmd_iter;
+
+	cmd_iter = cmd_table;
+	while (cmd_iter != NULL)
+	{
+		close_cmd_fd(((t_cmd *)cmd_iter->content));
+		cmd_iter = cmd_iter->next;
+	}
+}
+
+int	pid_less_than_zero(pid_t **pid, size_t index)
+{
+	if ((*pid)[index] == 0)
+	{
+		free(*pid);
+		return (0);
+	}
+	else
+	{
+		free(*pid);
+		return (1);
+	}
+}
 
 int	check_child_exit_code(int status)
 {
