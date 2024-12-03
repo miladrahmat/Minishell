@@ -6,19 +6,26 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 15:32:24 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/16 15:36:12 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/03 18:00:31 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+
+// at this point the delimiter is stored in redir->filename
 void	check_quoted_heredoc_delim(t_redir *redir)
 {
-	if (is_quoted_str(redir->filename))
-	{
-		str_del_first_last(redir->filename);
+	char	*temp;
+	int		trash;
+
+	trash = 0;
+//	printf("hered, %s\n", redir->filename);
+	temp = strip_quotes(redir->filename, &trash);
+	if (ft_strcmp(temp, redir->filename) != 0)
 		redir->heredoc_quoted_delim = true;
-	}
+	free(redir->filename);
+	redir->filename = temp;
 }
 
 int	get_redir_destroyer(t_redir *redir)
