@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/12/03 15:10:48 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/12/03 18:55:04 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,11 @@ static void	execute_cmd(t_list_and_index child_args, t_env **env, \
 		ft_envclear(env, &free);
 		dup2(cmd->fd.infile, STDIN_FILENO);
 		dup2(cmd->fd.outfile, STDOUT_FILENO);
-		close_cmd_fd(cmd);
+		close_all_fds(child_args.lst);
 		if (cmd->cmd_args[0] != NULL)
 			execve(cmd->cmd_args[0], cmd->cmd_args, child_args.env_copy);
 	}
-	close_cmd_fd(cmd);
+	close_all_fds(child_args.lst);
 	split_free(child_args.env_copy, 0);
 	ft_envclear(env, &free);
 	ft_lstclear(&child_args.lst, &destroy_tlist_of_tcmd);
