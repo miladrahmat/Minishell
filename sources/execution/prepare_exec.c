@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/29 12:36:22 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/12/03 13:23:14 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,18 @@ static int	wait_pids(pid_t **pid, int index)
 		if ((*pid)[iter] != 0)
 			waitpid((*pid)[iter], NULL, 0);
 	}
-	if ((*pid)[iter] == 0)
+	if ((*pid)[iter] <= 0)
 	{
-		free(*pid);
-		return (1);
+		if ((*pid)[iter] == 0)
+		{
+			free(*pid);
+			return (0);
+		}
+		else
+		{
+			free(*pid);
+			return (1);
+		}
 	}
 	waitpid((*pid)[iter], &ret_val, 0);
 	free(*pid);
@@ -48,6 +56,8 @@ static void	execute_cmd(t_list_and_index child_args, t_env **env, \
 
 	cmd = ft_lstget_nth(child_args.lst, child_args.index)->content;
 	signal_handling_child();
+	if (cmd == NULL)
+		exit(0);
 	ret_val = 127;
 	if (cmd->fd.infile == -1 || cmd->fd.outfile == -1)
 		ret_val = 1;
@@ -76,18 +86,19 @@ static pid_t	prepare_child(t_list_and_index child_args, t_env **env, \
 	pid_t	pid;
 	t_list	*cmd;
 
+//	printf("prepare_child()\n");
 	cmd = ft_lstget_nth(child_args.lst, child_args.index);
 	if (cmd->next != NULL && (check_pipe_fd(((t_cmd **)&cmd->content), \
 			((t_cmd **)&cmd->next->content)) < 0))
-		return (-1);
+		return (-2);
 	if (open_files(&cmd) < 0)
 	{
 		close_cmd_fd(cmd->content);
-		return (0);
+		return (-1);
 	}
 	pid = fork();
 	if (pid < 0)
-		return (-1);
+		return (-2);
 	if (pid == 0)
 	{
 		if (cmd->next != NULL)
@@ -105,6 +116,7 @@ static int	prepare_parent(t_list *cmd_table, t_env **env, \
 	pid_t				*child;
 	t_list				*cmd_iter;
 
+//	printf("prepare_parent()\n");
 	child = malloc(ft_lstsize(cmd_table) * (sizeof(pid_t)));
 	if (child == NULL)
 		return (1);
@@ -115,10 +127,12 @@ static int	prepare_parent(t_list *cmd_table, t_env **env, \
 	cmd_iter = cmd_table;
 	while (cmd_iter != NULL && ++c_args.index < ft_lstsize(cmd_table))
 	{
+//		printf("prepare_parent(): loop\n");
 		if (((t_cmd *)cmd_iter->content)->cmd_args != NULL)
 		{
+//			printf("prepare_parent(): cmd_args EXISTS\n");
 			child[c_args.index] = prepare_child(c_args, env, ret_val);
-			if (child[c_args.index] < 0)
+			if (child[c_args.index] < -1)
 			{
 				wait_pids(&child, c_args.index - 1);
 				return (1);
@@ -135,6 +149,7 @@ int	prepare_exec(t_list *cmd_table, t_env **env, int last_ret_val)
 	size_t				env_i;
 	t_env				*env_iter;
 	int					ret_val;
+	t_list				*cmd_iter;
 
 	ret_val = execute_one_builtin(cmd_table, env, last_ret_val);
 	if (ret_val >= 0)
@@ -154,5 +169,11 @@ int	prepare_exec(t_list *cmd_table, t_env **env, int last_ret_val)
 	}
 	c_args.env_copy[env_i] = NULL;
 	ret_val = prepare_parent(cmd_table, env, c_args, last_ret_val);
+	cmd_iter = cmd_table;
+	while (cmd_iter != NULL)
+	{
+		close_cmd_fd(((t_cmd *)cmd_iter->content));
+		cmd_iter = cmd_iter->next;
+	}
 	return (split_free(c_args.env_copy, ret_val));
 }

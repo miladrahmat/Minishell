@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/29 16:38:55 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/03 13:38:31 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static int	exec_cmd_table(t_list *cmd_table, t_env **env, int last_ret_val)
 	t_list	*cmd_table_iter;
 	int		ret_val;
 
+//	printf("exec_cmd_table\n");
 	cmd_table_iter = cmd_table;
 	while (cmd_table_iter->next != NULL)
 		cmd_table_iter = cmd_table_iter->next;
@@ -83,18 +84,26 @@ static void	prepare_cmd(char *line, t_env **env, int *last_ret_val)
 		check = check_syntax(line);
 		if (check > 0)
 		{
+	//		printf("prepare_cmd(): syntax OK\n");
 			cmd_table = init_cmd_table(line, *env, *last_ret_val);
 			add_history(line);
 			free(line);
 			if (cmd_table)
+			{
+	//			printf("prepare_cmd(): path_error: %i\n",
+//		  			((t_cmd *)cmd_table->content)->path_error);
 				*last_ret_val = exec_cmd_table(cmd_table, env, *last_ret_val);
+			}
 		}
 		else if (check == -1)
 			line_has_syntax_error(line, last_ret_val);
 		ft_lstclear(&cmd_table, &destroy_tlist_of_tcmd);
 	}
 	else
+	{
+	//	printf("prepare_cmd: last exit\n");
 		exit_signal(&cmd_table, env, *last_ret_val);
+	}
 }
 
 int	main(int ac, char **av, char **envp)
@@ -103,6 +112,8 @@ int	main(int ac, char **av, char **envp)
 	t_env				*env;
 	int					last_ret_val;
 	int					check;
+
+	char	*tmp;
 
 	(void)av;
 	(void)ac;
@@ -117,7 +128,17 @@ int	main(int ac, char **av, char **envp)
 	last_ret_val = 0;
 	while (true)
 	{
-		line = readline("[MINISHELL]$> ");
+//		line = readline("[MINISHELL]$> ");
+		if (isatty(fileno(stdin)))
+			line = readline("[MINISHELL]$> ");
+		else
+		{
+			line = get_next_line(fileno(stdin));
+			tmp = line;
+			if (line)
+				line = ft_strtrim(line, "\n");
+			free(tmp);
+		}
 		prepare_cmd(line, &env, &last_ret_val);
 	}
 }
