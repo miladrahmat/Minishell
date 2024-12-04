@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/12/03 18:55:04 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:50:46 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ static pid_t	prepare_child(t_list_and_index child_args, t_env **env, \
 		return (-2);
 	if (pid == 0)
 	{
-		if (cmd->next != NULL)
-			close(((t_cmd *)cmd->next->content)->fd.infile);
+//		if (cmd->next != NULL)
+//			close(((t_cmd *)cmd->next->content)->fd.infile);
 		execute_cmd(child_args, env, ret_val);
 	}
 	ignore_sigint();
