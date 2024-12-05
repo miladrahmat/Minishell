@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:23:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/03 18:24:03 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:52:26 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,21 @@ static int	get_redir(t_cmd *cmd, char *token1, char *token2)
 	return (tokens_consumed);
 }
 
+// delete nodes starting from last to be deleted
 static void	delete_tokens(t_list **head, t_list **to_del, int n)
 {
+	int		temp;
+
+	temp = n;
+	while (temp > 1)
+	{
+		(*to_del) = (*to_del)->next;
+		temp--;
+	}
 	while (n > 0)
 	{
 		ft_lstdel_and_connect(head, to_del);
 		n--;
-		if (n > 0 && (*to_del)->next)
-			*to_del = (*to_del)->next;
 	}
 }
 
