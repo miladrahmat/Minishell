@@ -6,7 +6,7 @@
 #    By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/01 11:56:58 by lemercie          #+#    #+#              #
-#    Updated: 2024/11/29 16:40:44 by lemercie         ###   ########.fr        #
+#    Updated: 2024/12/06 16:44:42 by mrahmat-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,7 +73,8 @@ PARSING_FILES	:= paths.c \
 				heredoc_helpers.c \
 				syntax.c \
 				syntax_helpers.c \
-				transform_tokens.c
+				transform_tokens.c \
+				syntax_utils.c
 
 ENV_FILES	:= environment.c \
 			environment1.c \
