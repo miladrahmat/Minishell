@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:53:41 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/12/03 16:27:43 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/12/06 17:31:30 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ static int	check_redirect_out(char *line)
 	redir = false;
 	while (line[i] != '\0')
 	{
-		check = skip_quotes(&line[i]);
+		if (redir == false)
+			check = skip_quotes(&line[i]);
 		if (check != 0)
 		{
 			i += check;
@@ -77,7 +78,8 @@ static int	check_redirect_in(char *line)
 	redir = false;
 	while (line[i] != '\0')
 	{
-		check = skip_quotes(&line[i]);
+		if (redir == false)
+			check = skip_quotes(&line[i]);
 		if (check != 0)
 		{
 			i += check;
