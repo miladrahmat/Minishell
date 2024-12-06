@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/03 15:07:41 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/12/06 16:44:09 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,5 +224,6 @@ int			check_error_redir(char *str, char redir_type, \
 	int *redir_num, bool *is);
 int			check_error_pipe(char *str, bool *is);
 int			check_whitespace(char *str);
+char		*get_special_chars(char redir_type);
 
 #endif
