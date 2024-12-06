@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:23:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/05 17:52:26 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/06 17:14:39 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ static int	get_redir(t_cmd *cmd, char *token1, char *token2)
 		return (get_redir_destroyer(redir));
 	if (redir->redir_type == heredoc)
 		check_quoted_heredoc_delim(redir);
-	//if (is_quoted_str(redir->filename))
-	//	str_del_first_last(redir->filename);
 	new_node = ft_lstnew(redir);
 	if (!new_node)
 		return (get_redir_destroyer(redir));
@@ -90,8 +88,6 @@ static int	parse_redirs(t_cmd *cmd)
 	t_list	*tokens_iter;
 	int		tokens_consumed;
 
-//	if (ft_lstsize(cmd->split_token) < 2)
-//		return (0);
 	tokens_iter = cmd->split_token;
 	while (tokens_iter)
 	{
@@ -105,15 +101,9 @@ static int	parse_redirs(t_cmd *cmd)
 			tokens_consumed = get_redir(cmd, tokens_iter->content, NULL);
 		if (tokens_consumed < 0)
 			return (1);
-//		printf("parse_redirs(): before del: %i\n", ft_lstsize(cmd->split_token));
-//		printf("parse_redirs(): %s\n", (char *) tokens_iter->content);
 		delete_tokens(&cmd->split_token, &tokens_iter, tokens_consumed);
-//		printf("parse_redirs(): after del: %i\n", ft_lstsize(cmd->split_token));
 		if (!tokens_iter)
-		{
-//			printf("break\n");
 			break ;
-		}
 		tokens_iter = tokens_iter->next;
 	}
 	return (0);
