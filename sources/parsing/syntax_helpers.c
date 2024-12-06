@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 09:58:07 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/12/03 16:52:29 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/12/06 15:45:30 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ int	check_error_redir(char *str, char redir_type, int *redir_num, bool *is)
 	if (*str == redir_type)
 	{
 		*is = true;
+		if (*redir_num > 0 && *(str - 1) != redir_type)
+			return (-1);
 		(*redir_num)++;
 		if (*redir_num > 2)
 			return (-1);
@@ -74,7 +76,7 @@ int	check_error_redir(char *str, char redir_type, int *redir_num, bool *is)
 		*redir_num = 0;
 	if (*is == true && ft_strchr(special_chars, *str) != 0)
 		return (-1);
-	else if (ft_isprint(*str) && *is && *str != '|' && *str != redir_type)
+	else if (*is && *str != '|' && *str != redir_type && !is_whitespace(*str))
 	{
 		*redir_num = 0;
 		*is = false;
