@@ -6,7 +6,7 @@
 /*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:23:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/09 11:39:43 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/09 11:53:42 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ static void	delete_tokens(t_list **head, t_list **to_del, int n)
 {
 	int		temp;
 
-//	printf("delete_tokens(): n == %i\n", n);
 	temp = n;
 	while (temp > 1)
 	{
@@ -82,8 +81,6 @@ static void	delete_tokens(t_list **head, t_list **to_del, int n)
 		ft_lstdel_and_connect(head, to_del);
 		n--;
 	}
-//	if (*head)
-//		printf("delete_tokens: head after: %s\n", (char *) (*head)->content);
 }
 
 static int	parse_redirs(t_cmd *cmd)
@@ -94,7 +91,6 @@ static int	parse_redirs(t_cmd *cmd)
 	tokens_iter = cmd->split_token;
 	while (tokens_iter)
 	{
-//		printf("parse_redirs: looping\n");
 		tokens_consumed = 0;
 		if (tokens_iter->next)
 		{
@@ -108,8 +104,6 @@ static int	parse_redirs(t_cmd *cmd)
 		if (tokens_consumed > 0)
 		{
 			delete_tokens(&cmd->split_token, &tokens_iter, tokens_consumed);
-			if (!tokens_iter)
-				break ;
 			continue ;
 		}
 		tokens_iter = tokens_iter->next;
