@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:53:41 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/12/06 17:31:30 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/09 11:50:06 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,12 @@ static int	check_redirect_in(char *line)
 	redir = false;
 	while (line[i] != '\0')
 	{
-		if (redir == false)
-			check = skip_quotes(&line[i]);
+		check = skip_quotes(&line[i]);
 		if (check != 0)
 		{
 			i += check;
 			redir = false;
+			redir_num = 0;
 		}
 		if (check_error_redir(&line[i], '<', &redir_num, &redir) < 0)
 			return (print_syntax_error('<'));
