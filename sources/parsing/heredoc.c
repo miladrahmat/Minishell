@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 15:38:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/09 16:31:16 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:47:52 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	read_into_file(int fd, char *delim, t_env *env, bool expand)
 		}
 		write(fd, "\n", 1);
 		free(line);
-		line = readline(">");
+		line = readline("> ");
 	}
 	if (line)
 		free(line);
