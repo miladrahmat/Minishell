@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 18:32:17 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/11/29 12:27:31 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:37:24 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,11 @@ void	update_pwd(t_env **envp)
 	res = malloc(PATH_MAX * sizeof(char));
 	if (res == NULL)
 		return ;
-	getcwd(res, PATH_MAX);
+	if (!getcwd(res, PATH_MAX))
+	{
+		free(res);
+		return ;
+	}
 	old_pwd = NULL;
 	list_iter = *envp;
 	while (list_iter != NULL)

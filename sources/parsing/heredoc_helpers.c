@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_helpers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lemercie <lemercie@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:02:53 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/02 10:07:50 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:30:31 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,9 @@ int	try_expand_write(char *line, t_env *env, int fd, bool expand)
 	return (0);
 }
 
-int	heredoc_free_str(char *s)
+int	heredoc_free_str(int fd, char *s)
 {
+	close(fd);
 	if (s)
 		free(s);
 	return (1);

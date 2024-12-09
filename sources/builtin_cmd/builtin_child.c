@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 13:46:43 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/12/02 10:51:56 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:26:06 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	builtin_exit_child(t_list_and_index child_args, t_env **envp, \
 		else
 			ret_val = ft_atoi(cmd_table->cmd_args[1]);
 	}
+	close_all_fds(child_args.lst);
 	ft_envclear(envp, &free);
 	split_free(child_args.env_copy, 0);
 	ft_lstclear(&child_args.lst, &destroy_tlist_of_tcmd);

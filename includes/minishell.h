@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/06 16:44:09 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:31:01 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int			process_heredocs(t_list *cmd_table, t_env *env);
 // parsing/heredoc_helpers.c
 char		*create_filename(void);
 int			try_expand_write(char *line, t_env *env, int fd, bool expand);
-int			heredoc_free_str(char *s);
+int			heredoc_free_str(int fd, char *s);
 // parsing/path_utils.c
 void		close_all(t_files files, int pipefd[2]);
 // parsing/path_helpers.c
