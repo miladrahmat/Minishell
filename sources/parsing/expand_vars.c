@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:27:49 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/02 10:34:39 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:24:41 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,8 @@ char	*expand_vars(char *token, t_env *env, int *last_ret_val)
 	extra_args.last_ret_val = last_ret_val;
 	if (!token)
 		return (NULL);
+	else if (ft_strlen(token) == 0)
+		return (ft_strdup(token));
 	else
 		return (var_expander(token, extra_args));
 }
