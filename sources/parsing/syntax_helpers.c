@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 09:58:07 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/12/06 18:05:36 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/10 11:05:28 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	check_error_redir(char *str, char redir_type, int *redir_num, bool *is)
 		*redir_num = 0;
 		*is = false;
 	}
-	if (*is && str[1] == '\0')
+	if (*is && (*str == '\0' || str[1] == '\0'))
 		return (-1);
 	return (1);
 }
