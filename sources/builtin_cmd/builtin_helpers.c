@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 18:32:17 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/12/09 16:37:24 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/12/11 14:46:58 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,9 @@ void	update_pwd(t_env **envp)
 	char	*res;
 	char	*old_pwd;
 
-	res = malloc(PATH_MAX * sizeof(char));
+	res = get_pwd();
 	if (res == NULL)
 		return ;
-	if (!getcwd(res, PATH_MAX))
-	{
-		free(res);
-		return ;
-	}
 	old_pwd = NULL;
 	list_iter = *envp;
 	while (list_iter != NULL)
@@ -77,30 +72,6 @@ size_t	ft_strlen_eq(char *str)
 	return (eq);
 }
 
-int	add_new_env(char *new_variable, t_env **envp)
-{
-	t_env	*new_node;
-	size_t	cut;
-
-	cut = ft_strlen_eq(new_variable);
-	if (cut == 0 && new_variable[cut] == '\0')
-		return (-1);
-	else if (cut == 0 && new_variable[cut] == '=')
-	{
-		print_export_error(&new_variable, false);
-		return (-1);
-	}
-	new_node = set_key_value(new_variable);
-	if (new_node == NULL)
-		return (-1);
-	if (new_variable[cut] == '\0')
-		new_node->flag = false;
-	else
-		new_node->flag = true;
-	ft_envadd_back(envp, new_node);
-	return (1);
-}
-
 size_t	get_cmd_amount(char **cmd)
 {
 	size_t	amount;
@@ -109,4 +80,19 @@ size_t	get_cmd_amount(char **cmd)
 	while (*(cmd + amount) != NULL)
 		amount++;
 	return (amount);
+}
+
+char	*get_pwd(void)
+{
+	char	*res;
+
+	res = malloc(PATH_MAX * sizeof(char));
+	if (res == NULL)
+		return (NULL);
+	if (getcwd(res, PATH_MAX) == NULL)
+	{
+		free(res);
+		return (NULL);
+	}
+	return (res);
 }

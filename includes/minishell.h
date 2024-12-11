@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:14 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/09 16:31:01 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/12/11 14:36:39 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ size_t		get_cmd_amount(char **cmd);
 size_t		ft_strlen_eq(char *str);
 int			validate_str(char *str, char *acc_values);
 long long	exit_error_check(char **cmd);
+char		*get_pwd(void);
 
 //env struct functions
 t_env		*ft_envnew(char *key, char *value);
