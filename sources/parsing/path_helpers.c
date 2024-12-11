@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 15:59:59 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/02 11:54:25 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/11 14:59:26 by lemercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ static bool	is_directory(char *path)
 bool	is_abs_or_pwd_path(char *cmd)
 {
 	if (cmd && ft_strcmp(cmd, ".") == 0)
+		return (true);
+	if (cmd && ft_strcmp(cmd, "..") == 0)
 		return (true);
 	if (cmd && ft_strlen(cmd) > 1)
 	{
