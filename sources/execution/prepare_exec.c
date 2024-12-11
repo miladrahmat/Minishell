@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 12:21:33 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/12/06 17:15:45 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:29:13 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ static pid_t	prepare_child(t_list_and_index child_args, t_env **env, \
 	pid_t	pid;
 	t_list	*cmd;
 
+	pid = 0;
 	cmd = ft_lstget_nth(child_args.lst, child_args.index);
 	if (cmd->next != NULL && (check_pipe_fd(((t_cmd **)&cmd->content), \
 			((t_cmd **)&cmd->next->content)) < 0))
@@ -84,14 +85,15 @@ static pid_t	prepare_child(t_list_and_index child_args, t_env **env, \
 		close_cmd_fd(cmd->content);
 		return (-1);
 	}
-	pid = fork();
-	if (pid < 0)
-		return (-2);
-	if (pid == 0)
+	if (((t_cmd *)cmd->content)->cmd_args != NULL)
 	{
-		execute_cmd(child_args, env, ret_val);
+		pid = fork();
+		if (pid < 0)
+			return (-2);
+		if (pid == 0)
+			execute_cmd(child_args, env, ret_val);
+		ignore_sigint();
 	}
-	ignore_sigint();
 	close_cmd_fd(((t_cmd *)cmd->content));
 	return (pid);
 }
@@ -112,14 +114,11 @@ static int	prepare_parent(t_list *cmd_table, t_env **env, \
 	cmd_iter = cmd_table;
 	while (cmd_iter != NULL && ++c_args.index < ft_lstsize(cmd_table))
 	{
-		if (((t_cmd *)cmd_iter->content)->cmd_args != NULL)
+		child[c_args.index] = prepare_child(c_args, env, ret_val);
+		if (child[c_args.index] < -1)
 		{
-			child[c_args.index] = prepare_child(c_args, env, ret_val);
-			if (child[c_args.index] < -1)
-			{
-				wait_pids(&child, c_args.index - 1);
-				return (1);
-			}
+			wait_pids(&child, c_args.index - 1);
+			return (1);
 		}
 		cmd_iter = cmd_iter->next;
 	}
