@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:20:32 by mrahmat-          #+#    #+#             */
-/*   Updated: 2024/12/02 10:52:16 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/11 14:46:50 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,12 @@ int	pwd(int fd)
 {
 	char	*res;
 
-	res = malloc(PATH_MAX * sizeof(char));
+	res = get_pwd();
 	if (res == NULL)
-		return (0);
-	if (getcwd(res, PATH_MAX) == NULL)
 	{
 		if (errno != 0)
-		{
-			free(res);
 			return (print_builtin_error("pwd", NULL, NULL, false));
-		}
+		return (1);
 	}
 	ft_putendl_fd(res, fd);
 	free(res);
