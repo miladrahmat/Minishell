@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 11:35:34 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/06 17:14:02 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:01:22 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ static void	prepare_cmd(char *line, t_env **env, int *last_ret_val)
 		}
 		else if (check == -1)
 			line_has_syntax_error(line, last_ret_val);
+		else
+			free(line);
 		ft_lstclear(&cmd_table, &destroy_tlist_of_tcmd);
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:56:15 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/03 15:12:24 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:08:44 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ bool	export_existing_key(char *cmd, t_env **envp)
 	cut = ft_strlen_eq(cmd);
 	while (list_iter != NULL)
 	{
-		if (ft_strncmp(cmd, list_iter->key, ft_strlen(list_iter->key)) == 0)
+		if (ft_strcmp(cmd, list_iter->key) == 0)
 		{
 			return (export_key(cmd, cut, &list_iter));
 		}
