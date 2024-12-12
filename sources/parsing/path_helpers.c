@@ -6,11 +6,11 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 15:59:59 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/11 14:59:26 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/12 13:44:57 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./minishell.h"
+#include "minishell.h"
 
 static bool	is_directory(char *path)
 {

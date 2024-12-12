@@ -6,11 +6,11 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:38:19 by lemercie          #+#    #+#             */
-/*   Updated: 2024/11/26 15:12:19 by lemercie         ###   ########.fr       */
+/*   Updated: 2024/12/12 13:45:04 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./minishell.h"
+#include "minishell.h"
 
 static char	*create_path(char *dir, char *cmd)
 {
