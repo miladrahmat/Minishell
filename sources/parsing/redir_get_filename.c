@@ -6,7 +6,7 @@
 /*   By: mrahmat- <mrahmat-@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:15:01 by lemercie          #+#    #+#             */
-/*   Updated: 2024/12/13 12:08:18 by mrahmat-         ###   ########.fr       */
+/*   Updated: 2024/12/13 12:10:30 by mrahmat-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,19 +55,16 @@ static char	*get_filename(char *start, bool heredoc)
 	char	*ret;
 	char	*temp;
 
-	int	i = 0;
 	ret = NULL;
 	start = skip_whitespace(start);
 	end = start;
 	while (*start)
 	{
-		printf("looping %d\n", i++);
 		if (heredoc)
 			end = get_end(end);
 		else
 			end = get_filename_move_end(&start, end);
 		new_str = ft_strndup(start, substr_len(start, end));
-		printf("filename: %s\n", new_str);
 		if (!new_str)
 			return (NULL);
 		temp = ret;
